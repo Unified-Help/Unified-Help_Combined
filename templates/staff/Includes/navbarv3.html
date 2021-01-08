@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    .sidenav {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      background-color: #181f26;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
+      border-right: 1px solid #000000;
+    }
+
+    .accord-card{
+      margin-bottom: 1.0em;
+    }
+
+    .sidenav a {
+      text-decoration: none;
+      font-size: 1.0em;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+      margin-left: 01.5em;
+    }
+
+    .sidenav a:hover {
+      color:white;
+    }
+
+    .sidenav a:active{
+      color: white;
+    }
+
+    .sidenav .closebtn {
+      position: absolute;
+      top: 0;
+      right: 25px;
+      font-size: 36px;
+      margin-left: 50px;
+    }
+
+    .sub-link{
+      margin:1.0em 1.5em;
+    }
+
+    .sub-link a{
+      padding-bottom: 0.5em;
+    }
+
+    #main {
+      transition: margin-left .5s;
+    }
+
+    .top-navbar {
+      border-bottom: 2px solid #181f26;
+    }
+
+    .logo {
+      color: #181f26;
+      font-size: 1.5em;
+      padding: 0.4em 0.8em;
+      margin-top: 0.2em;
+      margin-bottom: 0.2em;
+    }
+
+    .logo:hover {
+      cursor: pointer;
+      color: #181f26;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="mySidenav" class="sidenav">
+    <!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
+    <div id="accordion">
+      <h4 style="margin-bottom: 1.0em;" class="dropdown-header">Core</h4>
+     <div class="accord-card">
+       <div class="main-link">
+         <a class="collapsed card-link" data-toggle="collapse" href="#collapseOne">
+           <!--________ Account Management icon here________-->
+          <i style="margin-right: 0.3em;" class="far fa-user-circle"></i> Account Management
+         </a>
+       </div>
+       <!--________Account Management links here________-->
+       <div id="collapseOne" class="collapse" data-parent="#accordion">
+         <div class="sub-link">
+           <a href="/staff_profile">Staff Profile</a>
+           <a href="/account_management">Unlock/ Delete Accounts</a>
+       </div>
+     </div>
+   </div>
+     <div class="accord-card">
+       <div class="main-link">
+         <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+           <!--________Transaction Processing icon here________-->
+         <i style="margin-right: 0.3em;" class="fas fa-hand-holding-usd"></i>Transaction Processing
+       </a>
+       </div>
+       <!--________Transaction Processing links here________-->
+       <div id="collapseTwo" class="collapse" data-parent="#accordion">
+         <div class="sub-link">
+           <a href="/incoming_items">Incoming Item Transactions</a>
+       </div>
+     </div>
+     </div>
+     <div class="accord-card">
+       <div class="main-link">
+         <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+           <!--________Customer Support icon here________-->
+           <i style="margin-right: 0.3em;" class="fas fa-phone"></i>Customer Support
+         </a>
+       </div>
+       <!--________Customer Support links here________-->
+       <div id="collapseThree" class="collapse" data-parent="#accordion">
+         <div class="sub-link">
+           <a href="/forum_FAQ">Forum & FAQ Page</a>
+         </div>
+       </div>
+     </div>
+     <div class="accord-card">
+       <div class="main-link">
+         <a class="collapsed card-link" data-toggle="collapse" href="#collapseFour">
+           <!--________Report Generation icon here________-->
+          <i style="margin-right: 0.3em;" class="fas fa-chart-bar"></i> Report Generation
+         </a>
+       </div>
+       <!--________Report Generation links here________-->
+       <div id="collapseFour" class="collapse" data-parent="#accordion">
+         <div class="sub-link">
+           <a href="/dashboard">Dashboard</a>
+           <a href="/cost_analysis">Cost Analysis</a>
+           <a href="/upload_insert_data">Insert/ Upload Data</a>
+         </div>
+       </div>
+     </div>
+     <h4 style="margin-bottom: 1.0em;" class="dropdown-header">Add-Ons</h4>
+     <!--________Extra links here________-->
+     <a class = "accord-card main-link" href="/">Unified Help: Customer</a>
+     <a class = "accord-card main-link" href="/staff_home">Home</a>
+   </div>
+  </div>
+  <div id="main">
+    <div class="d-flex justify-content-between mb-3 top-navbar">
+      <div class="p-2">
+        <button class="btn-theme" id="sidebarToggle"><i class="fas fa-bars"></i>&nbsp;&nbsp;Toggle Sidebar</button>
+      </div>
+      <a class="p-2 logo" style="text-decoration:none;" href="/">Unified Help - Staff</a>
+      <div class="p-2">
+        <div class="dropdown">
+          <!--________Place holder for staff user name over here (for top-right dropdown)________-->
+          <button class="btn-theme dropdown-toggle" data-toggle="dropdown">Hello There, {{user_name}}</button>
+          <div class="dropdown-menu">
+            <!--________Dropdown Menu links here________-->
+            <a class="dropdown-item" href="#">Change Password</a>
+            <hr>
+            <a class="dropdown-item" href="/staff_profile">View Profile</a>
+            <hr>
+            <a class="dropdown-item" href="#">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

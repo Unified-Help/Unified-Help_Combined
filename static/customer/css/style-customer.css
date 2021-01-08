@@ -1,0 +1,19 @@
+body{
+    font-family: 'Trebuchet MS',
+    'Lucida Sans Unicode', 'Lucida Grande',
+     'Lucida Sans', Arial, sans-serif;
+
+
+}
+.navbar{
+  background-color: #45B8FF;
+}
+.category{
+    background-color: #45B8FF;
+}
+.forum-col{
+    min-width: 256px;
+}
+.last-post-col {
+    min-width: 192px;
+}

@@ -1,0 +1,27 @@
+.detailed-box{
+  margin:3% 5%;
+}
+
+.details{
+  margin-top: 5%;
+}
+
+.compare-btn{
+  margin-top: 5%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px 3px;
+}
+
+.r-costs-title{
+  font-size: 1.1em;
+  margin-top: -6%;
+}
+.card-text > strong{
+  font-size: 3.5em;
+}
+
+h1{
+  text-align: center;
+  margin-top: 3%;
+}

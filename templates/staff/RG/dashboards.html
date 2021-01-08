@@ -1,0 +1,408 @@
+{% extends "/base.html" %}
+
+{% block title %} Unified Help - Dashboard{% endblock %}
+
+<!-- Any css files/ internal css in here -->
+{% block head %}
+{{ super () }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous" />
+<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='RG/dashboard.css')}}">
+{% endblock %}
+
+<!-- Page content in here -->
+{% block content %}
+<!--___________Analytics Overview________________-->
+<div class="card  Overview" style="border:none;">
+  <div class="d-flex justify-content-between  mb-3">
+    <div class="p-2 card-title">
+      <h3>Analytics Overview</h3>
+    </div>
+    <!--____________Time period toggle_____________-->
+    <div class="p-2">
+      <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+        <label class="btn btn-sm btn-primary btn-simple active" id="0">
+          <input type="radio" name="options" checked="">
+          <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Accounts</span>
+          <span class="d-block d-sm-none">
+            <i class="tim-icons icon-single-02"></i>
+          </span>
+        </label>
+        <label class="btn btn-sm btn-primary btn-simple" id="1">
+          <input type="radio" class="d-none d-sm-none" name="options">
+          <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Purchases</span>
+          <span class="d-block d-sm-none">
+            <i class="tim-icons icon-gift-2"></i>
+          </span>
+        </label>
+        <label class="btn btn-sm btn-primary btn-simple" id="2">
+          <input type="radio" class="d-none" name="options">
+          <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Sessions</span>
+          <span class="d-block d-sm-none">
+            <i class="tim-icons icon-tap-02"></i>
+          </span>
+        </label>
+      </div>
+    </div>
+  </div>
+  <div class="card-deck">
+    <!--__________Overview 1____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class="fas fa-hand-holding-usd" style="font-size:36px;"></i>
+        <p class="card-text"><strong>$31000</strong></p>
+        <p class="card-text desc">Total Monetary Donations</p>
+      </div>
+    </div>
+    <!--__________Overview 2____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class="fas fa-couch" style="font-size:36px;"></i>
+        <p class="card-text"><strong>215</strong></p>
+        <p class="card-text desc">Total Item Donations</p>
+      </div>
+    </div>
+    <!--__________Overview 3____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class='fas fa-warehouse' style="font-size:36px;"></i>
+        <p class="card-text"><strong>70%</strong></p>
+        <p class="card-text desc">Inventory Space used</p>
+      </div>
+    </div>
+    <!--___________Overview 4____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class="fas fa-dollar-sign" style="font-size:36px;"></i>
+        <p class="card-text"><strong>$4000</strong></p>
+        <p class="card-text desc">Total Expenses Incurred</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="chart-group">
+  <!--____________Whole Row Chart____________-->
+  <div class="row">
+    <div class="col-12">
+        <div class="card-header ">
+          <div class="d-flex justify-content-between  mb-3">
+            <div class="p-2 card-title">
+              <h3>Analytics Overview</h3>
+            </div>
+            <div class="p-2">
+              <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                <label class="btn btn-sm btn-primary btn-simple active" id="0">
+                  <input type="radio" name="options" checked="">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Accounts</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-single-02"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-primary btn-simple" id="1">
+                  <input type="radio" class="d-none d-sm-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Purchases</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-gift-2"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-primary btn-simple" id="2">
+                  <input type="radio" class="d-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Sessions</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-tap-02"></i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"></div>
+            <canvas id="chartBig1" width="947" height="275" class="chartjs-render-monitor" style="display: block; height: 220px; width: 758px;"></canvas>
+          </div>
+        </div>
+    </div>
+  </div>
+  <!--__________50% width charts_______________-->
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card card-chart">
+        <div class="card-header">
+          <h5 class="card-category">Total Shipments</h5>
+          <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"></div>
+            <canvas id="myChart" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card card-chart">
+        <div class="card-header">
+          <h5 class="card-category">Total Shipments</h5>
+          <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"></div>
+            <canvas id="myChart" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--____________33% width charts_______________-->
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card card-chart">
+        <div class="card-header">
+          <h5 class="card-category">Total Shipments</h5>
+          <h3 class="card-title"><i class="tim-icons icon-bell-55 text-primary"></i> 763,215</h3>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"></div>
+            <canvas id="chartLinePurple" width="567" height="220" class="chartjs-render-monitor" style="display: block; height: 220px; width: 567px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card card-chart">
+        <div class="card-header">
+          <h5 class="card-category">Daily Sales</h5>
+          <h3 class="card-title"><i class="tim-icons icon-delivery-fast text-info"></i> 3,500€</h3>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"></div>
+            <canvas id="CountryChart" width="567" height="220" class="chartjs-render-monitor" style="display: block; height: 220px; width: 567px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4">
+      <div class="card card-chart">
+        <div class="card-header">
+          <h5 class="card-category">Completed Tasks</h5>
+          <h3 class="card-title"><i class="tim-icons icon-send text-success"></i> 12,100K</h3>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"></div>
+            <canvas id="chartLineGreen" width="567" height="220" class="chartjs-render-monitor" style="display: block; height: 220px; width: 567px;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+<!-- Link any js files here -->
+{% block scripts %}
+{{ super () }}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+<script>
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+
+  var chart_labels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  var chart_data = [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100];
+
+
+  var ctx = document.getElementById("chartBig1").getContext('2d');
+
+  var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+
+  gradientStroke.addColorStop(1, 'rgba(72,72,176,0.1)');
+  gradientStroke.addColorStop(0.4, 'rgba(72,72,176,0.0)');
+  gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
+  var config = {
+    type: 'line',
+    data: {
+      labels: chart_labels,
+      datasets: [{
+        label: "My First dataset",
+        fill: true,
+        backgroundColor: gradientStroke,
+        borderColor: '#d346b1',
+        borderWidth: 2,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        pointBackgroundColor: '#d346b1',
+        pointBorderColor: 'rgba(255,255,255,0)',
+        pointHoverBackgroundColor: '#d346b1',
+        pointBorderWidth: 20,
+        pointHoverRadius: 4,
+        pointHoverBorderWidth: 15,
+        pointRadius: 4,
+        data: chart_data,
+      }]
+    },
+
+  };
+  var myChartData = new Chart(ctx, config);
+  $("#0").click(function() {
+    var data = myChartData.config.data;
+    data.datasets[0].data = chart_data;
+    data.labels = chart_labels;
+    myChartData.update();
+  });
+  $("#1").click(function() {
+    var chart_data = [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120];
+    var data = myChartData.config.data;
+    data.datasets[0].data = chart_data;
+    data.labels = chart_labels;
+    myChartData.update();
+  });
+
+  $("#2").click(function() {
+    var chart_data = [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130];
+    var data = myChartData.config.data;
+    data.datasets[0].data = chart_data;
+    data.labels = chart_labels;
+    myChartData.update();
+  });
+
+  var ctx = document.getElementById("chartLinePurple").getContext("2d");
+
+  var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+
+  gradientStroke.addColorStop(1, 'rgba(72,72,176,0.2)');
+  gradientStroke.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+  gradientStroke.addColorStop(0, 'rgba(119,52,169,0)'); //purple colors
+
+  var data = {
+    labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'],
+    datasets: [{
+      label: "Data",
+      fill: true,
+      backgroundColor: gradientStroke,
+      borderColor: '#d048b6',
+      borderWidth: 2,
+      borderDash: [],
+      borderDashOffset: 0.0,
+      pointBackgroundColor: '#d048b6',
+      pointBorderColor: 'rgba(255,255,255,0)',
+      pointHoverBackgroundColor: '#d048b6',
+      pointBorderWidth: 20,
+      pointHoverRadius: 4,
+      pointHoverBorderWidth: 15,
+      pointRadius: 4,
+      data: [80, 100, 70, 80, 120, 80],
+    }]
+  };
+
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: data,
+  });
+
+
+  var ctxGreen = document.getElementById("chartLineGreen").getContext("2d");
+
+  var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+
+  gradientStroke.addColorStop(1, 'rgba(66,134,121,0.15)');
+  gradientStroke.addColorStop(0.4, 'rgba(66,134,121,0.0)'); //green colors
+  gradientStroke.addColorStop(0, 'rgba(66,134,121,0)'); //green colors
+
+  var data = {
+    labels: ['JUL', 'AUG', 'SEP', 'OCT', 'NOV'],
+    datasets: [{
+      label: "My First dataset",
+      fill: true,
+      backgroundColor: gradientStroke,
+      borderColor: '#00d6b4',
+      borderWidth: 2,
+      borderDash: [],
+      borderDashOffset: 0.0,
+      pointBackgroundColor: '#00d6b4',
+      pointBorderColor: 'rgba(255,255,255,0)',
+      pointHoverBackgroundColor: '#00d6b4',
+      pointBorderWidth: 20,
+      pointHoverRadius: 4,
+      pointHoverBorderWidth: 15,
+      pointRadius: 4,
+      data: [90, 27, 60, 12, 80],
+    }]
+  };
+
+  var myChart = new Chart(ctxGreen, {
+    type: 'line',
+    data: data,
+
+  });
+
+  var ctx = document.getElementById("CountryChart").getContext("2d");
+
+  var gradientStroke = ctx.createLinearGradient(0, 230, 0, 50);
+
+  gradientStroke.addColorStop(1, 'rgba(29,140,248,0.2)');
+  gradientStroke.addColorStop(0.4, 'rgba(29,140,248,0.0)');
+  gradientStroke.addColorStop(0, 'rgba(29,140,248,0)'); //blue colors
+
+
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    responsive: true,
+    legend: {
+      display: false
+    },
+    data: {
+      labels: ['USA', 'GER', 'AUS', 'UK', 'RO', 'BR'],
+      datasets: [{
+        label: "Countries",
+        fill: true,
+        backgroundColor: gradientStroke,
+        hoverBackgroundColor: gradientStroke,
+        borderColor: '#1f8ef1',
+        borderWidth: 2,
+        borderDash: [],
+        borderDashOffset: 0.0,
+        data: [53, 20, 15, 80, 100, 45],
+      }]
+    },
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,25 @@
+.options{
+  margin: 3% 6%;
+}
+
+.card-deck > .card > p{
+  font-size: 1.6em;
+}
+
+.first-line{
+  margin-top: 10%;
+}
+
+.eg{
+  margin-top: -3%;
+}
+
+.card-deck > .card > a{
+  font-size: 1.3em;
+}
+
+.choose{
+  padding-top: 50%;
+  margin-bottom: 3%;
+  margin-top: 10%;
+}

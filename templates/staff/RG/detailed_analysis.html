@@ -1,0 +1,90 @@
+{% extends "staff/base.html" %}
+
+{% block title %} Unified Help - Detailed Analysis{% endblock %}
+
+<!-- Any css files/ internal css in here -->
+{% block head %}
+<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='staff/RG/detailed_analysis.css')}}">
+{% endblock %}
+
+<!-- Page content in here -->
+{% block content %}
+<div class="card detailed-box" style="border:none;">
+  <div class="d-flex justify-content-between mb-3 top-navbar">
+    <div class="p-2">
+      <a href="/cost_analysis"><button class="btn-theme" id="sidebarToggle"><i class="fas fa-arrow-left"></i>&nbsp;&nbsp;Back</button></a>
+    </div>
+    <h1 class="p-2 logo">Detailed Analysis</h1>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <!--___________Campaign Costs_____________-->
+      <div class="card card-chart">
+        <div class="card-header">
+          <div class="d-flex justify-content-between  mb-3">
+            <div class="p-2 card-title">
+              <h3>Campaign Costs</h3>
+            </div>
+            <div class="p-2">
+              <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                  <input type="radio" name="options" checked="">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Month</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-single-02"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                  <input type="radio" class="d-none d-sm-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-gift-2"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                  <input type="radio" class="d-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-tap-02"></i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-9 chart-area">
+              <div class="chartjs-size-monitor" style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"></div>
+              <canvas id="CountryChart" width="567" height="220" class="chartjs-render-monitor" style="display: block; height: 220px; width: 567px;"></canvas>
+            </div>
+            <div class="col-lg-3">
+              <div class="card card-header">
+                <div class="card-body text-center">
+                  <p class="card-category r-costs-title">Average Cost per Month</p>
+                  <p class="card-text"><strong>$1215</strong></p>
+                </div>
+              </div>
+              <div class="card card-header details">
+                <div class="card-body text-center">
+                  <p class="card-category r-costs-title">Increase From Last Year</p>
+                  <p class="card-text"><strong>$1214</strong></p>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="button" class="btn btn-dark compare-btn">Compare With Previous Year</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--_________Utilities Costs Charts____________-->
+
+  </div>
+</div>
+{% endblock %}
+
+<!-- Link any js files here -->
+{% block script %}
+{% endblock %}

@@ -1,0 +1,37 @@
+.Overview{
+margin: 3%
+}
+
+.chart-group{
+  margin: 3%;
+}
+
+.row{
+  margin-bottom: 3%;
+}
+
+.card-deck > .card{
+  border-radius: 9px;
+}
+
+.card-body > i{
+  font-size: 36px;
+}
+
+.card-text > strong{
+  font-size: 3.0em;
+}
+
+.desc{
+  margin-top: -4%;
+  font-size: 0.8em;
+}
+
+.chart-area{
+  height: 500px;
+}
+
+#IDA_container, #IS_container, #On_vs_Off_container, #EI_container{
+  height: 100%;
+  width: 100%;
+}

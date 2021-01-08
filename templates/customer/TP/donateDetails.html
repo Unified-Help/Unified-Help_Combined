@@ -1,0 +1,49 @@
+{% extends "customer/base.html" %}
+
+{% block title %} Donate {% endblock %}
+
+<!-- Any css files/ internal css in here -->
+{% block head %}
+{% endblock %}
+
+{% set active_page = "donate" %}
+
+<!-- Page content in here -->
+{% block content %}
+<br/><br/><br/>
+<h1 style="text-align:center; margin-top:3%;">Make a Donation!</h1>
+<br>
+<a class="choose col-lg-1" href="/donate" style="margin: 4.1%;">
+    <button type="button" class="btn btn-secondary" value="Donate">&#x3c; Back</button>
+</a>
+<br><br>
+<form method="POST" action="">
+  <div class="card options col-lg-12" style="border:none;">
+    <div class="card-deck">
+      <!-- Monetary Donation -->
+      <div class="card option card-header" style="margin: 0% 5%;">
+        <div class="card-body text-center">
+          <h2>Monetary Donation</h2>
+            <p class="card-text first-line">Make a Monetary donation to help!</p>
+          <br><br>
+          <a class="choose" href="/donate/details/money"><button type="button" class="btn btn-primary">Donate Money</button></a>
+        </div>
+      </div>
+
+      <!-- Item Donation -->
+      <div class="card option card-header" style="margin: 0% 5%;">
+        <div class="card-body text-center">
+          <h2>Item Donation </h2>
+          <p class="card-text first-line">Make an Item Donation such as Clothes, Furniture, Books and Electronics!</p>
+          <br><br>
+          <a class="choose" href="/donate/details/item"><button type="button" class="btn btn-primary">Donation Items</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+  <!-- Link any js files here -->
+  {% block script %}
+  {% endblock %}

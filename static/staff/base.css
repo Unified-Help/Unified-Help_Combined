@@ -1,0 +1,24 @@
+#Main{
+transition: 0.5s;
+}
+
+#Main{
+  margin-left: 0.8em;
+}
+
+.btn-theme{
+  background-color: white;
+  color: #181f26;
+  border: 0px;
+  padding: 0.4em 0.8em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+  font-size: 1.0em;
+}
+
+.btn-theme:hover{
+  background-color: #181f26;
+  color: white;
+  transition: 0.4s;
+  text-decoration: none;
+}

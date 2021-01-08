@@ -1,0 +1,78 @@
+{% extends "customer/base.html" %}
+{% block title %}Donate Money{% endblock %}
+
+{% block head %}
+<!--<link href="{{url_for('static', filename = 'customer/css/donateForm.css')}}" rel="stylesheet">-->
+{% endblock %}
+
+{% set active_page = "donate" %}
+
+{% block content %}
+{% from "customer/includes/_formHelper.html" import render_field %}
+
+<br /><br /><br />
+
+<div style="margin: 1% 1.5%;">
+  <a class="choose" href="/donate/details" style="margin: 0%;">
+        <button type="button" class="btn btn-secondary" value="Donate">&#x3c; Back</button>
+  </a>
+  <h2>Money Donation</h2>
+
+  <form method="POST" action="">
+
+    <br>
+    <p style="margin-bottom: 0%"><b>Base Donation Details:</b></p>
+    <div class="card">
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-6">
+          {{ render_field(form.donateToWho, class="form-control") }}
+        </div>
+        <div class="form-group col-lg-6">
+          {{ render_field(form.moneyAmount, class="form-control", placeholder="SGD$") }}
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <p style="margin-bottom: 0%"><b>Debit/Credit Card Information:</b></p>
+    <div class="card">
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-12">
+          {{ render_field(form.cardInfo_Name, class="form-control") }}
+        </div>
+      </div>
+
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-6">
+          {{ render_field(form.cardInfo_Number, class="form-control", placeholder="xxxx-xxxx-xxxx-xxxx") }}
+        </div>
+        <div class="form-group col-lg-6">
+          {{ render_field(form.cardInfo_CVV, class="form-control", placeholder="xxx") }}
+        </div>
+      </div>
+
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-6">
+          {{ render_field(form.cardInfo_DateExpiry, class="form-control") }}
+        </div>
+        <div class="form-group col-lg-6">
+          {{ render_field(form.cardInfo_YearExpiry, class="form-control") }}
+        </div>
+      </div>
+    </div>
+
+    <br/>
+    <input type="submit" value="Cancel" name="Cancel" class="btn btn-danger"/>
+    <input type="submit" value="Confirm" name="Confirm" class="btn btn-primary float-right"/>
+
+  </form>
+</div>
+{% endblock %}
+
+{% block footer %}
+<br><br>
+{% endblock %}
+
+{% block scripts %}
+<!--<script src="{{url_for('static', filename = 'customer/js/donateForm.js')}}"></script>-->
+{% endblock %}

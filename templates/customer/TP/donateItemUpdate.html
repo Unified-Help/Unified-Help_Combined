@@ -1,0 +1,95 @@
+{% extends "customer/base.html" %}
+{% block title %}Update Donate Item Details{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% set active_page = "donate" %}
+
+{% block content %}
+{% from "customer/includes/_formHelper.html" import render_field %}
+
+<br /><br /><br />
+
+<div style="margin: 1% 1.5%;">
+  <h2>Update Item Donation Details</h2>
+  <p>Leave empty if no information</p>
+
+  <form method="POST" action="">
+    <p style="margin-bottom: 0%"><b>Item Specifications:</b></p>
+    <div class="card">
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-4">
+          {{ render_field(form.itemWeight, class="form-control", placeholder="kg") }}
+        </div>
+        <div class="form-group col-lg-4">
+          {{ render_field(form.itemHeight, class="form-control", placeholder="m") }}
+        </div>
+        <div class="form-group col-lg-4">
+          {{ render_field(form.itemLength, class="form-control", placeholder="m") }}
+        </div>
+        <div class="form-group col-lg-4">
+          {{ render_field(form.itemWidth, class="form-control", placeholder="m") }}
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <p style="margin-bottom: 0%"><b>Collection Details:</b></p>
+    <div class="card">
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-4">
+          {{ render_field(form.collectionDate, class="form-control") }}
+        </div>
+        <div class="form-group col-lg-4">
+          {{ render_field(form.collectionMonth, class="form-control") }}
+        </div>
+        <div class="form-group col-lg-4">
+          {{ render_field(form.collectionTime, class="form-control", placeholder="24hr format, e.g. 0000") }}
+        </div>
+      </div>
+
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-12">
+          {{ render_field(form.collectionType, class="form-control", style="list-style-type:none;") }}
+        </div>
+      </div>
+    </div>
+
+
+    <br />
+    <p style="margin-bottom: 0%"><b>Pick Up Information:</b></p>
+    <div class="card">
+      <h6 style="padding: 0.5% 1%;">If Collection Type: "We Pick Up", Fill the form below.</h6>
+
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-6">
+          {{ render_field(form.pickupAddress1, class="form-control") }}
+        </div>
+        <div class="form-group col-lg-4">
+          {{ render_field(form.pickupAddress2, class="form-control") }}
+        </div>
+        <div class="form-group col-lg-2">
+          {{ render_field(form.pickupAddress3, class="form-control") }}
+        </div>
+      </div>
+
+      <div class="row" style="padding: 0.5% 1%;">
+        <div class="form-group col-lg-6">
+          {{ render_field(form.pickupPostalCode, class="form-control", placeholder="Singapore") }}
+        </div>
+      </div>
+    </div>
+    <br />
+    <input type="submit" value="Update" class="btn btn-primary" />
+  </form>
+</div>
+{% endblock %}
+
+{% block footer %}
+<br><br>
+{% endblock %}
+
+
+{% block scripts %}
+{% endblock %}

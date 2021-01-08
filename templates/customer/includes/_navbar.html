@@ -1,0 +1,47 @@
+<header id="header" class="fixed-top">
+    <div class="container-fluid d-flex">
+
+      <div class="logo mr-auto">
+        <h1 class="text-light"><a href="{{url_for('home')}}"><span>Unified Help</span></a></h1>
+        <!-- <a href="index.html"><img src="../static/img/UnifiedHelpLogo.png" alt="UnifiedHelpLogo"></a> -->
+      </div>
+      <nav class="nav-menu d-none d-lg-block">
+        <ul id = "navLinks">
+          <!-- Staff link -->
+          <li><a href="/staff_home" onclick="">Staff</a></li>
+
+          <!-- Homepage -->
+          <li class="{{ 'active' if active_page == 'home' }}"><a href="{{url_for('home')}}" onclick="">Home</a></li>
+
+          <!-- Transaction Processing -->
+          <li class="drop-down {{ 'active' if active_page == 'donate' }}"><a href="{{url_for('donate')}}">Donate</a>
+            <ul>
+              <li class="drop-down"><a href="{{url_for('donateDetails')}}">Donate Now!</a>
+                <ul>
+                  <li class="navLinks"><a href="{{url_for('donate_Money')}}">Donate Money</a></li>
+                  <li class="navLinks"><a href="{{url_for('donate_Item')}}">Donate Item</a></li>
+                </ul>
+              </li>
+              <li class="navLinks"><a href="{{url_for('donateHistory')}}">Donate History</a></li>
+            </ul>
+          </li>
+
+          <!-- Customer Support -->
+          <li class="drop-down {{ 'active' if active_page == 'cs' }}"><a href="#">Customer Support</a>
+            <ul>
+              <li class="navLinks"><a href="{{url_for('forum')}}">Forum</a></li>
+            </ul>
+          </li>
+
+          <!-- Account Management -->
+          <li class="drop-down"><a href="#">Account</a>
+            <ul>
+              <li class="navLinks"><a href="{{url_for('login')}}">Login</a></li>
+              <li class="navLinks"><a href="{{url_for('create_user')}}">Create Account</a></li>
+              <li class="navLinks"><a href="{{url_for('profile')}}">Profile</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+    </div>
+  </header>

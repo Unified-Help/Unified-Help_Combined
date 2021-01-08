@@ -1,0 +1,32 @@
+.charts{
+  margin: 3%;
+}
+
+.info-cards{
+  margin: 8% 3%;
+}
+
+.total-r-costs{
+  margin-top: 5%;
+}
+
+.r-costs-title{
+  font-size: 1.7em;
+}
+.card-text > strong{
+  font-size: 5.0em;
+}
+
+.desc{
+  margin-top: -4%;
+  font-size: 1.1em;
+}
+
+.chart-area{
+  height: 400px;
+}
+
+#CC_container, #ISC_container, #AC_container, #UCW_container, #UCE_container{
+  height: 100%;
+  width: 100%;
+}

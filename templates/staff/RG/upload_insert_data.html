@@ -1,0 +1,40 @@
+{% extends "staff/base.html" %}
+
+{% block title %} Unified Help - Upload Data{% endblock %}
+
+<!-- Any css files/ internal css in here -->
+{% block head %}
+<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='staff/RG/upload_insert_data.css')}}">
+{% endblock %}
+
+<!-- Page content in here -->
+{% block content %}
+<h1 style="text-align:center; margin-top:3%;">Upload Data</h1>
+<div class="card options" style="border:none;">
+  <div class="card-deck">
+    <!--__________Overview 1____________-->
+    <div class="card option card-header">
+      <div class="card-body text-center">
+        <h2>Upload Data File</h2>
+        <p class="card-text first-line">Insert excel files with relavant Data Fields</p>
+        <p class="card-text">Recommended for Batch Uploads</p>
+        <a class="choose" href="/upload_dataForm"><button type="button" class="btn btn-dark">Choose</button></a>
+      </div>
+    </div>
+    <!--__________Overview 2____________-->
+    <div class="card option card-header">
+      <div class="card-body text-center">
+        <h2>Manually Insert Data</h2>
+        <p class="card-text first-line">Choose the data field and timeframe</p>
+        <p class="card-text">Recommended for Single Data Value</p>
+        <p class="card-text eg">(e.g. Monthly Administration Cost)</p>
+        <a class="choose" href="/manual_insertForm"><button type="button" class="btn btn-dark">Choose</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+  {% endblock %}
+
+  <!-- Link any js files here -->
+  {% block script %}
+  {% endblock %}

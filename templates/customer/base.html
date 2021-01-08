@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>{% block title %}Unified Help{% endblock %}</title>
+
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- change the file name to change the icon on the google tab -->
+  <link href="{{url_for('static', filename = 'customer/img/UnifiedHelpLogo.png')}}" rel="icon">
+  <link href="{{url_for('static', filename = 'customer/img/apple-touch-icon.png')}}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{url_for('static', filename = 'customer/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename = 'customer/vendor/icofont/icofont.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename = 'customer/vendor/boxicons/css/boxicons.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename = 'customer/vendor/venobox/venobox.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename = 'customer/vendor/owl.carousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename = 'customer/vendor/aos/aos.css')}}" rel="stylesheet">
+  <link href="{{url_for('static', filename = 'customer/vendor/css/bulma.min.css')}}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{url_for('static', filename = 'customer/css/style.css')}}" rel="stylesheet">
+
+  <!-- BootStrap 4 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  {% block head %}
+  {% endblock %}
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+    {% block navbar %}
+      {% include 'customer/includes/_navbar.html' %}
+    {% endblock %}
+
+
+  {% block content %}
+  {% endblock %}
+
+  {% block footer %}
+    {% include 'customer/includes/_footer.html' %}
+  {% endblock %}
+
+  <div class="container" style="margin-bottom: 2%;">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Unified Help 2020</span></strong>. All Rights Reserved
+    </div>
+  </div>
+
+
+
+  <!-- Vendor JS Files -->
+  <script src="{{url_for('static', filename = 'customer/vendor/jquery/jquery.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/vendor/jquery.easing/jquery.easing.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/vendor/php-email-form/validate.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/vendor/venobox/venobox.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/vendor/owl.carousel/owl.carousel.min.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/vendor/aos/aos.js')}}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{{url_for('static', filename = 'customer/js/main.js')}}"></script>
+  <script src="{{url_for('static', filename = 'customer/js/nav.js')}}"></script>
+  {% block scripts %}
+  {% endblock %}
+
+</body>
+
+</html>

@@ -1,0 +1,48 @@
+{% extends "customer/base.html" %}
+
+{% block title %} Donate {% endblock %}
+
+<!-- Any css files/ internal css in here -->
+{% block head %}
+{% endblock %}
+
+{% set active_page = "donate" %}
+
+<!-- Page content in here -->
+{% block content %}
+<br/><br/><br/>
+<h1 style="text-align:center; margin-top:3%;">Donate!</h1>
+
+<form method="POST" action="">
+  <div class="card options col-lg-12" style="border:none;">
+    <div class="card-deck">
+      <!-- Make a Donation -->
+      <div class="card option card-header" style="margin: 0% 5%;">
+        <div class="card-body text-center">
+          <h2>Make a Donation</h2>
+            <p class="card-text first-line">Either make an <b>Item</b> or a <b>Monetary</b> Donation!</p>
+          <br><br>
+<!--          <input type="submit" name="Donate" value="Donate" class="btn btn-primary"/>-->
+          <a class="choose" href="/donate/details"><button type="button" class="btn btn-primary">Donate</button></a>
+
+        </div>
+      </div>
+
+      <!-- View Donation History -->
+      <div class="card option card-header" style="margin: 0% 5%;">
+        <div class="card-body text-center">
+          <h2>View Donation History</h2>
+          <p class="card-text first-line">Check what you have donated!</p>
+          <br><br>
+<!--          <input type="submit" name="History" value="History" class="btn btn-primary"/>-->
+          <a class="choose" href="/donate/history"><button type="button" class="btn btn-primary">Donation History</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}
+
+  <!-- Link any js files here -->
+  {% block script %}
+  {% endblock %}
