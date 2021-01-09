@@ -20,7 +20,7 @@ from User import User
 from Staff_RG_manual_upload import ManualUploadForm
 import csv
 import datetime
-from Staff_RG_cost import Data
+from Staff_RG_costs import Data
 
 app = Flask(__name__)
 # Jinja for loop lib
@@ -773,47 +773,23 @@ def dashboard():
 
 @app.route("/cost_analysis")
 def cost_analysis():
-    # Dictionaries for different costs. Helps with data management and also reduces complexity
     campaign_costs_dict = {}
-    Inv_storage_costs_dict = {}
-    UCE_costs_dict = {}
-    UCW_costs_dict = {}
-    admin_costs_dict = {}
+    db = shelve.open('unified_help_costs.db', 'c')
+
+    try:
+        campaign_costs_dict = db['campaign_costs']
+
+    except:
+        print('Error in retrieving campaign costs from unified_help_costs.db')
+
     try:
         with open("Staff_RG_costs.csv", "r") as data_file:
-            # Converts each line from the csv file into a dictionary. For example, the first line, as a dictionary, will be,
-            # {'Year': '2015', 'Month': 'JAN', 'Campaign Costs': '3992', 'Inventory Storage Costs': '1217', 'Utilities Costs: Electricity': '305', 'Utilities Cost: Water': '440', 'Administration Costs': '5782'}
-            # Therefore, the key is the heading of each column and the value is the corresponding data value of that column and row
             data_reader = csv.DictReader(data_file)
             for line in data_reader:
-                # Creates object for campaign cost value in the line with "Data" class.
-                cc_data_object = Data(line["Date"], "Campaign Costs", line["Campaign Costs"])
-                # Creates object for inventory storage cost value in the line with "Data" class.
-                ISC_data_object = Data(line["Date"], "Inventory Storage Costs", line["Inventory Storage Costs"])
-                # Creates object for UCE cost value in the line with "Data" class.
-                UCE_data_object = Data(line["Date"], "Utilities Costs: Electricity", line["Utilities Costs: Electricity"])
-                 # Creates object for UCW cost value in the line with "Data" class.
-                UCW_data_object = Data(line["Date"], "Utilities Costs: Water", line["Utilities Cost: Water"])
-                # Creates object for administration cost value in the line with "Data" class.
-                AC_data_object = Data(line["Date"],  "Administration Costs", line["Administration Costs"])
-                # Stores the object in the respective dictionary using the data_id of object as the key.
-                campaign_costs_dict[cc_data_object.get_data_id()] = cc_data_object
-
-
-                # Stores the object in the respective dictionary using the data_id of object as the key.
-                Inv_storage_costs_dict[ISC_data_object.get_data_id()] = ISC_data_object
-
-
-                # Stores the object in the respective dictionary using the data_id of object as the key.
-                UCE_costs_dict[UCE_data_object.get_data_id()] = UCE_data_object
-
-
-                # Stores the object in the respective dictionary using the data_id of object as the key.
-                UCW_costs_dict[UCW_data_object.get_data_id()] = UCW_data_object
-
-
-                # Stores the object in the respective dictionary using the data_id of object as the key.
-                admin_costs_dict[AC_data_object.get_data_id()] = AC_data_object
+                campaign_costs_online = Data(line["Date"], "Campaign Costs:Online", line["Campaign Costs:Online"])
+                campaign_costs_offline = Data(line["Date"], "Campaign Costs:Offline", line["Campaign Costs:Offline"])
+                campaign_costs_dict[campaign_costs_online.get_data_id()] = campaign_costs_online
+                campaign_costs_dict[campaign_costs_offline.get_data_id()] = campaign_costs_offline
 
     # Error exceptions
     except FileNotFoundError:
@@ -822,12 +798,10 @@ def cost_analysis():
     except:
         print("Error in extracting data from file. "
               "Ensure that the headings and index of file uploaded matches the template file.")
+    db.close()
 
-    # Utilises the datetime module calls the now function which gets the current year,month,week,day and exact time.
-    # This is later used to get the current year. It is needed to show data from different time frames.
-    now = datetime.datetime.now()
 
-    # ========== Retrieve ==========
+    # Test codes
     chart_data = []
     for key, value in campaign_costs_dict.items():
         data = [value.get_date(), value.get_value()]

@@ -1,4 +1,4 @@
-.charts{
+.costs-charts{
   margin: 3%;
 }
 
@@ -26,7 +26,7 @@
   height: 400px;
 }
 
-#CC_container, #ISC_container, #AC_container, #UCW_container, #UCE_container{
+#CC_container, #ISC_container, #AC_container, #CAP_container, #FRE_container, #OC_container{
   height: 100%;
   width: 100%;
 }

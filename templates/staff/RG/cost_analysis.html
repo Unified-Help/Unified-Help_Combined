@@ -9,17 +9,17 @@
 
 <!-- Page content in here -->
 {% block content %}
-<div class="card charts" style="border:none">
-  <!-- Top Five Reduced Costs Column-->
-  <div class="row">
-  <div class="col-lg-3">
+<!-- <div class="card charts" style="border:none"> -->
+<!-- Top Five Reduced Costs Column-->
+<!-- <div class="row"> -->
+<!-- <div class="col-lg-3">
     <div class="card card-chart">
       <div class="card-header">
         <h5 class="card-category">Top 5 Reduced Costs This Year</h5>
       </div>
-      <div class="card-body">
-        <!--_________No.1 Reduced Cost___________-->
-        <div class="card card-header info-cards">
+      <div class="card-body">-->
+<!--_________No.1 Reduced Cost___________-->
+<!--<div class="card card-header info-cards">
         <div class="card-category">Administration</div>
           <div class="card-body">
             <div class="row">
@@ -32,9 +32,9 @@
               </div>
             </div>
           </div>
-        </div>
-        <!--_________No.2 Reduced Cost___________-->
-        <div class="card card-header info-cards">
+        </div>-->
+<!--_________No.2 Reduced Cost___________-->
+<!--<div class="card card-header info-cards">
         <div class="card-category">Administration</div>
           <div class="card-body">
             <div class="row">
@@ -47,9 +47,9 @@
               </div>
             </div>
           </div>
-        </div>
-        <!--_________No.3 Reduced Cost___________-->
-        <div class="card card-header info-cards">
+        </div>-->
+<!--_________No.3 Reduced Cost___________-->
+<!--<div class="card card-header info-cards">
         <div class="card-category">Administration</div>
           <div class="card-body">
             <div class="row">
@@ -62,9 +62,9 @@
               </div>
             </div>
           </div>
-        </div>
-        <!--_________No.4 Reduced Cost___________-->
-        <div class="card card-header info-cards">
+        </div>-->
+<!--_________No.4 Reduced Cost___________-->
+<!-- <div class="card card-header info-cards">
         <div class="card-category">Administration</div>
           <div class="card-body">
             <div class="row">
@@ -77,9 +77,9 @@
               </div>
             </div>
           </div>
-        </div>
-        <!--_________No.5 Reduced Cost___________-->
-        <div class="card card-header info-cards">
+        </div> -->
+<!--_________No.5 Reduced Cost___________-->
+<!-- <div class="card card-header info-cards">
         <div class="card-category">Administration</div>
           <div class="card-body">
             <div class="row">
@@ -94,19 +94,19 @@
           </div>
         </div>
       </div>
-    </div>
-    <!--Card showing total reduced costs__________-->
-    <div class="card card-header total-r-costs">
+    </div> -->
+<!--Card showing total reduced costs__________-->
+<!-- <div class="card card-header total-r-costs">
       <div class="card-body text-center">
         <p class="card-category r-costs-title">Total Reduced Costs This Year</p>
         <p class="card-text"><strong>$1215</strong></p>
       </div>
     </div>
-  </div>
-  <div class="col-lg-9">
-  <div class="card costs-charts" style="border:none;">
-    <div class="row">
-    <div class="col-lg-7">
+  </div>  -->
+<div class="card costs-charts" style="border:none;">
+  <h1 style="margin-bottom:3%;">Cost Analysis</h1>
+  <div class="row">
+    <div class="col-lg-6">
       <!--___________Campaign Costs_____________-->
       <div class="card card-chart">
         <div class="card-header">
@@ -188,9 +188,135 @@
         </div>
       </div>
     </div>
-    <!--_________Utilities Costs Charts____________-->
-    <div class="col-lg-5">
+    <div class="col-lg-6">
+      <!--_________Charitable Activites/ Programs Chart____________-->
       <div class="card card-chart">
+        <div class="card-header">
+          <div class="d-flex justify-content-between  mb-3">
+            <div class="p-2 card-title">
+              <h3>Charitable Programs Costs</h3>
+            </div>
+            <div class="p-2">
+              <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                  <input type="radio" name="options" checked="">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-single-02"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                  <input type="radio" class="d-none d-sm-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-gift-2"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                  <input type="radio" class="d-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-tap-02"></i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div id="CAP_container"></div>
+          </div>
+        </div>
+      </div>
+      <!--_________Fund-Raising Expenses Chart____________-->
+      <div class="card card-chart" style="margin-top:5%;">
+        <div class="card-header">
+          <div class="d-flex justify-content-between  mb-3">
+            <div class="p-2 card-title">
+              <h3>Fund-Raising Expenses</h3>
+            </div>
+            <div class="p-2">
+              <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                  <input type="radio" name="options" checked="">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-single-02"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                  <input type="radio" class="d-none d-sm-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-gift-2"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                  <input type="radio" class="d-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-tap-02"></i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div id="FRE_container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-7">
+      <!--___________Admin Costs Chart____________-->
+      <div class="card card-chart" style="margin-top:5%;">
+        <div class="card-header">
+          <div class="d-flex justify-content-between  mb-3">
+            <div class="p-2 card-title">
+              <h3>Administration Costs</h3>
+            </div>
+            <div class="p-2">
+              <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                  <input type="radio" name="options" checked="">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-single-02"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                  <input type="radio" class="d-none d-sm-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-gift-2"></i>
+                  </span>
+                </label>
+                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                  <input type="radio" class="d-none" name="options">
+                  <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
+                  <span class="d-block d-sm-none">
+                    <i class="tim-icons icon-tap-02"></i>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="chart-area">
+            <div id="AC_container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <!--___________Utilities Costs Chart____________-->
+      <div class="card card-chart" style="margin-top:8%;">
         <div class="card-header">
           <div class="d-flex justify-content-between  mb-3">
             <div class="p-2 card-title">
@@ -224,203 +350,176 @@
           </div>
         </div>
         <div class="card-body">
-          <div class="card-category"><h1>Water</h1></div>
           <div class="chart-area">
-            <div id="UCW_container"></div>
-          </div>
-        </div>
-        <div class="card-body" style="margin-top:5%;">
-          <div class="card-category"><h1>Electricity</h1></div>
-          <div class="chart-area">
-            <div id="UCE_container"></div>
+            <div id="UC_container"></div>
           </div>
         </div>
       </div>
     </div>
-    </div>
-    <!--___________Admin Costs Chart____________-->
-    <div class="card card-chart" style="margin-top:5%;">
-      <div class="card-header">
-        <div class="d-flex justify-content-between  mb-3">
-          <div class="p-2 card-title">
-            <h3>Administration Costs</h3>
-          </div>
-          <div class="p-2">
-            <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-              <label class="btn btn-sm btn-dark btn-simple active" id="0">
-                <input type="radio" name="options" checked="">
-                <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
-                <span class="d-block d-sm-none">
-                  <i class="tim-icons icon-single-02"></i>
-                </span>
-              </label>
-              <label class="btn btn-sm btn-dark btn-simple" id="1">
-                <input type="radio" class="d-none d-sm-none" name="options">
-                <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
-                <span class="d-block d-sm-none">
-                  <i class="tim-icons icon-gift-2"></i>
-                </span>
-              </label>
-              <label class="btn btn-sm btn-dark btn-simple" id="2">
-                <input type="radio" class="d-none" name="options">
-                <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
-                <span class="d-block d-sm-none">
-                  <i class="tim-icons icon-tap-02"></i>
-                </span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="chart-area">
-          <div id="AC_container"></div>
-        </div>
-      </div>
-    </div>
+  </div>
 </div>
-</div>
-</div>
-</div>
+<!-- </div>
+</div> -->
 {% endblock %}
 
 <!-- Link any js files here -->
 {% block script %}
 <script type="text/javascript">
+  //--------------- Camapign Costs Line Chart ---------------//
+  // create data
+  // var data = {{ data|safe }}
+  //
+  // // create a chart
+  // chart = anychart.line();
+  //
+  // // create a line series and set the data
+  // var series = chart.line(data);
+  //
+  // chart.yScale().minimum(0);
+  // // set the container id
+  // chart.container("CC_container");
+  //
+  // // initiate drawing the chart
+  // chart.draw();
+  anychart.onDocumentReady(function() {
+    // set the data
+    table = anychart.data.table();
+    table.addData({{ data | safe }});
 
-//--------------- Camapign Costs Line Chart ---------------//
-// create data
-// var data = {{ data|safe }}
-//
-// // create a chart
-// chart = anychart.line();
-//
-// // create a line series and set the data
-// var series = chart.line(data);
-//
-// chart.yScale().minimum(0);
-// // set the container id
-// chart.container("CC_container");
-//
-// // initiate drawing the chart
-// chart.draw();
-anychart.onDocumentReady(function () {
-  // set the data
-  table = anychart.data.table();
-  table.addData({{ data| safe }});
-
-  // map the data
-  mapping = table.mapAs();
-  mapping.addField('value', 1);
-
-
-  // chart type
-  var chart = anychart.stock();
-  chart.crosshair(false);
-  chart.scroller().column(mapping);
-
-  var rangeSelector = anychart.ui.rangeSelector();
-  var rangePicker = anychart.ui.rangePicker();
+    // map the data
+    mapping = table.mapAs();
+    mapping.addField('value', 1);
 
 
-  // set the series
-  var series = chart.plot(0).spline(mapping);
-  series.name("Campaign Costs");
+    // chart type
+    var chart = anychart.stock();
+    chart.crosshair(false);
+    chart.scroller().column(mapping);
 
-  chart.container('CC_container');
-  chart.draw();
+    var rangeSelector = anychart.ui.rangeSelector();
+    var rangePicker = anychart.ui.rangePicker();
+
+
+    // set the series
+    var series = chart.plot(0).spline(mapping);
+    series.name("Campaign Costs");
+
+    chart.container('CC_container');
+    chart.draw();
 
     // Render the range picker into an instance of a stock chart
-  rangePicker.render(chart);
-  rangeSelector.render(chart);
-});
+    rangePicker.render(chart);
+    rangeSelector.render(chart);
+  });
 
-//---------------- Inventory Storage Costs Line Chart ---------------//
+  //---------------- Inventory Storage Costs Line Chart ---------------//
   // create data
-var data = [
-  ["January", 10000],
-  ["February", 12000],
-  ["March", 18000],
-  ["April", 11000],
-  ["May", 9000]
-];
+  var data = [
+    ["January", 10000],
+    ["February", 12000],
+    ["March", 18000],
+    ["April", 11000],
+    ["May", 9000]
+  ];
 
-// create a chart
-chart = anychart.line();
+  // create a chart
+  chart = anychart.line();
 
-// create a line series and set the data
-var series = chart.line(data);
+  // create a line series and set the data
+  var series = chart.line(data);
 
-// set the container id
-chart.container("ISC_container");
+  // set the container id
+  chart.container("ISC_container");
 
-// initiate drawing the chart
-chart.draw();
+  // initiate drawing the chart
+  chart.draw();
 
-//--------------- UCW Line Chart ---------------//
+  //--------------- Charitable activities expenses Line Chart ---------------//
   // create data
-var data = [
-  ["January", 10000],
-  ["February", 12000],
-  ["March", 18000],
-  ["April", 11000],
-  ["May", 9000]
-];
+  var data = [
+    ["January", 10000],
+    ["February", 12000],
+    ["March", 18000],
+    ["April", 11000],
+    ["May", 9000]
+  ];
 
-// create a chart
-chart = anychart.line();
+  // create a chart
+  chart = anychart.line();
 
-// create a line series and set the data
-var series = chart.line(data);
+  // create a line series and set the data
+  var series = chart.line(data);
 
-// set the container id
-chart.container("UCW_container");
+  // set the container id
+  chart.container("CAP_container");
 
-// initiate drawing the chart
-chart.draw();
+  // initiate drawing the chart
+  chart.draw();
 
-//--------------- UCE Costs Line Chart ---------------//
+  //--------------- Fund Raising Expenses Line Chart ---------------//
   // create data
-var data = [
-  ["January", 10000],
-  ["February", 12000],
-  ["March", 18000],
-  ["April", 11000],
-  ["May", 9000]
-];
+  var data = [
+    ["January", 10000],
+    ["February", 12000],
+    ["March", 18000],
+    ["April", 11000],
+    ["May", 9000]
+  ];
 
-// create a chart
-chart = anychart.line();
+  // create a chart
+  chart = anychart.line();
 
-// create a line series and set the data
-var series = chart.line(data);
+  // create a line series and set the data
+  var series = chart.line(data);
 
-// set the container id
-chart.container("UCE_container");
+  // set the container id
+  chart.container("FRE_container");
 
-// initiate drawing the chart
-chart.draw();
+  // initiate drawing the chart
+  chart.draw();
 
-//--------------- Administration Costs Line Chart ---------------//
+  //--------------- Administration Costs Line Chart ---------------//
   // create data
-var data = [
-  ["January", 10000],
-  ["February", 12000],
-  ["March", 18000],
-  ["April", 11000],
-  ["May", 9000]
-];
+  var data = [
+    ["January", 10000],
+    ["February", 12000],
+    ["March", 18000],
+    ["April", 11000],
+    ["May", 9000]
+  ];
 
-// create a chart
-chart = anychart.line();
+  // create a chart
+  chart = anychart.line();
 
-// create a line series and set the data
-var series = chart.line(data);
+  // create a line series and set the data
+  var series = chart.line(data);
 
-// set the container id
-chart.container("AC_container");
+  // set the container id
+  chart.container("AC_container");
 
-// initiate drawing the chart
-chart.draw();
+  // initiate drawing the chart
+  chart.draw();
+
+  //--------------- Utilities Costs Line Chart ---------------//
+  // create data
+  var data = [
+    ["January", 10000],
+    ["February", 12000],
+    ["March", 18000],
+    ["April", 11000],
+    ["May", 9000]
+  ];
+
+  // create a chart
+  chart = anychart.line();
+
+  // create a line series and set the data
+  var series = chart.line(data);
+
+  // set the container id
+  chart.container("UC_container");
+
+  // initiate drawing the chart
+  chart.draw();
 </script>
 {% endblock %}
