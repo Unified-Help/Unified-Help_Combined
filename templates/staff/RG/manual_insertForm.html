@@ -8,17 +8,22 @@
 
 <form method="POST" action="">
   <div class="form-group">
-    {{ render_field(form.data_field, class="form-control") }}
-  </div>
-    <div class="form-group">
-    {{ render_field(form.month, class="form-control") }}
-  </div>
-    <div class="form-group">
-    {{ render_field(form.year, class="form-control") }}
+    {{ render_field(form.data_fields, class="form-control") }}
   </div>
   <div class="form-group">
     {{ render_field(form.data_value, class="form-control") }}
   </div>
+  <!-- <div class="form-group">
+    {{ render_field(form.gender, class="form-control") }}
+  </div>
+  <div class="form-group">
+    {{ render_field(form.membership, class="form-check", style="list-style-type:none") }}
+  </div>
+  <div id="prof">
+    <div class="form-group">
+      {{ render_field(form.remarks, class="form-control") }}
+    </div>
+  </div> -->
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
 {% endblock %}

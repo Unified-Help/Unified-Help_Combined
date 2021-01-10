@@ -1,5 +1,4 @@
-from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, IntegerField, validators
-import datetime
+from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, validators
 
 
 class ManualUploadForm(Form):
@@ -21,23 +20,11 @@ class ManualUploadForm(Form):
                                      ("Utilities Costs: Electricity", "Utilities Costs: Electricity")],
                             default='')
 
-    month = SelectField("Month", [validators.DataRequired()],
+    cardInfo_DateExpiry = SelectField("Month of Expiry*", [validators.DataRequired()],
                                       choices=[('01', 'January'), ('02', 'Feburary'), ('03', 'March'), ('04', 'April'),
                                                ('05', 'May'), ('06', 'June'), ('07', 'July'), ('08', 'August'),
                                                ('09', 'September'), ('10', 'October'), ('11', 'November'),
                                                ('12', 'December')])
-
-    year_choices = []
-    x = datetime.datetime.now()
-    y = 0
-    while True:
-        value = str(x.year - y)
-        choice = (value, value)
-        if value == "2014":
-            break
-        else:
-            year_choices.append(choice)
-
-    year = SelectField("Year", [validators.DataRequired()], choices=year_choices)
-
-    data_value = IntegerField("Input Data", [validators.NumberRange(min=1, max=1000000), validators.DataRequired()])
+    cardInfo_YearExpiry = SelectField("Year of Expiry*", [validators.DataRequired()],
+                                      choices=[('21', '2021'), ('22', '2022'), ('23', '2023'), ('24', '2024'),
+                                               ('25', '2025'), ('26', '2026'), ('27', '2027')])

@@ -86,8 +86,7 @@ def donateHistory():
                 donorI = donorsI_dict.get(key)
                 donorsI_list.append(donorI)
 
-            return render_template('customer/TP/donationHistory.html', donorsI_list=donorsI_list,
-                                   donorsM_list=donorsM_list)
+            return render_template('customer/TP/donationHistory.html', donorsI_list=donorsI_list, donorsM_list=donorsM_list)
         db.close()
 
     except:
@@ -306,8 +305,7 @@ def forum():
     for key in uhc_dict:
         post = uhc_dict.get(key)
         uhc_list.append(post)
-    return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list,
-                           announcements_list=announcements_list,
+    return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, announcements_list=announcements_list,
                            uhc_list=uhc_list)
 
 
@@ -400,8 +398,7 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     post_edited = post.get_edited()
     category = pinned_posts_list[0].get_category()
     db.close()
-    return render_template('customer/CS/forum-post.html', list=pinned_posts_list, category=category,
-                           post_subject=post_subject,
+    return render_template('customer/CS/forum-post.html', list=pinned_posts_list, category=category, post_subject=post_subject,
                            post_author=post_author,
                            post_datetime=post_datetime, post_message=post_message, post_id=post_id,
                            post_edited=post_edited)
@@ -477,8 +474,7 @@ def forum_announcements_posts_post(forum_announcements_post_id):
     post_datetime = post.get_date_time()
     post_message = post.get_post_message()
     category = announcements_list[0].get_category()
-    return render_template('customer/CS/forum-post.html', list=announcements_list, category=category,
-                           post_subject=post_subject,
+    return render_template('customer/CS/forum-post.html', list=announcements_list, category=category, post_subject=post_subject,
                            post_author=post_author,
                            post_datetime=post_datetime, post_message=post_message)
 
@@ -804,6 +800,7 @@ def cost_analysis():
               "Ensure that the headings and index of file uploaded matches the template file.")
     db.close()
 
+
     # Test codes
     chart_data = []
     for key, value in campaign_costs_dict.items():
@@ -828,34 +825,12 @@ def upload_dataForm():
     return render_template('staff/RG/upload_dataForm.html')
 
 
-# @app.route("/manual_insertForm")
-# def manual_insertForm():
-#     create_user_form = CreateUserForm(request.form)
-#     if request.method == 'POST' and create_user_form.validate():
-#         users_dict = {}
-#         db = shelve.open('storage.db', 'c')
-#
-#         try:
-#             users_dict = db['Users']
-#         except:
-#             print("Error in retrieving Users from storage.db.")
-#
-#         user = User(create_user_form.first_name.data, create_user_form.last_name.data,
-#                     create_user_form.gender.data, create_user_form.membership.data, create_user_form.remarks.data)
-#         users_dict[user.get_user_id()] = user
-#         db['Users'] = users_dict
-#
-#         # Test codes
-#         users_dict = db['Users']
-#         user = users_dict[user.get_user_id()]
-#         print(user.get_first_name(), user.get_last_name(), "was stored in storage.db successfully with user_id ==",
-#               user.get_user_id())
-#
-#         db.close()
-#
-#         session['user_created'] = user.get_first_name() + ' ' + user.get_last_name()
-#
-#     return render_template('staff/RG/manual_insertForm.html')
+@app.route("/manual_insertForm")
+def manual_insertForm():
+    # manual_upload_form = ManualUploadForm(request.form)
+    # if request.method == 'POST' and manual_upload_form.validate()
+
+    return render_template('staff/RG/manual_insertForm.html')
 
 
 # Error Handling
