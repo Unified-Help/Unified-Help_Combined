@@ -17,7 +17,7 @@ from Forms import CreateUserForm, LoginForm
 from User import User
 
 # Report Generation Imports
-# from Staff_RG_manual_upload import ManualUploadForm
+from Staff_RG_manual_upload import ManualUploadForm
 import csv
 import datetime
 from Staff_RG_costs import Data
@@ -827,10 +827,26 @@ def upload_dataForm():
 
 @app.route("/manual_insertForm")
 def manual_insertForm():
-    # manual_upload_form = ManualUploadForm(request.form)
-    # if request.method == 'POST' and manual_upload_form.validate()
+    manual_upload_form = ManualUploadForm(request.form)
+    if request.method == 'POST' and manual_upload_form.validate():
+        cost_dict = {}
+        db = shelve.open('storage.db', 'r')
 
-    return render_template('staff/RG/manual_insertForm.html')
+        try:
+            cost_dict = db['cost']
+        except:
+            print("Error in retrieving Users from storage.db.")
+
+        cost_object = Data(manual_upload_form.month, manual_upload_form.data_field, manual_upload_form.data_value)
+        cost_dict["yes"] = cost_object
+        db['cost'] = cost_dict
+
+        # Test codes
+        cost_dict = db['cost']
+        user = cost_dict["yes"]
+        db.close()
+
+    return render_template('staff/RG/manual_insertForm.html', form = manual_upload_form)
 
 
 # Error Handling

@@ -1,6 +1,7 @@
 {% extends "staff/base.html" %}
 {% block title %}Data Upload - Manual Insert{% endblock %}
 
+<<<<<<< Updated upstream
 {% block content %}
 {% from "staff/includes/_formHelper.html" import render_field %}
 
@@ -26,4 +27,41 @@
   </div> -->
   <input type="submit" value="Submit" class="btn btn-primary"/>
 </form>
+=======
+{% block head %}
+<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='staff/RG/manual_insertForm.css')}}">
+{% endblock %}
+
+{% block content %}
+{% from "staff/Includes/_formHelper.html" import render_field %}
+
+<div class="form-page">
+<h2 class=>Upload/ Update Data</h2>
+<br>
+<form method="POST" action="">
+  <h5 style="margin-bottom: -0.5%"><b>Select Data Field</b></h5>
+  <div class="form-group">
+    {{ render_field(form.data_field, class="form-control") }}
+  </div>
+  <br>
+  <h5 style="margin-bottom: 0.5%"><b>Select Month and Year</b></h5>
+  <div class="card">
+    <div class="row" style="padding: 0.5% 1%;">
+      <div class="form-group col-lg-6">
+        {{ render_field(form.month, class="form-control") }}
+      </div>
+      <div class="form-group col-lg-6">
+        {{ render_field(form.year, class="form-control") }}
+      </div>
+    </div>
+  </div>
+  <br>
+  <h5 style="margin-bottom: -0.5%"><b>Input Data Value</b></h5>
+  <div class="form-group">
+    {{ render_field(form.data_value, class="form-control") }}
+  </div>
+  <input type="submit" value="Submit" class="btn btn-dark"/>
+</form>
+</div>
+>>>>>>> Stashed changes
 {% endblock %}
