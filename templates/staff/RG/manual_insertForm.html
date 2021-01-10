@@ -1,33 +1,6 @@
 {% extends "staff/base.html" %}
 {% block title %}Data Upload - Manual Insert{% endblock %}
 
-<<<<<<< Updated upstream
-{% block content %}
-{% from "staff/includes/_formHelper.html" import render_field %}
-
-<h1 class="display-4">Upload Data</h1>
-
-<form method="POST" action="">
-  <div class="form-group">
-    {{ render_field(form.data_fields, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.data_value, class="form-control") }}
-  </div>
-  <!-- <div class="form-group">
-    {{ render_field(form.gender, class="form-control") }}
-  </div>
-  <div class="form-group">
-    {{ render_field(form.membership, class="form-check", style="list-style-type:none") }}
-  </div>
-  <div id="prof">
-    <div class="form-group">
-      {{ render_field(form.remarks, class="form-control") }}
-    </div>
-  </div> -->
-  <input type="submit" value="Submit" class="btn btn-primary"/>
-</form>
-=======
 {% block head %}
 <link type="text/css" rel="stylesheet" href="{{url_for('static', filename='staff/RG/manual_insertForm.css')}}">
 {% endblock %}
@@ -63,5 +36,4 @@
   <input type="submit" value="Submit" class="btn btn-dark"/>
 </form>
 </div>
->>>>>>> Stashed changes
 {% endblock %}
