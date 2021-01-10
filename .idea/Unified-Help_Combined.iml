@@ -5,7 +5,11 @@
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
 <<<<<<< HEAD:.idea/Unified-Help_Combined.iml
+<<<<<<< HEAD:.idea/Unified-Help_Combined.iml
     <orderEntry type="inheritedJdk" />
+=======
+    <orderEntry type="jdk" jdkName="Python 3.8 (Unified Help Combined)" jdkType="Python SDK" />
+>>>>>>> parent of f3960a7... yes:.idea/Unified Help.iml
 =======
     <orderEntry type="jdk" jdkName="Python 3.8 (Unified Help Combined)" jdkType="Python SDK" />
 >>>>>>> parent of f3960a7... yes:.idea/Unified Help.iml
