@@ -286,7 +286,7 @@
                     <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="previous_Year()">
                   <input type="radio" class="d-none d-sm-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
@@ -456,25 +456,54 @@
   chart.draw();
 
   //--------------- Utilities Costs Line Chart ---------------//
-  // create data
-  var data = [
-    ["January", 10000],
-    ["February", 12000],
-    ["March", 18000],
-    ["April", 11000],
-    ["May", 9000]
-  ];
+  // data
+ var dataSet = anychart.data.set([
+ ["January", 10000],
+ ["February", 12000],
+ ["March", 18000],
+ ["April", 11000],
+ ["May", 9000]
+ ]);
 
-  // create a chart
-  chart = anychart.line();
+ // set chart type
+ var chart = anychart.line();
 
-  // create a line series and set the data
-  var series = chart.line(data);
 
-  // set the container id
-  chart.container("UC_container");
+ // set data
+ var column = chart.line(dataSet);
 
-  // initiate drawing the chart
-  chart.draw();
+ // remap data
+ var view = dataSet.mapAs();
+
+ function previous_Year() {
+view.set(dataSet,                        // get parameter to update
+ view.get( dataSet) == [
+ ["January", 11000],
+ ["February", 12000],
+ ["March", 18000],
+ ["April", 11000],
+ ["May", 19000]
+ ] // parameter updating
+);
+ }
+
+ // set listener on chart
+ column.listen(
+
+   // listener type
+   "pointclick",
+
+   // function, if listener triggers
+   function(e) {
+view.set(
+   e.pointIndex,                       // get index of clicked column
+   "value",                            // get parameter to update
+   view.get(e.pointIndex, "value") + 5 // parameter updating
+);
+   }
+ );
+
+ // set container and draw chart
+ chart.container("UC_container").draw();
 </script>
 {% endblock %}
