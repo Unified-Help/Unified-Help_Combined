@@ -323,7 +323,7 @@ def create_forum_post():
         # users_db = users_db['Users']
         # users_db.close()
 
-        # username = session['username']
+        # session_username = session['username']
 
 
         try:
@@ -334,6 +334,9 @@ def create_forum_post():
         except:
             print("Error in retrieving data from forumdb.")
 
+        # if len(session_username) == 0:
+        #     redirect(url_for('login')
+        # else:
 
 
         if create_forum_post_form.category.data == 'Pinned Posts':
@@ -805,6 +808,73 @@ def staff_forum():
     return render_template('staff/CS/staff_forum.html',pinned_posts_list=pinned_posts_list, announcements_list=announcements_list,
                            uhc_list=uhc_list)
 
+@app.route("/staff_forum/createforumpost", methods=['GET', 'POST'])
+def create_staff_forum_post():
+    create_forum_post_form = createForumPost(request.form)
+    if request.method == 'POST' and create_forum_post_form.validate():
+        # users_dict = {}
+        pinned_posts_dict = {}
+        announcements_dict = {}
+        uhc_dict = {}
+        db = shelve.open('forumdb', 'c')
+
+        # users_db = shelve.open('account.db', 'r')
+        # users_db = users_db['Users']
+        # users_db.close()
+
+        # session_username = session['username']
+
+
+        try:
+            pinned_posts_dict = db['PinnedPosts']
+            announcements_dict = db['Announcements']
+            uhc_dict = db['UHC']
+
+        except:
+            print("Error in retrieving data from forumdb.")
+
+        # if len(session_username) == 0:
+        #     redirect(url_for('login')
+        # else:
+
+
+        if create_forum_post_form.category.data == 'Pinned Posts':
+            post = ForumPinnedPostsCounter()
+            post.set_forum_pinned_post_id()
+            post.set_username(create_forum_post_form.username.data)
+            post.set_category(create_forum_post_form.category.data)
+            post.set_post_subject(create_forum_post_form.post_subject.data)
+            post.set_post_message(create_forum_post_form.post_message.data)
+            post.set_date_time(post.get_date_time())
+            pinned_posts_dict[post.get_forum_pinned_post_id()] = post
+            db['PinnedPosts'] = pinned_posts_dict
+            return redirect(url_for('forum_pinned_posts'))
+
+        elif create_forum_post_form.category.data == 'Announcements':
+            post = ForumAnnoucementsPostCounter()
+            post.set_forum_announcements_post_id()
+            post.set_username(create_forum_post_form.username.data)
+            post.set_category(create_forum_post_form.category.data)
+            post.set_post_subject(create_forum_post_form.post_subject.data)
+            post.set_post_message(create_forum_post_form.post_message.data)
+            post.set_date_time(post.get_date_time())
+            announcements_dict[post.get_forum_announcements_post_id()] = post
+            db['Announcements'] = announcements_dict
+            return redirect(url_for('forum_announcements_posts'))
+
+        elif create_forum_post_form.category.data == 'Unified Help Community':
+            post = ForumUHCPostCounter()
+            post.set_forum_uhc_post_id()
+            post.set_username(create_forum_post_form.username.data)
+            post.set_category(create_forum_post_form.category.data)
+            post.set_post_subject(create_forum_post_form.post_subject.data)
+            post.set_post_message(create_forum_post_form.post_message.data)
+            post.set_date_time(post.get_date_time())
+            uhc_dict[post.get_forum_uhc_post_id()] = post
+            db['UHC'] = uhc_dict
+            return redirect(url_for('forum_uhc_posts'))
+        db.close()
+    return render_template('customer/CS/createForumPost.html', form=create_forum_post_form)
 
 
 
