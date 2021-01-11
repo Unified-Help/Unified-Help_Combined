@@ -15,6 +15,7 @@ from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCount
 # Account Management Imports
 from Forms import CreateUserForm, LoginForm
 from User import User
+from datetime import timedelta
 
 # Report Generation Imports
 from Staff_RG_manual_upload import ManualUploadForm
@@ -313,56 +314,69 @@ def forum():
 
 @app.route("/forum/createforumpost", methods=['GET', 'POST'])
 def create_forum_post():
-    create_forum_post_form = createForumPost(request.form)
-    if request.method == 'POST' and create_forum_post_form.validate():
-        pinned_posts_dict = {}
-        announcements_dict = {}
-        uhc_dict = {}
-        db = shelve.open('forumdb', 'c')
-        try:
-            pinned_posts_dict = db['PinnedPosts']
-            announcements_dict = db['Announcements']
-            uhc_dict = db['UHC']
+    try:
+        session_username = session['username']
+    except:
+        return redirect(url_for('login'))
+    else:
+        create_forum_post_form = createForumPost(request.form)
+        if request.method == 'POST' and create_forum_post_form.validate():
+            # users_dict = {}
+            pinned_posts_dict = {}
+            announcements_dict = {}
+            uhc_dict = {}
+            db = shelve.open('forumdb', 'c')
 
-        except:
-            print("Error in retrieving data from forumdb.")
+            # users_db = shelve.open('account.db', 'r')
+            # users_db = users_db['Users']
+            # users_db.close()
 
-        if create_forum_post_form.category.data == 'Pinned Posts':
-            post = ForumPinnedPostsCounter()
-            post.set_forum_pinned_post_id()
-            post.set_username(create_forum_post_form.username.data)
-            post.set_category(create_forum_post_form.category.data)
-            post.set_post_subject(create_forum_post_form.post_subject.data)
-            post.set_post_message(create_forum_post_form.post_message.data)
-            post.set_date_time(post.get_date_time())
-            pinned_posts_dict[post.get_forum_pinned_post_id()] = post
-            db['PinnedPosts'] = pinned_posts_dict
-            return redirect(url_for('forum_pinned_posts'))
+            try:
+                pinned_posts_dict = db['PinnedPosts']
+                announcements_dict = db['Announcements']
+                uhc_dict = db['UHC']
 
-        elif create_forum_post_form.category.data == 'Announcements':
-            post = ForumAnnoucementsPostCounter()
-            post.set_forum_announcements_post_id()
-            post.set_username(create_forum_post_form.username.data)
-            post.set_category(create_forum_post_form.category.data)
-            post.set_post_subject(create_forum_post_form.post_subject.data)
-            post.set_post_message(create_forum_post_form.post_message.data)
-            post.set_date_time(post.get_date_time())
-            announcements_dict[post.get_forum_announcements_post_id()] = post
-            db['Announcements'] = announcements_dict
-            return redirect(url_for('forum_announcements_posts'))
+            except:
+                print("Error in retrieving data from forumdb.")
 
-        elif create_forum_post_form.category.data == 'Unified Help Community':
-            post = ForumUHCPostCounter()
-            post.set_forum_uhc_post_id()
-            post.set_username(create_forum_post_form.username.data)
-            post.set_category(create_forum_post_form.category.data)
-            post.set_post_subject(create_forum_post_form.post_subject.data)
-            post.set_post_message(create_forum_post_form.post_message.data)
-            post.set_date_time(post.get_date_time())
-            uhc_dict[post.get_forum_uhc_post_id()] = post
-            db['UHC'] = uhc_dict
-            return redirect(url_for('forum_uhc_posts'))
-        db.close()
+
+
+            if create_forum_post_form.category.data == 'Pinned Posts':
+                post = ForumPinnedPostsCounter()
+                post.set_forum_pinned_post_id()
+                post.set_username(create_forum_post_form.username.data)
+                post.set_category(create_forum_post_form.category.data)
+                post.set_post_subject(create_forum_post_form.post_subject.data)
+                post.set_post_message(create_forum_post_form.post_message.data)
+                post.set_date_time(post.get_date_time())
+                pinned_posts_dict[post.get_forum_pinned_post_id()] = post
+                db['PinnedPosts'] = pinned_posts_dict
+                return redirect(url_for('forum_pinned_posts'))
+
+            elif create_forum_post_form.category.data == 'Announcements':
+                post = ForumAnnoucementsPostCounter()
+                post.set_forum_announcements_post_id()
+                post.set_username(create_forum_post_form.username.data)
+                post.set_category(create_forum_post_form.category.data)
+                post.set_post_subject(create_forum_post_form.post_subject.data)
+                post.set_post_message(create_forum_post_form.post_message.data)
+                post.set_date_time(post.get_date_time())
+                announcements_dict[post.get_forum_announcements_post_id()] = post
+                db['Announcements'] = announcements_dict
+                return redirect(url_for('forum_announcements_posts'))
+
+            elif create_forum_post_form.category.data == 'Unified Help Community':
+                post = ForumUHCPostCounter()
+                post.set_forum_uhc_post_id()
+                post.set_username(create_forum_post_form.username.data)
+                post.set_category(create_forum_post_form.category.data)
+                post.set_post_subject(create_forum_post_form.post_subject.data)
+                post.set_post_message(create_forum_post_form.post_message.data)
+                post.set_date_time(post.get_date_time())
+                uhc_dict[post.get_forum_uhc_post_id()] = post
+                db['UHC'] = uhc_dict
+                return redirect(url_for('forum_uhc_posts'))
+            db.close()
     return render_template('customer/CS/createForumPost.html', form=create_forum_post_form)
 
 
@@ -428,8 +442,11 @@ def forum_pinned_posts_post_update(forum_pinned_posts_id):
         db.close()
 
         post = pinned_posts_dict.get(forum_pinned_posts_id)
+        post_id = post.get_forum_pinned_post_id()
+        post_subject = post.get_post_subject()
         forum_pinned_posts_form_update.post_message.data = post.get_post_message()
-        return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update)
+        category = post.get_category()
+        return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update, category=category, post_id=post_id, post_subject=post_subject)
 
 
 @app.route('/forum/pinned_posts/delete/<int:forum_pinned_posts_id>', methods=['GET', 'POST'])
@@ -505,8 +522,11 @@ def forum_announcements_posts_post_update(forum_announcements_post_id):
         db.close()
 
         post = announcements_dict.get(forum_announcements_post_id)
+        post_id = post.get_forum_announcements_post_id()
+        post_subject = post.get_post_subject()
         forum_announcements_form_update.post_message.data = post.get_post_message()
-        return render_template('customer/CS/forum-post_update.html', form=forum_announcements_form_update)
+        category = post.get_category()
+        return render_template('customer/CS/forum-post_update.html', form=forum_announcements_form_update, category=category, post_id=post_id, post_subject=post_subject)
 
 
 @app.route('/forum/announcements/delete/<int:forum_announcements_post_id>', methods=['GET', 'POST'])
@@ -580,8 +600,11 @@ def forum_uhc_posts_post_update(forum_uhc_post_id):
         db.close()
 
         post = uhc_dict.get(forum_uhc_post_id)
+        post_id = post.get_forum_uhc_post_id()
+        post_subject = post.get_post_subject()
         forum_uhc_form_update.post_message.data = post.get_post_message()
-        return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update)
+        category = post.get_category()
+        return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update, category=category, post_id=post_id, post_subject=post_subject)
 
 
 @app.route('/forum/uhc/delete/<int:forum_uhc_post_id>', methods=['GET', 'POST'])
@@ -622,12 +645,13 @@ def create_user():
 
         session['user_created'] = user.get_username()
 
-        return redirect(url_for('home'))
+        return redirect(url_for('profile'))
     return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    create_login_form = CreateUserForm(request.form)
     users_dict = {}
     db = shelve.open('account.db', 'r')
     users_dict = db['Users']
@@ -635,36 +659,29 @@ def login():
 
     users_list = []
     for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
-    if request.method == 'POST':
-        session.pop('Users', None)
-
-        if request.form['password'] == user.get_password():
-            session['Users'] = user.get_username()
+        b = users_dict[key]
+        print(b.get_username(), b.get_password())
+        print(create_login_form.username.data, create_login_form.password.data)
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            print("It went through")
             return redirect(url_for('profile'))
 
     return render_template('customer/AM/login.html')
 
-
 @app.route('/profile')
 def profile():
-    if g.user:
-        return render_template('customer/AM/profile.html', user=session['Users'])
-    return redirect(url_for('login'))
-
-
-@app.before_request
-def before_request():
-    g.user = None
-
-    if 'Users' in session:
-        g.user = session['Users']
-
+    if "username" in session:
+        username = session["username"]
+        return render_template('customer/AM/profile.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
-    session.pop('Users', None)
+    session.pop('username', None)
     return render_template('customer/index.html')
 
 
@@ -753,6 +770,72 @@ def staff_profile():
 def account_management():
     return render_template('staff/AM/unlock_delete_acc.html')
 
+@app.route('/retrieve')
+def retrieve():
+    users_dict = {}
+    db = shelve.open('account.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
+
+    return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
+
+
+@app.route('/update/<int:id>/', methods=['GET', 'POST'])
+def update(id):
+    update_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and update_user_form.validate():
+        users_dict = {}
+        db = shelve.open('account.db', 'c')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+        user.set_username(update_user_form.username.data)
+        user.set_email(update_user_form.email.data)
+        user.set_gender(update_user_form.gender.data)
+        user.set_password(update_user_form.password.data)
+
+        db['Users'] = users_dict
+        db.close()
+
+        session['user_updated'] = user.get_username()
+
+        return redirect(url_for('retrieve'))
+    else:
+        users_dict = {}
+        db = shelve.open('account.db', 'r')
+        users_dict = db['Users']
+        db.close()
+
+        user = users_dict.get(id)
+        update_user_form.username.data = user.get_username()
+        update_user_form.email.data = user.get_email()
+        update_user_form.gender.data = user.get_gender()
+        update_user_form.password.data = user.get_password()
+        update_user_form.confirm_password.data = user.get_confirm_password()
+
+        return render_template('staff/AM/updateAccount.html', form=update_user_form)
+
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    users_dict = {}
+    db = shelve.open('account.db', 'w')
+    users_dict = db['Users']
+
+    user = users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+
+    session['user_deleted'] = user.get_username()
+
+    return redirect(url_for('retrieve'))
+
 
 # ------------ Transaction Processing ------------ #
 
@@ -763,9 +846,100 @@ def incoming_item():
 
 # ------------ Customer Support ------------ #
 
-@app.route("/forum_FAQ")
-def forum_FAQ():
-    return render_template('staff/CS/forum_FAQ.html')
+@app.route("/staff_forum")
+def staff_forum():
+    pinned_posts_dict = {}
+    announcements_dict = {}
+    uhc_dict = {}
+    db = shelve.open('forumdb', 'c')
+    pinned_posts_dict = db['PinnedPosts']
+    announcements_dict = db['Announcements']
+    uhc_dict = db['UHC']
+    db.close()
+
+    pinned_posts_list = []
+    announcements_list = []
+    uhc_list = []
+    for key in pinned_posts_dict:
+        post = pinned_posts_dict.get(key)
+        pinned_posts_list.append(post)
+    for key in announcements_dict:
+        post = announcements_dict.get(key)
+        announcements_list.append(post)
+    for key in uhc_dict:
+        post = uhc_dict.get(key)
+        uhc_list.append(post)
+    return render_template('staff/CS/staff_forum.html',pinned_posts_list=pinned_posts_list, announcements_list=announcements_list,
+                           uhc_list=uhc_list)
+
+@app.route("/staff_forum/createforumpost", methods=['GET', 'POST'])
+def create_staff_forum_post():
+    create_forum_post_form = createForumPost(request.form)
+    if request.method == 'POST' and create_forum_post_form.validate():
+        # users_dict = {}
+        pinned_posts_dict = {}
+        announcements_dict = {}
+        uhc_dict = {}
+        db = shelve.open('forumdb', 'c')
+
+        # users_db = shelve.open('account.db', 'r')
+        # users_db = users_db['Users']
+        # users_db.close()
+
+        # session_username = session['username']
+
+
+        try:
+            pinned_posts_dict = db['PinnedPosts']
+            announcements_dict = db['Announcements']
+            uhc_dict = db['UHC']
+
+        except:
+            print("Error in retrieving data from forumdb.")
+
+        # if len(session_username) == 0:
+        #     redirect(url_for('login')
+        # else:
+
+
+        if create_forum_post_form.category.data == 'Pinned Posts':
+            post = ForumPinnedPostsCounter()
+            post.set_forum_pinned_post_id()
+            post.set_username(create_forum_post_form.username.data)
+            post.set_category(create_forum_post_form.category.data)
+            post.set_post_subject(create_forum_post_form.post_subject.data)
+            post.set_post_message(create_forum_post_form.post_message.data)
+            post.set_date_time(post.get_date_time())
+            pinned_posts_dict[post.get_forum_pinned_post_id()] = post
+            db['PinnedPosts'] = pinned_posts_dict
+            return redirect(url_for('forum_pinned_posts'))
+
+        elif create_forum_post_form.category.data == 'Announcements':
+            post = ForumAnnoucementsPostCounter()
+            post.set_forum_announcements_post_id()
+            post.set_username(create_forum_post_form.username.data)
+            post.set_category(create_forum_post_form.category.data)
+            post.set_post_subject(create_forum_post_form.post_subject.data)
+            post.set_post_message(create_forum_post_form.post_message.data)
+            post.set_date_time(post.get_date_time())
+            announcements_dict[post.get_forum_announcements_post_id()] = post
+            db['Announcements'] = announcements_dict
+            return redirect(url_for('forum_announcements_posts'))
+
+        elif create_forum_post_form.category.data == 'Unified Help Community':
+            post = ForumUHCPostCounter()
+            post.set_forum_uhc_post_id()
+            post.set_username(create_forum_post_form.username.data)
+            post.set_category(create_forum_post_form.category.data)
+            post.set_post_subject(create_forum_post_form.post_subject.data)
+            post.set_post_message(create_forum_post_form.post_message.data)
+            post.set_date_time(post.get_date_time())
+            uhc_dict[post.get_forum_uhc_post_id()] = post
+            db['UHC'] = uhc_dict
+            return redirect(url_for('forum_uhc_posts'))
+        db.close()
+    return render_template('customer/CS/createForumPost.html', form=create_forum_post_form)
+
 
 
 # ------------ Report Generation ------------ #

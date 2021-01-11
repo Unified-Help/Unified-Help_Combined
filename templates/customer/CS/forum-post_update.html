@@ -8,7 +8,7 @@
 
 <nav class="navbar navbar-dark bg-dark">
       <div class="container">
-        <h1><a href="index.html" class="navbar-brand">Forum</a></h1>
+        <h1><a href="customer/index.html" class="navbar-brand">Forum</a></h1>
         <form class="form-inline">
           <input type="text" class="form-control mr-3 mb-2 mb-sm-0" placeholder="Search">
           <button type="submit" class="btn btn-primary">Search</button>
@@ -18,14 +18,17 @@
     <div class="container my-3">
       <nav class="breadcrumb">
         <a href="{{url_for('forum')}}" class="breadcrumb-item" style="text-decoration: none">Unified Help Forum</a>
-<!--        {% if category == 'Pinned Posts' %}-->
-<!--        <a href="{{ url_for('forum_pinned_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>-->
-<!--        {% elif category == 'Announcements' %}-->
-<!--        <a href="{{ url_for('forum_announcements_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>-->
-<!--        {% elif category == 'Unified Help Community' %}-->
-<!--        <a href="{{ url_for('forum_uhc_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>-->
-<!--        {% endif %}-->
-        <span class="breadcrumb-item active">Edit</span>
+        {% if category == 'Pinned Posts' %}
+        <a href="{{ url_for('forum_pinned_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>
+        <a href="{{ url_for('forum_pinned_posts_post', forum_pinned_posts_id = post_id) }}" class="breadcrumb-item" style="text-decoration: none">{{ post_subject }}</a>
+        {% elif category == 'Announcements' %}
+        <a href="{{ url_for('forum_announcements_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>
+        <a href="{{ url_for('forum_announcements_posts_post', forum_announcements_post_id = post_id) }}" class="breadcrumb-item" style="text-decoration: none">{{ post_subject }}</a>
+        {% elif category == 'Unified Help Community' %}
+        <a href="{{ url_for('forum_uhc_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>
+        <a href="{{ url_for('forum_uhc_posts_post', forum_uhc_post_id = post_id) }}" class="breadcrumb-item" style="text-decoration: none">{{ post_subject }}</a>
+        {% endif %}
+        <span class="breadcrumb-item active">Edit Message</span>
       </nav>
 
       <div class="row">
