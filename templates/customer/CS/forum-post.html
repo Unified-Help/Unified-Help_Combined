@@ -1,18 +1,18 @@
 {% extends "customer/base.html" %}
 {% block title %}Unified Help Forum{% endblock %}
 
-  {% block head %}
+{% block head %}
     <link href="{{url_for('static', filename = 'customer/css/style-forum.css')}}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/b1681f8635.js" crossorigin="anonymous"></script>
 
-    <style type="text/css">
-      .author-col {
-        min-width: 12em;
-      }
-      .post-col {
-        min-width: 20em;
-      }
-   </style>
+<!--    <style type="text/css">-->
+<!--      .author-col {-->
+<!--        width: 13.7em;-->
+<!--      }-->
+<!--      .post-col {-->
+<!--        width: 20em;-->
+<!--      }-->
+<!--   </style>-->
   {% endblock %}
 
 <body>
@@ -46,7 +46,7 @@
             <tbody>
               <tr>
                 <td class="author-col">
-                  <div>by {{post_author}}</a></div>
+                  <div>by {{post_author}}</div>
                 </td>
                 <td class="post-col d-lg-flex justify-content-lg-between">
                   <div><span class="font-weight-bold">Post subject:</span> {{post_subject}}</div>
@@ -56,14 +56,23 @@
               <tr>
                 <td>
                   <div><span class="font-weight-bold">Joined:</span><br>03 Apr 2017, 13:46</div>
-                  <div><span class="font-weight-bold">Posts:</span><br>123</div><br>
-
+                  <div><span class="font-weight-bold">Posts:</span><br>123</div>
+                  <br>
+                </td>
+                <td>
+                  <p>{{post_message}}</p>
+                  <br>
+                  {% if post_edited == True %}
+                  <p>~edited~</p>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="background-color:#ffffff">
                   {% for post in list %}
                   {% if category == 'Pinned Posts' %}
-                  <p><a href="{{ url_for('forum_pinned_posts_post_update', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}"><i class="far fa-edit fa-lg" style="padding-left: 5px;"></i></a></p>
-                  <form action="{{ url_for('forum_pinned_posts_post_delete', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}">
-                    <!-- Button to Open the Modal -->
-                    <a href="#" class="btn border-0 bg-white float-right far fa-trash-alt"  aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_pinned_post_id()}}"></a>
+                  <a href="{{ url_for('forum_pinned_posts_post_update', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px"></i></a>
+                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_pinned_post_id()}}" style="padding-left:30px;"></i>
                     <!-- The Modal -->
                     <div class="modal" id="myModal_{{post.get_forum_pinned_post_id()}}">
                       <div class="modal-dialog">
@@ -82,19 +91,15 @@
 
                           <!-- Modal footer -->
                           <div class="modal-footer">
-                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <a href="{{ url_for('forum_pinned_posts_post_delete', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}" class="btn btn-danger">Delete</a>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                           </div>
-
                         </div>
                       </div>
                     </div>
-                  </form>
                   {% elif category == 'Announcements' %}
-                  <p><a href="{{ url_for('forum_announcements_posts_post_update', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}"><i class="far fa-edit fa-lg" style="padding-left: 5px;"></i></a></p>
-                  <form action="{{ url_for('forum_announcements_post_delete', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}">
-                    <!-- Button to Open the Modal -->
-                    <a href="#" class="btn border-0 bg-white float-right far fa-trash-alt"  aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_announcements_post_id()}}"></a>
+                  <a href="{{ url_for('forum_announcements_posts_post_update', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px;"></i></a>
+                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_announcements_post_id()}}" style="padding-left:30px;"></i>
                     <!-- The Modal -->
                     <div class="modal" id="myModal_{{post.get_forum_announcements_post_id()}}">
                       <div class="modal-dialog">
@@ -113,19 +118,15 @@
 
                           <!-- Modal footer -->
                           <div class="modal-footer">
-                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <a href="{{ url_for('forum_announcements_post_delete', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}" class="btn btn-danger">Delete</a>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                           </div>
-
                         </div>
                       </div>
                     </div>
-                  </form>
                   {% elif category == 'Unified Help Community' %}
-                  <p><a href="{{ url_for('forum_uhc_posts_post_update', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}"><i class="far fa-edit fa-lg" style="padding-left: 5px;"></i></a></p>
-                  <form action="{{ url_for('forum_uhc_post_delete', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}">
-                    <!-- Button to Open the Modal -->
-                    <a href="#" class="btn border-0 bg-white float-right far fa-trash-alt"  aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_uhc_post_id()}}"></a>
+                  <a href="{{ url_for('forum_uhc_posts_post_update', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px;"></i></a>
+                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_uhc_post_id()}}" style="padding-left:30px;"></i>
                     <!-- The Modal -->
                     <div class="modal" id="myModal_{{post.get_forum_uhc_post_id()}}">
                       <div class="modal-dialog">
@@ -144,50 +145,42 @@
 
                           <!-- Modal footer -->
                           <div class="modal-footer">
-                            <input type="submit" value="Delete" class="btn btn-danger">
+                            <a href="{{ url_for('forum_uhc_post_delete', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}" class="btn btn-danger">Delete</a>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                           </div>
-
                         </div>
                       </div>
                     </div>
-                  </form>
                   {% endif %}
                   {% endfor %}
+                  <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
+                  <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-striped table-bordered table-responsive-lg">
+            <tbody>
+              <tr>
+                <td style="width: 200px">
+                  <div>by <a href="#">Author name</a></div>
+                </td>
+                <td class="justify-content-lg-between" style="width: 800px">
+                  <div><span class="font-weight-bold">Post subject:</span> Forum post title with a complex and long question.</div>
+                  <div><span class="font-weight-bold">Posted:</span> 03 Apr 2017, 13:46</div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div><span class="font-weight-bold">Joined:</span><br>03 Apr 2017, 13:46</div>
                 </td>
                 <td>
-                  <p>{{post_message}}</p>
-                  <br>
-                  {% if post_edited == True %}
-                  <p>~edited~</p>
-                  {% endif %}
+                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla feugiat auctor enim eu blandit. Aliquam consequat tortor sit amet velit consectetur, eu sollicitudin orci posuere. Integer at varius massa, at aliquam velit. Suspendisse eu pellentesque libero, vel suscipit felis. Sed non eros non purus sollicitudin ullamcorper sit amet ut dolor. Curabitur ac nisi nunc. Suspendisse porta ac eros vitae dapibus. Donec a metus a purus rutrum rutrum ac ac ipsum. Ut vulputate facilisis nisi, in imperdiet dolor suscipit eget. Suspendisse ultricies mauris quis ex pellentesque ultricies. Duis a purus nec risus condimentum pellentesque at at enim.<p/>
+                  <img src="https://placehold.it/600x400" class="img-fluid">
+                  <p>In aliquet lorem eget eleifend faucibus. Praesent pellentesque vel arcu ut egestas. Mauris mauris risus, scelerisque quis consectetur suscipit, sollicitudin vitae tortor. Proin eget commodo libero, sit amet tempus lorem. Sed bibendum eros arcu, ac semper lorem porta a. Curabitur accumsan risus aliquam, mattis leo eu, fringilla nibh. Aenean luctus condimentum purus in fringilla. Vivamus a diam dolor. Fusce iaculis scelerisque urna, nec ultrices urna.</p>
                 </td>
               </tr>
             </tbody>
           </table>
-<!--          <table class="table table-striped table-bordered table-responsive-lg">-->
-<!--            <tbody>-->
-<!--              <tr>-->
-<!--                <td class="author-col">-->
-<!--                  <div>by <a href="#">Author name</a></div>-->
-<!--                </td>-->
-<!--                <td class="post-col d-lg-flex justify-content-lg-between">-->
-<!--                  <div><span class="font-weight-bold">Post subject:</span> Forum post title with a complex and long question.</div>-->
-<!--                  <div><span class="font-weight-bold">Posted:</span> 03 Apr 2017, 13:46</div>-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--              <tr>-->
-<!--                <td>-->
-<!--                  <div><span class="font-weight-bold">Joined:</span><br>03 Apr 2017, 13:46</div>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla feugiat auctor enim eu blandit. Aliquam consequat tortor sit amet velit consectetur, eu sollicitudin orci posuere. Integer at varius massa, at aliquam velit. Suspendisse eu pellentesque libero, vel suscipit felis. Sed non eros non purus sollicitudin ullamcorper sit amet ut dolor. Curabitur ac nisi nunc. Suspendisse porta ac eros vitae dapibus. Donec a metus a purus rutrum rutrum ac ac ipsum. Ut vulputate facilisis nisi, in imperdiet dolor suscipit eget. Suspendisse ultricies mauris quis ex pellentesque ultricies. Duis a purus nec risus condimentum pellentesque at at enim.<p/>-->
-<!--                  <img src="https://placehold.it/600x400" class="img-fluid">-->
-<!--                  <p>In aliquet lorem eget eleifend faucibus. Praesent pellentesque vel arcu ut egestas. Mauris mauris risus, scelerisque quis consectetur suscipit, sollicitudin vitae tortor. Proin eget commodo libero, sit amet tempus lorem. Sed bibendum eros arcu, ac semper lorem porta a. Curabitur accumsan risus aliquam, mattis leo eu, fringilla nibh. Aenean luctus condimentum purus in fringilla. Vivamus a diam dolor. Fusce iaculis scelerisque urna, nec ultrices urna.</p>-->
-<!--                </td>-->
-<!--              </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
         </div>
       </div>
         <br><br>

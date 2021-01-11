@@ -1,0 +1,30 @@
+{% extends "staff/base.html" %}
+{% block title %}Data Upload - Manual Insert{% endblock %}
+
+{% block head %}
+<link type="text/css" rel="stylesheet" href="{{url_for('static', filename='staff/RG/file_uploadForm.css')}}">
+{% endblock %}
+
+{% block content %}
+{% from "staff/Includes/_formHelper.html" import render_field %}
+
+<div class="form-page">
+<form class="from-box " action="http://localhost:5000/uploader" method="POST">
+  <div class="col-lg-6 card upload-box">
+  <input type="file">
+  <p>DRAG FILE HERE OR CLICK TO BROWSE</p>
+  </div>
+  <button class="btn-theme col-lg-6 submit-btn" style="border: 1px solid black;" type="submit">Upload</button>
+</form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+  $('form input').change(function () {
+    $('form p').text(this.files.length + " file(s) selected");
+  });
+});
+</script>
+{% endblock %}
