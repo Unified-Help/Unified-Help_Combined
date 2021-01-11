@@ -9,102 +9,57 @@
 
 <!-- Page content in here -->
 {% block content %}
-<!-- <div class="card charts" style="border:none"> -->
-<!-- Top Five Reduced Costs Column-->
-<!-- <div class="row"> -->
-<!-- <div class="col-lg-3">
-    <div class="card card-chart">
-      <div class="card-header">
-        <h5 class="card-category">Top 5 Reduced Costs This Year</h5>
-      </div>
-      <div class="card-body">-->
-<!--_________No.1 Reduced Cost___________-->
-<!--<div class="card card-header info-cards">
-        <div class="card-category">Administration</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-4" style="background-color:green;"><i class="fas fa-hand-holding-usd" style="font-size:50px;"></i></div>
-              <div class="col-lg-4" style="background-color:red;">
-                <p class="total-reduced">$31</p>
-              </div>
-              <div class="col-lg-4" style="background-color:black;">
-                <canvas id="myChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>-->
-<!--_________No.2 Reduced Cost___________-->
-<!--<div class="card card-header info-cards">
-        <div class="card-category">Administration</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-4" style="background-color:green;"><i class="fas fa-hand-holding-usd" style="font-size:50px;"></i></div>
-              <div class="col-lg-4" style="background-color:red;">
-                <p class="total-reduced">$31</p>
-              </div>
-              <div class="col-lg-4" style="background-color:black;">
-                <canvas id="myChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>-->
-<!--_________No.3 Reduced Cost___________-->
-<!--<div class="card card-header info-cards">
-        <div class="card-category">Administration</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-4" style="background-color:green;"><i class="fas fa-hand-holding-usd" style="font-size:50px;"></i></div>
-              <div class="col-lg-4" style="background-color:red;">
-                <p class="total-reduced">$31</p>
-              </div>
-              <div class="col-lg-4" style="background-color:black;">
-                <canvas id="myChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>-->
-<!--_________No.4 Reduced Cost___________-->
-<!-- <div class="card card-header info-cards">
-        <div class="card-category">Administration</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-4" style="background-color:green;"><i class="fas fa-hand-holding-usd" style="font-size:50px;"></i></div>
-              <div class="col-lg-4" style="background-color:red;">
-                <p class="total-reduced">$31</p>
-              </div>
-              <div class="col-lg-4" style="background-color:black;">
-                <canvas id="myChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div> -->
-<!--_________No.5 Reduced Cost___________-->
-<!-- <div class="card card-header info-cards">
-        <div class="card-category">Administration</div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-lg-4" style="background-color:green;"><i class="fas fa-hand-holding-usd" style="font-size:50px;"></i></div>
-              <div class="col-lg-4" style="background-color:red;">
-                <p class="total-reduced">$31</p>
-              </div>
-              <div class="col-lg-4" style="background-color:black;">
-                <canvas id="myChart"></canvas>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-<!--Card showing total reduced costs__________-->
-<!-- <div class="card card-header total-r-costs">
+<!--___________Analytics Overview________________-->
+<div class="card  Overview" style="border:none;">
+  <div class="d-flex justify-content-between  mb-3">
+    <div class="p-2 card-title">
+      <h3>Top 5 Reduced Costs This Year</h3>
+    </div>
+  </div>
+  <div class="card-deck">
+    <!--__________Overview 1____________-->
+    <div class="card card-header">
       <div class="card-body text-center">
-        <p class="card-category r-costs-title">Total Reduced Costs This Year</p>
-        <p class="card-text"><strong>$1215</strong></p>
+        <i class="fas fa-hand-holding-usd" style="font-size:36px;"></i>
+        <p class="card-text"><strong>$31000</strong></p>
+        <p class="card-text desc">1. Total Monetary Donations</p>
       </div>
     </div>
-  </div>  -->
+    <!--__________Overview 2____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class="fas fa-couch" style="font-size:36px;"></i>
+        <p class="card-text"><strong>215</strong></p>
+        <p class="card-text desc">2. Total Item Donations</p>
+      </div>
+    </div>
+    <!--__________Overview 3____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class='fas fa-warehouse' style="font-size:36px;"></i>
+        <p class="card-text"><strong>70%</strong></p>
+        <p class="card-text desc">3. Inventory Space used</p>
+      </div>
+    </div>
+    <!--___________Overview 4____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class="fas fa-dollar-sign" style="font-size:36px;"></i>
+        <p class="card-text"><strong>$4000</strong></p>
+        <p class="card-text desc">4. Total Expenses Incurred</p>
+      </div>
+    </div>
+    <!--___________Overview 5____________-->
+    <div class="card card-header">
+      <div class="card-body text-center">
+        <i class="fas fa-dollar-sign" style="font-size:36px;"></i>
+        <p class="card-text"><strong>$4000</strong></p>
+        <p class="card-text desc">5. Total Expenses Incurred</p>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="card costs-charts" style="border:none;">
-  <h1 style="margin-bottom:3%;">Cost Analysis</h1>
   <div class="row">
     <div class="col-lg-6">
       <!--___________Campaign Costs_____________-->
