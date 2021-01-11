@@ -1033,9 +1033,6 @@ def manual_insertForm():
         db.close()
 
     return render_template('staff/RG/manual_insertForm.html', form=manual_upload_form)
-<<<<<<< HEAD
-=======
-
 
 @app.route("/file_uploadForm")
 def file_upload():
@@ -1048,7 +1045,6 @@ def file_uploader():
         f = request.files['file']
         f.save((f.filename))
         return 'file uploaded successfully'
->>>>>>> 8d220a98079127bc26d5853a030a3765f0edfb99
 
 
 # Error Handling
