@@ -27,11 +27,7 @@
           </li>
 
           <!-- Customer Support -->
-          <li class="drop-down {{ 'active' if active_page == 'cs' }}"><a href="#">Customer Support</a>
-            <ul>
-              <li class="navLinks"><a href="{{url_for('forum')}}">Forum</a></li>
-            </ul>
-          </li>
+          <li class="navLinks {{ 'active' if active_page == 'cs' }}"><a href="{{url_for('forum')}}">Forum</a></li>
 
           <!-- Account Management -->
           <li class="drop-down"><a href="#">Account</a>

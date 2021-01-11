@@ -142,4 +142,3 @@ class ForumUHCPostCounter(ForumPost):
 
     def get_forum_uhc_post_id(self):
         return self.__forum_uhc_post_id
-

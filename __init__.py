@@ -313,10 +313,19 @@ def forum():
 def create_forum_post():
     create_forum_post_form = createForumPost(request.form)
     if request.method == 'POST' and create_forum_post_form.validate():
+        # users_dict = {}
         pinned_posts_dict = {}
         announcements_dict = {}
         uhc_dict = {}
         db = shelve.open('forumdb', 'c')
+
+        # users_db = shelve.open('account.db', 'r')
+        # users_db = users_db['Users']
+        # users_db.close()
+
+        # username = session['username']
+
+
         try:
             pinned_posts_dict = db['PinnedPosts']
             announcements_dict = db['Announcements']
@@ -324,6 +333,8 @@ def create_forum_post():
 
         except:
             print("Error in retrieving data from forumdb.")
+
+
 
         if create_forum_post_form.category.data == 'Pinned Posts':
             post = ForumPinnedPostsCounter()
@@ -425,8 +436,11 @@ def forum_pinned_posts_post_update(forum_pinned_posts_id):
         db.close()
 
         post = pinned_posts_dict.get(forum_pinned_posts_id)
+        post_id = post.get_forum_pinned_post_id()
+        post_subject = post.get_post_subject()
         forum_pinned_posts_form_update.post_message.data = post.get_post_message()
-        return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update)
+        category = post.get_category()
+        return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update, category=category, post_id=post_id, post_subject=post_subject)
 
 
 @app.route('/forum/pinned_posts/delete/<int:forum_pinned_posts_id>', methods=['GET', 'POST'])
@@ -501,8 +515,11 @@ def forum_announcements_posts_post_update(forum_announcements_post_id):
         db.close()
 
         post = announcements_dict.get(forum_announcements_post_id)
+        post_id = post.get_forum_announcements_post_id()
+        post_subject = post.get_post_subject()
         forum_announcements_form_update.post_message.data = post.get_post_message()
-        return render_template('customer/CS/forum-post_update.html', form=forum_announcements_form_update)
+        category = post.get_category()
+        return render_template('customer/CS/forum-post_update.html', form=forum_announcements_form_update, category=category, post_id=post_id, post_subject=post_subject)
 
 
 @app.route('/forum/announcements/delete/<int:forum_announcements_post_id>', methods=['GET', 'POST'])
@@ -576,8 +593,11 @@ def forum_uhc_posts_post_update(forum_uhc_post_id):
         db.close()
 
         post = uhc_dict.get(forum_uhc_post_id)
+        post_id = post.get_forum_uhc_post_id()
+        post_subject = post.get_post_subject()
         forum_uhc_form_update.post_message.data = post.get_post_message()
-        return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update)
+        category = post.get_category()
+        return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update, category=category, post_id=post_id, post_subject=post_subject)
 
 
 @app.route('/forum/uhc/delete/<int:forum_uhc_post_id>', methods=['GET', 'POST'])
@@ -759,9 +779,33 @@ def incoming_item():
 
 # ------------ Customer Support ------------ #
 
-@app.route("/forum_FAQ")
-def forum_FAQ():
-    return render_template('staff/CS/forum_FAQ.html')
+@app.route("/staff_forum")
+def staff_forum():
+    pinned_posts_dict = {}
+    announcements_dict = {}
+    uhc_dict = {}
+    db = shelve.open('forumdb', 'c')
+    pinned_posts_dict = db['PinnedPosts']
+    announcements_dict = db['Announcements']
+    uhc_dict = db['UHC']
+    db.close()
+
+    pinned_posts_list = []
+    announcements_list = []
+    uhc_list = []
+    for key in pinned_posts_dict:
+        post = pinned_posts_dict.get(key)
+        pinned_posts_list.append(post)
+    for key in announcements_dict:
+        post = announcements_dict.get(key)
+        announcements_list.append(post)
+    for key in uhc_dict:
+        post = uhc_dict.get(key)
+        uhc_list.append(post)
+    return render_template('staff/CS/staff_forum.html',pinned_posts_list=pinned_posts_list, announcements_list=announcements_list,
+                           uhc_list=uhc_list)
+
+
 
 
 # ------------ Report Generation ------------ #
