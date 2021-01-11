@@ -8,7 +8,94 @@
 
 <!-- Page content in here -->
 {% block content %}
-<h1>This is the account Management (unlock/delete acc) page</h1>
+  {% if 'user_created' in session %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_created', None) }} was created.
+</div>
+{% elif 'user_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_updated', None) }} was updated.
+</div>
+{% elif 'user_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('user_deleted', None) }} was deleted.
+</div>
+
+{% endif %}
+<div>
+  {% if count == 0 %}
+  <p>There are no users.</p>
+  {% elif count == 1 %}
+  <p>There is 1 user.</p>
+  {% else %}
+  <p>There are {{ count }} users.</p>
+  {% endif %}
+</div>
+<div>
+  <br><br><br>
+  <h4 class="display-6" style="text-align:center">Customer Account</h4>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>User ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Gender</th>
+        <th>Password</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for user in users_list %}
+      <tr>
+        <td>{{ user.get_user_id() }}</td>
+        <td>{{ user.get_username() }}</td>
+        <td>{{ user.get_email() }}</td>
+        <td>{{ user.get_gender() }}</td>
+        <td>{{ user.get_password() }}</td>
+        <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
+            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_username()}} {{user.get_email()}}?');"-->
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{user.get_user_id()}}"> Delete
+    </button>
+
+    <!-- The Modal -->
+    <div class="modal" id="myModal_{{user.get_user_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Confirmation</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            Are you sure you want to delete {{user.get_username()}} {{user.get_email()}}?
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <input type="submit" value="Delete" class="btn btn-danger">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
 
 <!-- Link any js files here -->

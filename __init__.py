@@ -15,6 +15,7 @@ from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCount
 # Account Management Imports
 from Forms import CreateUserForm, LoginForm
 from User import User
+from datetime import timedelta
 
 # Report Generation Imports
 from Staff_RG_manual_upload import ManualUploadForm
@@ -296,6 +297,7 @@ def forum():
     pinned_posts_list = []
     announcements_list = []
     uhc_list = []
+    username = session["username"]
     for key in pinned_posts_dict:
         post = pinned_posts_dict.get(key)
         pinned_posts_list.append(post)
@@ -306,7 +308,7 @@ def forum():
         post = uhc_dict.get(key)
         uhc_list.append(post)
     return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, announcements_list=announcements_list,
-                           uhc_list=uhc_list)
+                           uhc_list=uhc_list, username=username)
 
 
 @app.route("/forum/createforumpost", methods=['GET', 'POST'])
@@ -641,12 +643,13 @@ def create_user():
 
         session['user_created'] = user.get_username()
 
-        return redirect(url_for('home'))
+        return redirect(url_for('profile'))
     return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    create_login_form = CreateUserForm(request.form)
     users_dict = {}
     db = shelve.open('account.db', 'r')
     users_dict = db['Users']
@@ -654,36 +657,29 @@ def login():
 
     users_list = []
     for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
-    if request.method == 'POST':
-        session.pop('Users', None)
-
-        if request.form['password'] == user.get_password():
-            session['Users'] = user.get_username()
+        b = users_dict[key]
+        print(b.get_username(), b.get_password())
+        print(create_login_form.username.data, create_login_form.password.data)
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            print("It went through")
             return redirect(url_for('profile'))
 
     return render_template('customer/AM/login.html')
 
-
 @app.route('/profile')
 def profile():
-    if g.user:
-        return render_template('customer/AM/profile.html', user=session['Users'])
-    return redirect(url_for('login'))
-
-
-@app.before_request
-def before_request():
-    g.user = None
-
-    if 'Users' in session:
-        g.user = session['Users']
-
+    if "username" in session:
+        username = session["username"]
+        return render_template('customer/AM/profile.html')
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/logout')
 def logout():
-    session.pop('Users', None)
+    session.pop('username', None)
     return render_template('customer/index.html')
 
 
@@ -771,6 +767,72 @@ def staff_profile():
 @app.route("/account_management")
 def account_management():
     return render_template('staff/AM/unlock_delete_acc.html')
+
+@app.route('/retrieve')
+def retrieve():
+    users_dict = {}
+    db = shelve.open('account.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        user = users_dict.get(key)
+        users_list.append(user)
+
+    return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
+
+
+@app.route('/update/<int:id>/', methods=['GET', 'POST'])
+def update(id):
+    update_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and update_user_form.validate():
+        users_dict = {}
+        db = shelve.open('account.db', 'c')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+        user.set_username(update_user_form.username.data)
+        user.set_email(update_user_form.email.data)
+        user.set_gender(update_user_form.gender.data)
+        user.set_password(update_user_form.password.data)
+
+        db['Users'] = users_dict
+        db.close()
+
+        session['user_updated'] = user.get_username()
+
+        return redirect(url_for('retrieve'))
+    else:
+        users_dict = {}
+        db = shelve.open('account.db', 'r')
+        users_dict = db['Users']
+        db.close()
+
+        user = users_dict.get(id)
+        update_user_form.username.data = user.get_username()
+        update_user_form.email.data = user.get_email()
+        update_user_form.gender.data = user.get_gender()
+        update_user_form.password.data = user.get_password()
+        update_user_form.confirm_password.data = user.get_confirm_password()
+
+        return render_template('staff/AM/updateAccount.html', form=update_user_form)
+
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    users_dict = {}
+    db = shelve.open('account.db', 'w')
+    users_dict = db['Users']
+
+    user = users_dict.pop(id)
+
+    db['Users'] = users_dict
+    db.close()
+
+    session['user_deleted'] = user.get_username()
+
+    return redirect(url_for('retrieve'))
 
 
 # ------------ Transaction Processing ------------ #
