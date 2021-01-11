@@ -45,7 +45,7 @@
         <button type="submit" class="btn btn-sm btn-outline-danger">Go</button>
       </form>
       {% if category == 'Unified Help Community' %}
-      <a href="/forum/createforumpost"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
+      <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
       {% endif %}
       <br/><br/>
       <div class="row">
