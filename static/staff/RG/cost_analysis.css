@@ -26,7 +26,36 @@
   height: 400px;
 }
 
-#CC_container, #ISC_container, #AC_container, #CAP_container, #FRE_container, #OC_container{
+.Overview{
+margin: 3%
+}
+
+.chart-group{
+  margin: 3%;
+}
+
+.row{
+  margin-bottom: 3%;
+}
+
+.card-deck > .card{
+  border-radius: 9px;
+}
+
+.card-body > i{
+  font-size: 36px;
+}
+
+.card-text > strong{
+  font-size: 3.0em;
+}
+
+.desc{
+  margin-top: -4%;
+  font-size: 0.8em;
+}
+
+#CC_container, #ISC_container, #AC_container, #CAP_container, #FRE_container, #UC_container{
   height: 100%;
   width: 100%;
 }
