@@ -362,7 +362,8 @@ def create_forum_post():
             db.close()
             return redirect(url_for('forum_uhc_posts'))
 
-    return render_template('customer/CS/createForumPost.html', form=create_forum_post_form, session_username=session_username)
+    return render_template('customer/CS/createForumPost.html', form=create_forum_post_form,
+                           session_username=session_username)
 
 
 @app.route("/forum/pinned_posts")
@@ -565,7 +566,7 @@ def forum_uhc_posts_post(forum_uhc_post_id):
     post_edited = post.get_edited()
     return render_template('customer/CS/forum-post.html', list=uhc_list, category=category, post_subject=post_subject,
                            post_author=post_author,
-                           post_datetime=post_datetime, post_message=post_message,post_edited=post_edited)
+                           post_datetime=post_datetime, post_message=post_message, post_edited=post_edited)
 
 
 @app.route("/forum/uhc/update/<int:forum_uhc_post_id>", methods=['GET', 'POST'])
@@ -595,7 +596,6 @@ def forum_uhc_post_update(forum_uhc_post_id):
         category = post.get_category()
         return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update,
                                category=category, post_id=post_id, post_subject=post_subject)
-
 
 
 @app.route('/forum/uhc/delete/<int:forum_uhc_post_id>', methods=['GET', 'POST'])
@@ -664,7 +664,7 @@ def login():
 def profile():
     if "username" in session:
         username = session["username"]
-        return render_template('customer/AM/profile.html',username=username)
+        return render_template('customer/AM/profile.html', username=username)
     else:
         return redirect(url_for('login'))
 
@@ -941,52 +941,101 @@ def dashboard():
 
 @app.route("/cost_analysis")
 def cost_analysis():
-    campaign_costs_dict = {}
-    db = shelve.open('unified_help_costs.db', 'c')
+    # cc_dict = {}
+    # cap_dict = {}
+    # fre_dict = {}
+    # isc_dict = {}
+    # ac_dict = {}
+    # uc_dict = {}
+    # costs_db = shelve.open('costs.db', 'c')
+    #
+    # try:
+    #     cc_dict = costs_db['Campaign Costs']
+    #     cap_dict = costs_db['CAP Costs']
+    #     fre_dict = costs_db['FRE Costs']
+    #     isc_dict = costs_db['ISC Costs']
+    #     ac_dict = costs_db['AC Costs']
+    #     uc_dict = costs_db['UC Costs']
+    #
+    # except:
+    #     print("error in retrieving data from costs.db")
+    #
+    # with open("Staff_RG_costs.csv", 'r') as costs_data_file:
+    #     reader = csv.DictReader(costs_data_file)
+    #     for row in reader:
+    #         # ------ Creating and Storing Campaign Costs Objects ----- #
+    #         ccON = Data(row['Month'], row['Year'], 'Campaign Costs: Online', row['Campaign Costs:Online'])
+    #         cc_dict[ccON.get_data_id()] = ccON
+    #
+    #         ccOFF = Data(row['Month'], row['Year'], 'Campaign Costs: Offline', row['Campaign Costs: Offline'])
+    #         cc_dict[ccOFF.get_data_id()] = ccOFF
+    #         costs_db['Campaign Costs'] = cc_dict
+    #
+    #         # ------ Creating and Storing ISC Objects ----- #
+    #         ISC = Data(row['Month'], row['Year'], 'Inventory Storage Costs', row['Inventory Storage Costs'])
+    #         isc_dict[ISC.get_data_id()] = ISC
+    #         costs_db['ISC Costs'] = isc_dict
+    #
+    #         # ------ Creating and Storing CAP Objects ----- #
+    #         CAP_supplies = Data(row['Month'], row['Year'], 'Charitable Programs: Supplies', row['Charitable Programs: Supplies'])
+    #         cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
+    #
+    #         CAP_manpower = Data(row['Month'], row['Year'], 'Charitable Programs: Manpower', row['Charitable Programs: Manpower'])
+    #         cap_dict[CAP_manpower.get_data_id()] = CAP_manpower
+    #
+    #         CAP_vr = Data(row['Month'], row['Year'], 'Charitable Programs: Venue Rental', row['Charitable Programs: Venue Rental'])
+    #         cap_dict[CAP_vr.get_data_id()] = CAP_vr
+    #         costs_db['CAP Costs'] = cap_dict
+    #
+    #         # ------ Creating and Storing FRE Objects ----- #
+    #         FRE_catering = Data(row['Month'], row['Year'], 'Fund-raising Expenses: Catering', row['Fund-raising Expenses: Catering'])
+    #         fre_dict[FRE_catering.get_data_id()] = FRE_catering
+    #
+    #         FRE_vr = Data(row['Month'], row['Year'], 'Fund-raising Expenses: Venue Rental', row['Fund-raising Expenses: Venue Rental'])
+    #         fre_dict[FRE_vr.get_data_id()] = FRE_vr
+    #
+    #         FRE_marketing = Data(row['Month'], row['Year'], 'Fund Raising Expenses: Marketing', row['Fund Raising Expenses: Marketing'])
+    #         fre_dict[FRE_marketing.get_data_id()] = FRE_marketing
+    #         costs_db['FRE Costs'] = fre_dict
+    #
+    #         # ------ Creating and Storing AC Objects ----- #
+    #         AC_ES = Data(row['Month'], row['Year'], 'Administration Costs: Employee Salaries', row['Administration Costs: Employee Salaries'])
+    #         ac_dict[AC_ES.get_data_id()] = AC_ES
+    #
+    #         AC_ET = Data(row['Month'], row['Year'], 'Administration Costs: Employee Training', row['Administration Costs: Employee Training'])
+    #         ac_dict[AC_ET.get_data_id()] = AC_ET
+    #
+    #         AC_OS = Data(row['Month'], row['Year'], 'Administration Costs: Office Supplies', row['Administration Costs: Office Supplies'])
+    #         ac_dict[AC_OS.get_data_id()] = AC_OS
+    #
+    #         AC_LF = Data(row['Month'], row['Year'], 'Administration Costs: Legal Fees', row['Administration Costs: Legal Fees'])
+    #         ac_dict[AC_LF.get_data_id()] = AC_LF
+    #         costs_db['AC Costs'] = ac_dict
+    #
+    #         # ------ Creating and Storing UC Objects ----- #
+    #         UC_water = Data(row['Month'], row['Year'], 'Utilities Costs: Water', row['Utilities Costs: Water'])
+    #         uc_dict[UC_water.get_data_id()] = UC_water
+    #
+    #         UC_electricity = Data(row['Month'], row['Year'], 'Utilities Costs: Electricity', row['Utilities Costs: Electricity'])
+    #         uc_dict[UC_electricity.get_data_id()] = UC_electricity
+    #         costs_db['UC Costs'] = uc_dict
+    #
+    # costs_db.close()
+    #
+    # # Retrieve Costs for each category and sub-category
+    # costs_db = shelve.open('costs.db', 'r')
+    # cc_dict = costs_db['Campaign Costs']
+    # cap_dict = costs_db['CAP Costs']
+    # fre_dict = costs_db['FRE Costs']
+    # isc_dict = costs_db['ISC Costs']
+    # ac_dict = costs_db['AC Costs']
+    # uc_dict = costs_db['UC Costs']
+    # costs_db.close()
+    #
 
-    try:
-        campaign_costs_dict = db['campaign_costs']
 
-    except:
-        print('Error in retrieving campaign costs from unified_help_costs.db')
+    return render_template('staff/RG/cost_analysis.html')
 
-    try:
-        with open("Staff_RG_costs.csv", "r") as data_file:
-            data_reader = csv.DictReader(data_file)
-            for line in data_reader:
-                campaign_costs_online = Data(line["Date"], "Campaign Costs:Online", line["Campaign Costs:Online"])
-                campaign_costs_offline = Data(line["Date"], "Campaign Costs:Offline", line["Campaign Costs:Offline"])
-                campaign_costs_dict[campaign_costs_online.get_data_id()] = campaign_costs_online
-                campaign_costs_dict[campaign_costs_offline.get_data_id()] = campaign_costs_offline
-
-    # Error exceptions
-    except FileNotFoundError:
-        print("File not Found!")
-
-    except:
-        print("Error in extracting data from file. "
-              "Ensure that the headings and index of file uploaded matches the template file.")
-    db.close()
-
-    # Test codes
-    chart_data = []
-    for key, value in campaign_costs_dict.items():
-        data = [value.get_date(), value.get_value()]
-        chart_data.append(data)
-
-    return render_template('staff/RG/cost_analysis.html', data=chart_data)
-
-@app.route('/suggestions')
-def suggestions():
-    suggestions_list = [
-    ["January", 11000],
-    ["February", 12000],
-    ["March", 18000],
-    ["April", 1000],
-    ["May", 19000]
-  ]
-
-    return render_template('suggestions.html', suggestions=suggestions_list)
 
 @app.route("/upload_insert_data")
 def upload_insert_data():
@@ -1025,6 +1074,7 @@ def manual_insertForm():
         db.close()
 
     return render_template('staff/RG/manual_insertForm.html', form=manual_upload_form)
+
 
 @app.route("/file_uploadForm")
 def file_upload():

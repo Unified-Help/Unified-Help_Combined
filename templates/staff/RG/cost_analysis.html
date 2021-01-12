@@ -193,21 +193,21 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="thisYear()">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="fre_thisYear()">
                   <input type="radio" name="options" checked="">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="previousYear()">
+                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="fre_previousYear()">
                   <input type="radio" class="d-none d-sm-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="last5Years()">
+                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="fre_last5Years()">
                   <input type="radio" class="d-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
@@ -237,21 +237,21 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="ac_thisYear()">
                   <input type="radio" name="options" checked="">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="AC1">
+                <label class="btn btn-sm btn-dark btn-simple" id="AC1" onclick="ac_previousYear()">
                   <input type="radio" class="d-none d-sm-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="ac_last5Years()">
                   <input type="radio" class="d-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
@@ -279,21 +279,21 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="uc_thisYear()">
                   <input type="radio" name="options" checked="">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="previous_Year()">
+                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="uc_previousYear()">
                   <input type="radio" class="d-none d-sm-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="uc_last5Years()">
                   <input type="radio" class="d-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
@@ -324,13 +324,7 @@
 
 // Setting the data
 anychart.onDocumentReady(function () {
-   cc_data = anychart.data.set([
-  ["Jake", 637166, 737166, 813000],
-  ["John", 721630, 537166, 128013],
-  ["Peter", 148662, 188662, 194912],
-  ["James", 78662, 178662, 612037],
-  ["Mary", 90000, 89000, 375913]
-]);
+   cc_data = anychart.data.set({{ data|safe }});
 
   cc_data1 = anychart.data.set([
   ["Jake", 1637166, 737166, 813000],
@@ -563,326 +557,247 @@ function CAP_last5Years(){
   cap_chart.getSeries(0).data(cap_data2);
 }
 
-// // Setting the data
-// anychart.onDocumentReady(function () {
-//    cap_data = anychart.data.set([
-//   ["Jake", 637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data1 = anychart.data.set([
-//   ["Jake", 1637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data2 = anychart.data.set([
-//   ["Jake", 837166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-// //Mapping each sub category to a line series
-// var cap_seriesData_1 = cap_data.mapAs({x: 0, value: 1});
-// var cap_seriesData_2 = cap_data.mapAs({x: 0, value: 2});
-// var cap_seriesData_3 = cap_data.mapAs({x: 0, value: 3});
-//
-//   // create line chart
-// cap_chart = anychart.line();
-//
-// //plotting each series line and setting each series name
-// var cap_series1 = cap_chart.line(cap_seriesData_1);
-//   cap_series1.name("Cost 1")
-// var cap_series2 = cap_chart.line(cap_seriesData_2);
-//   cap_series2.name("Cost 2")
-// var cap_series3 = cap_chart.line(cap_seriesData_3);
-//   cap_series3.name("Cost 3")
-//
-// // Animation, legend and axis titles
-// cap_chart.animation(true);
-// cap_chart.legend(true);
-// cap_chart.xAxis().title("Month/Year")
-// cap_chart.yAxis().title("Costs")
-// //horizontal grid lines
-// cap_chart.yGrid().enabled(true);
-// // y axis uniform scaling
-// var customScale = anychart.scales.linear();
-// customScale.minimum(0);
-// customScale.maximum(2000000);
-// var customTicks = customScale.ticks();
-// customTicks.interval(100000);
-// cap_chart.yScale(customScale);
-//
-//   {% raw %}
-//   // configure axis labels
-//   cap_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
-//   {% endraw %}
-//
-//   // set container id and display chart
-//   cap_chart.container('CAP_container').draw();
-// });
-//
-// // load initial data on button click
-// function CAP_thisYear(){
-//   cap_chart.getSeries(0).data(cap_data);
-// }
-//
-// function CAP_previousYear() {
-//   cap_chart.getSeries(0).data(cap_data1);
-// }
-//
-// function CAP_last5Years(){
-//   cap_chart.getSeries(0).data(cap_data2);
-// }
-//
-// //--------------- Fund Raising Expenses Line Chart ---------------//
-//
-// // Setting the data
-// anychart.onDocumentReady(function () {
-//    cap_data = anychart.data.set([
-//   ["Jake", 637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data1 = anychart.data.set([
-//   ["Jake", 1637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data2 = anychart.data.set([
-//   ["Jake", 837166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-// //Mapping each sub category to a line series
-// var cap_seriesData_1 = cap_data.mapAs({x: 0, value: 1});
-// var cap_seriesData_2 = cap_data.mapAs({x: 0, value: 2});
-// var cap_seriesData_3 = cap_data.mapAs({x: 0, value: 3});
-//
-//   // create line chart
-// cap_chart = anychart.line();
-//
-// //plotting each series line and setting each series name
-// var cap_series1 = cap_chart.line(cap_seriesData_1);
-//   cap_series1.name("Cost 1")
-// var cap_series2 = cap_chart.line(cap_seriesData_2);
-//   cap_series2.name("Cost 2")
-// var cap_series3 = cap_chart.line(cap_seriesData_3);
-//   cap_series3.name("Cost 3")
-//
-// // Animation, legend and axis titles
-// cap_chart.animation(true);
-// cap_chart.legend(true);
-// cap_chart.xAxis().title("Month/Year")
-// cap_chart.yAxis().title("Costs")
-// //horizontal grid lines
-// cap_chart.yGrid().enabled(true);
-// // y axis uniform scaling
-// var customScale = anychart.scales.linear();
-// customScale.minimum(0);
-// customScale.maximum(2000000);
-// var customTicks = customScale.ticks();
-// customTicks.interval(100000);
-// cap_chart.yScale(customScale);
-//
-//   {% raw %}
-//   // configure axis labels
-//   cap_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
-//   {% endraw %}
-//
-//   // set container id and display chart
-//   cap_chart.container('CAP_container').draw();
-// });
-//
-// // load initial data on button click
-// function CAP_thisYear(){
-//   cap_chart.getSeries(0).data(cap_data);
-// }
-//
-// function CAP_previousYear() {
-//   cap_chart.getSeries(0).data(cap_data1);
-// }
-//
-// function CAP_last5Years(){
-//   cap_chart.getSeries(0).data(cap_data2);
-// }
-//
-// //--------------- Administration Costs Line Chart ---------------//
-//
-// // Setting the data
-// anychart.onDocumentReady(function () {
-//    cap_data = anychart.data.set([
-//   ["Jake", 637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data1 = anychart.data.set([
-//   ["Jake", 1637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data2 = anychart.data.set([
-//   ["Jake", 837166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-// //Mapping each sub category to a line series
-// var cap_seriesData_1 = cap_data.mapAs({x: 0, value: 1});
-// var cap_seriesData_2 = cap_data.mapAs({x: 0, value: 2});
-// var cap_seriesData_3 = cap_data.mapAs({x: 0, value: 3});
-//
-//   // create line chart
-// cap_chart = anychart.line();
-//
-// //plotting each series line and setting each series name
-// var cap_series1 = cap_chart.line(cap_seriesData_1);
-//   cap_series1.name("Cost 1")
-// var cap_series2 = cap_chart.line(cap_seriesData_2);
-//   cap_series2.name("Cost 2")
-// var cap_series3 = cap_chart.line(cap_seriesData_3);
-//   cap_series3.name("Cost 3")
-//
-// // Animation, legend and axis titles
-// cap_chart.animation(true);
-// cap_chart.legend(true);
-// cap_chart.xAxis().title("Month/Year")
-// cap_chart.yAxis().title("Costs")
-// //horizontal grid lines
-// cap_chart.yGrid().enabled(true);
-// // y axis uniform scaling
-// var customScale = anychart.scales.linear();
-// customScale.minimum(0);
-// customScale.maximum(2000000);
-// var customTicks = customScale.ticks();
-// customTicks.interval(100000);
-// cap_chart.yScale(customScale);
-//
-//   {% raw %}
-//   // configure axis labels
-//   cap_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
-//   {% endraw %}
-//
-//   // set container id and display chart
-//   cap_chart.container('CAP_container').draw();
-// });
-//
-// // load initial data on button click
-// function CAP_thisYear(){
-//   cap_chart.getSeries(0).data(cap_data);
-// }
-//
-// function CAP_previousYear() {
-//   cap_chart.getSeries(0).data(cap_data1);
-// }
-//
-// function CAP_last5Years(){
-//   cap_chart.getSeries(0).data(cap_data2);
-// }
-//
-// //--------------- Utilities Costs Line Chart ---------------//
-//
-// // Setting the data
-// anychart.onDocumentReady(function () {
-//    cap_data = anychart.data.set([
-//   ["Jake", 637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data1 = anychart.data.set([
-//   ["Jake", 1637166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-//   cap_data2 = anychart.data.set([
-//   ["Jake", 837166, 737166, 813000],
-//   ["John", 721630, 537166, 128013],
-//   ["Peter", 148662, 188662, 194912],
-//   ["James", 78662, 178662, 612037],
-//   ["Mary", 90000, 89000, 375913]
-// ]);
-//
-// //Mapping each sub category to a line series
-// var cap_seriesData_1 = cap_data.mapAs({x: 0, value: 1});
-// var cap_seriesData_2 = cap_data.mapAs({x: 0, value: 2});
-// var cap_seriesData_3 = cap_data.mapAs({x: 0, value: 3});
-//
-//   // create line chart
-// cap_chart = anychart.line();
-//
-// //plotting each series line and setting each series name
-// var cap_series1 = cap_chart.line(cap_seriesData_1);
-//   cap_series1.name("Cost 1")
-// var cap_series2 = cap_chart.line(cap_seriesData_2);
-//   cap_series2.name("Cost 2")
-// var cap_series3 = cap_chart.line(cap_seriesData_3);
-//   cap_series3.name("Cost 3")
-//
-// // Animation, legend and axis titles
-// cap_chart.animation(true);
-// cap_chart.legend(true);
-// cap_chart.xAxis().title("Month/Year")
-// cap_chart.yAxis().title("Costs")
-// //horizontal grid lines
-// cap_chart.yGrid().enabled(true);
-// // y axis uniform scaling
-// var customScale = anychart.scales.linear();
-// customScale.minimum(0);
-// customScale.maximum(2000000);
-// var customTicks = customScale.ticks();
-// customTicks.interval(100000);
-// cap_chart.yScale(customScale);
-//
-//   {% raw %}
-//   // configure axis labels
-//   cap_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
-//   {% endraw %}
-//
-//   // set container id and display chart
-//   cap_chart.container('CAP_container').draw();
-// });
-//
-// // load initial data on button click
-// function CAP_thisYear(){
-//   cap_chart.getSeries(0).data(cap_data);
-// }
-//
-// function CAP_previousYear() {
-//   cap_chart.getSeries(0).data(cap_data1);
-// }
-//
-// function CAP_last5Years(){
-//   cap_chart.getSeries(0).data(cap_data2);
-// }
+//--------------- Fund Raising Expenses Line Chart ---------------//
+
+// Setting the data
+anychart.onDocumentReady(function () {
+   fre_data = anychart.data.set([
+  ["Jake", 637166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+  fre_data1 = anychart.data.set([
+  ["Jake", 1637166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+  fre_data2 = anychart.data.set([
+  ["Jake", 837166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+//Mapping each sub category to a line series
+var fre_seriesData_1 = fre_data.mapAs({x: 0, value: 1});
+var fre_seriesData_2 = fre_data.mapAs({x: 0, value: 2});
+var fre_seriesData_3 = fre_data.mapAs({x: 0, value: 3});
+
+  // create line chart
+fre_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var fre_series1 = fre_chart.line(fre_seriesData_1);
+  fre_series1.name("Cost 1")
+var fre_series2 = fre_chart.line(fre_seriesData_2);
+  fre_series2.name("Cost 2")
+var fre_series3 = fre_chart.line(fre_seriesData_3);
+  fre_series3.name("Cost 3")
+
+// Animation, legend and axis titles
+fre_chart.animation(true);
+fre_chart.legend(true);
+fre_chart.xAxis().title("Month/Year")
+fre_chart.yAxis().title("Costs")
+//horizontal grid lines
+fre_chart.yGrid().enabled(true);
+// y axis uniform scaling
+var customScale = anychart.scales.linear();
+customScale.minimum(0);
+customScale.maximum(2000000);
+var customTicks = customScale.ticks();
+customTicks.interval(100000);
+fre_chart.yScale(customScale);
+
+  {% raw %}
+  // configure axis labels
+  fre_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+  {% endraw %}
+
+  // set container id and display chart
+  fre_chart.container('FRE_container').draw();
+});
+
+// load initial data on button click
+function fre_thisYear(){
+  fre_chart.getSeries(0).data(fre_data);
+}
+
+function fre_previousYear() {
+  fre_chart.getSeries(0).data(fre_data1);
+}
+
+function fre_last5Years(){
+  fre_chart.getSeries(0).data(fre_data2);
+}
+
+//--------------- Administration Costs Line Chart ---------------//
+
+// Setting the data
+anychart.onDocumentReady(function () {
+   ac_data = anychart.data.set([
+  ["Jake", 637166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+  ac_data1 = anychart.data.set([
+  ["Jake", 1637166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+  ac_data2 = anychart.data.set([
+  ["Jake", 837166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+//Mapping each sub category to a line series
+var ac_seriesData_1 = ac_data.mapAs({x: 0, value: 1});
+var ac_seriesData_2 = ac_data.mapAs({x: 0, value: 2});
+var ac_seriesData_3 = ac_data.mapAs({x: 0, value: 3});
+
+  // create line chart
+ac_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var ac_series1 = ac_chart.line(ac_seriesData_1);
+  ac_series1.name("Cost 1")
+var ac_series2 = ac_chart.line(ac_seriesData_2);
+  ac_series2.name("Cost 2")
+var ac_series3 = ac_chart.line(ac_seriesData_3);
+  ac_series3.name("Cost 3")
+
+// Animation, legend and axis titles
+ac_chart.animation(true);
+ac_chart.legend(true);
+ac_chart.xAxis().title("Month/Year")
+ac_chart.yAxis().title("Costs")
+//horizontal grid lines
+ac_chart.yGrid().enabled(true);
+// y axis uniform scaling
+var customScale = anychart.scales.linear();
+customScale.minimum(0);
+customScale.maximum(2000000);
+var customTicks = customScale.ticks();
+customTicks.interval(100000);
+ac_chart.yScale(customScale);
+
+  {% raw %}
+  // configure axis labels
+  ac_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+  {% endraw %}
+
+  // set container id and display chart
+  ac_chart.container('AC_container').draw();
+});
+
+// load initial data on button click
+function ac_thisYear(){
+  ac_chart.getSeries(0).data(ac_data);
+}
+
+function ac_previousYear() {
+  ac_chart.getSeries(0).data(ac_data1);
+}
+
+function ac_last5Years(){
+  ac_chart.getSeries(0).data(ac_data2);
+}
+
+//--------------- Utilities Costs Line Chart ---------------//
+
+// Setting the data
+anychart.onDocumentReady(function () {
+   uc_data = anychart.data.set([
+  ["Jake", 637166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+  uc_data1 = anychart.data.set([
+  ["Jake", 1637166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+  uc_data2 = anychart.data.set([
+  ["Jake", 837166, 737166, 813000],
+  ["John", 721630, 537166, 128013],
+  ["Peter", 148662, 188662, 194912],
+  ["James", 78662, 178662, 612037],
+  ["Mary", 90000, 89000, 375913]
+]);
+
+//Mapping each sub category to a line series
+var uc_seriesData_1 = uc_data.mapAs({x: 0, value: 1});
+var uc_seriesData_2 = uc_data.mapAs({x: 0, value: 2});
+var uc_seriesData_3 = uc_data.mapAs({x: 0, value: 3});
+
+  // create line chart
+uc_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var uc_series1 = uc_chart.line(uc_seriesData_1);
+  uc_series1.name("Cost 1")
+var uc_series2 = uc_chart.line(uc_seriesData_2);
+  uc_series2.name("Cost 2")
+var uc_series3 = uc_chart.line(uc_seriesData_3);
+  uc_series3.name("Cost 3")
+
+// Animation, legend and axis titles
+uc_chart.animation(true);
+uc_chart.legend(true);
+uc_chart.xAxis().title("Month/Year")
+uc_chart.yAxis().title("Costs")
+//horizontal grid lines
+uc_chart.yGrid().enabled(true);
+// y axis uniform scaling
+var customScale = anychart.scales.linear();
+customScale.minimum(0);
+customScale.maximum(2000000);
+var customTicks = customScale.ticks();
+customTicks.interval(100000);
+uc_chart.yScale(customScale);
+
+  {% raw %}
+  // configure axis labels
+  uc_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+  {% endraw %}
+
+  // set container id and display chart
+  uc_chart.container('UC_container').draw();
+});
+
+// load initial data on button click
+function uc_thisYear(){
+  uc_chart.getSeries(0).data(uc_data);
+}
+
+function uc_previousYear() {
+  uc_chart.getSeries(0).data(uc_data1);
+}
+
+function uc_last5Years(){
+  uc_chart.getSeries(0).data(uc_data2);
+}
 </script>
 {% endblock %}
