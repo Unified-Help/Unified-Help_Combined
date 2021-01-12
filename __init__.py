@@ -976,6 +976,17 @@ def cost_analysis():
 
     return render_template('staff/RG/cost_analysis.html', data=chart_data)
 
+@app.route('/suggestions')
+def suggestions():
+    suggestions_list = [
+    ["January", 11000],
+    ["February", 12000],
+    ["March", 18000],
+    ["April", 1000],
+    ["May", 19000]
+  ]
+
+    return render_template('suggestions.html', suggestions=suggestions_list)
 
 @app.route("/upload_insert_data")
 def upload_insert_data():

@@ -153,21 +153,21 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="CAP_thisYear()">
                   <input type="radio" name="options" checked="">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="CAP_previousYear()">
                   <input type="radio" class="d-none d-sm-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="CAP_last5Years()">
                   <input type="radio" class="d-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
@@ -193,21 +193,21 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0">
+                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="thisYear()">
                   <input type="radio" name="options" checked="">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="previousYear()">
                   <input type="radio" class="d-none d-sm-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
                     <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2">
+                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="last5Years()">
                   <input type="radio" class="d-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
@@ -244,7 +244,7 @@
                     <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1">
+                <label class="btn btn-sm btn-dark btn-simple" id="AC1">
                   <input type="radio" class="d-none d-sm-none" name="options">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
@@ -390,49 +390,165 @@
   chart.draw();
 
   //--------------- Charitable activities expenses Line Chart ---------------//
-  // create data
-  var data = [
-    ["January", 10000],
-    ["February", 12000],
-    ["March", 18000],
-    ["April", 11000],
-    ["May", 9000]
-  ];
+  anychart.onDocumentReady(function () {
+     cap_data = anychart.data.set([
+		["Jake", 637166, 737166, 813000],
+		["John", 721630, 537166, 128013],
+		["Peter", 148662, 188662, 194912],
+		["James", 78662, 178662, 612037],
+		["Mary", 90000, 89000, 375913]
+	]);
 
-  // create a chart
-  chart = anychart.line();
+    cap_data1 = anychart.data.set([
+		["Jake", 1637166, 737166, 813000],
+		["John", 721630, 537166, 128013],
+		["Peter", 148662, 188662, 194912],
+		["James", 78662, 178662, 612037],
+		["Mary", 90000, 89000, 375913]
+	]);
 
-  // create a line series and set the data
-  var series = chart.line(data);
+    cap_data2 = anychart.data.set([
+		["Jake", 837166, 737166, 813000],
+		["John", 721630, 537166, 128013],
+		["Peter", 148662, 188662, 194912],
+		["James", 78662, 178662, 612037],
+		["Mary", 90000, 89000, 375913]
+	]);
 
-  // set the container id
-  chart.container("CAP_container");
 
-  // initiate drawing the chart
-  chart.draw();
+  var cap_seriesData_1 = cap_data.mapAs({x: 0, value: 1});
+  var cap_seriesData_2 = cap_data.mapAs({x: 0, value: 2});
+  var cap_seriesData_3 = cap_data.mapAs({x: 0, value: 3});
+    // create column chart
+  cap_chart = anychart.line();
+
+
+  var cap_series1 = cap_chart.line(cap_seriesData_1);
+  var cap_series2 = cap_chart.line(cap_seriesData_2);
+  var cap_series3 = cap_chart.line(cap_seriesData_3);
+  cap_chart.animation(true);
+
+    {% raw %}
+    // configure axis labels
+    cap_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+    // tune tooltips format
+    cap_chart.tooltip().format('${%value}');
+    {% endraw %}
+    // tune interactivity selection mode
+    cap_chart.interactivity().selectionMode('none');
+
+    // set container id and display chart
+    cap_chart.container('CAP_container').draw();
+  });
+
+  // load initial data on button click
+  function CAP_thisYear(){
+    cap_chart.getSeries(0).data(cap_data);
+  }
+
+  function CAP_previousYear() {
+    cap_chart.getSeries(0).data(cap_data1);
+  }
+
+  function CAP_last5Years(){
+    cap_chart.getSeries(0).data(cap_data2);
+  }
 
   //--------------- Fund Raising Expenses Line Chart ---------------//
-  // create data
-  var data = [
-    ["January", 10000],
-    ["February", 12000],
-    ["March", 18000],
-    ["April", 11000],
-    ["May", 9000]
-  ];
+  anychart.onDocumentReady(function () {
+    data = [
+      {"x": 2015, "value": 2195081, "drillDown": [
+        {"x": "Q1", "value": 792026},
+        {"x": "Q2", "value": 610501},
+        {"x": "Q3", "value": 441843},
+        {"x": "Q4", "value": 350711}
+      ]},
+      {"x": 2016, "value": 3257447, "drillDown": [
+        {"x": "Q1", "value": 1378786},
+        {"x": "Q2", "value": 571063},
+        {"x": "Q3", "value": 510493},
+        {"x": "Q4", "value": 797105}
+      ]},
+      {"x": 2017, "value": 1963407, "drillDown": [
+        {"x": "Q1", "value": 499299},
+        {"x": "Q2", "value": 649963},
+        {"x": "Q3", "value": 571176},
+        {"x": "Q4", "value": 242969}
+      ]}
+    ];
 
-  // create a chart
-  chart = anychart.line();
+    data1 = [
+      {"x": 2015, "value": 3195081, "drillDown": [
+        {"x": "Q1", "value": 792026},
+        {"x": "Q2", "value": 610501},
+        {"x": "Q3", "value": 441843},
+        {"x": "Q4", "value": 350711}
+      ]},
+      {"x": 2016, "value": 3257447, "drillDown": [
+        {"x": "Q1", "value": 1378786},
+        {"x": "Q2", "value": 571063},
+        {"x": "Q3", "value": 510493},
+        {"x": "Q4", "value": 797105}
+      ]},
+      {"x": 2017, "value": 1963407, "drillDown": [
+        {"x": "Q1", "value": 499299},
+        {"x": "Q2", "value": 649963},
+        {"x": "Q3", "value": 571176},
+        {"x": "Q4", "value": 242969}
+      ]}
+    ];
 
-  // create a line series and set the data
-  var series = chart.line(data);
+    data2 = [
+      {"x": 2015, "value": 3195081, "drillDown": [
+        {"x": "Q1", "value": 792026},
+        {"x": "Q2", "value": 610501},
+        {"x": "Q3", "value": 441843},
+        {"x": "Q4", "value": 350711}
+      ]},
+      {"x": 2016, "value": 3257447, "drillDown": [
+        {"x": "Q1", "value": 1378786},
+        {"x": "Q2", "value": 571063},
+        {"x": "Q3", "value": 510493},
+        {"x": "Q4", "value": 797105}
+      ]},
+      {"x": 2017, "value": 3963407, "drillDown": [
+        {"x": "Q1", "value": 499299},
+        {"x": "Q2", "value": 649963},
+        {"x": "Q3", "value": 571176},
+        {"x": "Q4", "value": 242969}
+      ]}
+    ];
 
-  // set the container id
-  chart.container("FRE_container");
 
-  // initiate drawing the chart
-  chart.draw();
 
+    // create column chart
+    chart = anychart.column(data);
+
+    {% raw %}
+    // configure axis labels
+    chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+    // tune tooltips format
+    chart.tooltip().format('${%value}');
+    {% endraw %}
+    // tune interactivity selection mode
+    chart.interactivity().selectionMode('none');
+
+    // set container id and display chart
+    chart.container('FRE_container').draw();
+  });
+
+  // load initial data on button click
+  function thisYear(){
+    chart.getSeries(0).data(data);
+  }
+
+  function previousYear() {
+    chart.getSeries(0).data(data1);
+  }
+
+  function last5Years(){
+    chart.getSeries(0).data(data2);
+  }
   //--------------- Administration Costs Line Chart ---------------//
   // create data
   var data = [
@@ -449,6 +565,18 @@
   // create a line series and set the data
   var series = chart.line(data);
 
+
+
+  $("#AC1").click(function() {
+       var chart_data = [
+    ["January", 11000],
+    ["February", 12000],
+    ["March", 18000],
+    ["April", 1000],
+    ["May", 19000]
+  ];
+        chart.draw();
+      });
   // set the container id
   chart.container("AC_container");
 
