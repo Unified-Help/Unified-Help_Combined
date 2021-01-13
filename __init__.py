@@ -687,7 +687,7 @@ def retrieve_users():
         user = users_dict.get(key)
         users_list.append(user)
 
-    return render_template('customer/AM/retrieveusers.html', count=len(users_list), users_list=users_list)
+    return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
 
 
 @app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
