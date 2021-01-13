@@ -653,6 +653,8 @@ def login():
         b = users_dict[key]
         if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
             session["username"] = b.get_username()
+            session["email"] = b.get_email()
+            session["gender"] = b.get_gender()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
             return redirect(url_for('profile'))
@@ -664,7 +666,27 @@ def login():
 def profile():
     if "username" in session:
         username = session["username"]
-        return render_template('customer/AM/profile.html', username=username)
+        email = session["email"]
+        gender = session["gender"]
+        return render_template('customer/AM/profile.html', username=username, email=email, gender=gender)
+    update_user_form = CreateUserForm(request.form)
+    if request.method == 'POST' and update_user_form.validate():
+        users_dict = {}
+        db = shelve.open('account.db', 'c')
+        users_dict = db['Users']
+
+        user = users_dict.get(id)
+        user.set_username(update_user_form.username.data)
+        user.set_email(update_user_form.email.data)
+        user.set_gender(update_user_form.gender.data)
+        user.set_password(update_user_form.password.data)
+
+        db['Users'] = users_dict
+        db.close()
+
+        session['user_updated'] = user.get_username()
+
+        return redirect(url_for('retrieve_users'))
     else:
         return redirect(url_for('login'))
 
