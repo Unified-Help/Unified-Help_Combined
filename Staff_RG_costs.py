@@ -41,6 +41,10 @@ class CampaignCosts(Data):
     def get_offline_costs(self):
         return self.__offline_costs
 
+    def get_total(self):
+        total = self.__offline_costs + self.__online_costs
+        return total
+
     # Mutator Methods
     def set_online_costs(self, online_costs):
         self.__online_costs = online_costs
@@ -80,6 +84,10 @@ class CapCosts(Data):
     def get_vr(self):
         return self.__vr
 
+    def get_total(self):
+        total = self.__supplies + self.__manpower + self.__vr
+        return total
+
     # Mutator Methods
     def set_supplies(self, supplies):
         self.__supplies = supplies
@@ -107,6 +115,10 @@ class FreCosts(Data):
 
     def get_marketing(self):
         return self.__marketing
+
+    def get_total(self):
+        total = self.__catering + self.__vr + self.__marketing
+        return total
 
     # Mutator Methods
     def set_catering(self, catering):
@@ -140,6 +152,10 @@ class AdminCosts(Data):
     def get_legal_fees(self):
         return self.__legal_fees
 
+    def get_total(self):
+        total = self.__emp_salary + self.__emp_training + self.__office_supplies + self.__legal_fees
+        return total
+
     # Mutator Methods
     def set_emp_salary(self, emp_salary):
         self.__emp_salary = emp_salary
@@ -166,6 +182,10 @@ class UtilitiesCosts(Data):
 
     def get_electricity(self):
         return self.__electricity
+
+    def get_total(self):
+        total = self.__water + self.__electricity
+        return total
 
     # Mutator Methods
     def set_water(self, water):
