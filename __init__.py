@@ -21,7 +21,7 @@ from datetime import timedelta
 from Staff_RG_manual_upload import ManualUploadForm
 import csv
 import datetime
-from Staff_RG_costs import Data
+from Staff_RG_costs import Data, CampaignCosts, ISC, CapCosts, FreCosts, AdminCosts, UtilitiesCosts
 
 app = Flask(__name__)
 # Jinja for loop lib
@@ -963,99 +963,70 @@ def dashboard():
 
 @app.route("/cost_analysis")
 def cost_analysis():
-    # cc_dict = {}
-    # cap_dict = {}
-    # fre_dict = {}
-    # isc_dict = {}
-    # ac_dict = {}
-    # uc_dict = {}
-    # costs_db = shelve.open('costs.db', 'c')
-    #
-    # try:
-    #     cc_dict = costs_db['Campaign Costs']
-    #     cap_dict = costs_db['CAP Costs']
-    #     fre_dict = costs_db['FRE Costs']
-    #     isc_dict = costs_db['ISC Costs']
-    #     ac_dict = costs_db['AC Costs']
-    #     uc_dict = costs_db['UC Costs']
-    #
-    # except:
-    #     print("error in retrieving data from costs.db")
-    #
-    # with open("Staff_RG_costs.csv", 'r') as costs_data_file:
-    #     reader = csv.DictReader(costs_data_file)
-    #     for row in reader:
-    #         # ------ Creating and Storing Campaign Costs Objects ----- #
-    #         ccON = Data(row['Month'], row['Year'], 'Campaign Costs: Online', row['Campaign Costs:Online'])
-    #         cc_dict[ccON.get_data_id()] = ccON
-    #
-    #         ccOFF = Data(row['Month'], row['Year'], 'Campaign Costs: Offline', row['Campaign Costs: Offline'])
-    #         cc_dict[ccOFF.get_data_id()] = ccOFF
-    #         costs_db['Campaign Costs'] = cc_dict
-    #
-    #         # ------ Creating and Storing ISC Objects ----- #
-    #         ISC = Data(row['Month'], row['Year'], 'Inventory Storage Costs', row['Inventory Storage Costs'])
-    #         isc_dict[ISC.get_data_id()] = ISC
-    #         costs_db['ISC Costs'] = isc_dict
-    #
-    #         # ------ Creating and Storing CAP Objects ----- #
-    #         CAP_supplies = Data(row['Month'], row['Year'], 'Charitable Programs: Supplies', row['Charitable Programs: Supplies'])
-    #         cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
-    #
-    #         CAP_manpower = Data(row['Month'], row['Year'], 'Charitable Programs: Manpower', row['Charitable Programs: Manpower'])
-    #         cap_dict[CAP_manpower.get_data_id()] = CAP_manpower
-    #
-    #         CAP_vr = Data(row['Month'], row['Year'], 'Charitable Programs: Venue Rental', row['Charitable Programs: Venue Rental'])
-    #         cap_dict[CAP_vr.get_data_id()] = CAP_vr
-    #         costs_db['CAP Costs'] = cap_dict
-    #
-    #         # ------ Creating and Storing FRE Objects ----- #
-    #         FRE_catering = Data(row['Month'], row['Year'], 'Fund-raising Expenses: Catering', row['Fund-raising Expenses: Catering'])
-    #         fre_dict[FRE_catering.get_data_id()] = FRE_catering
-    #
-    #         FRE_vr = Data(row['Month'], row['Year'], 'Fund-raising Expenses: Venue Rental', row['Fund-raising Expenses: Venue Rental'])
-    #         fre_dict[FRE_vr.get_data_id()] = FRE_vr
-    #
-    #         FRE_marketing = Data(row['Month'], row['Year'], 'Fund Raising Expenses: Marketing', row['Fund Raising Expenses: Marketing'])
-    #         fre_dict[FRE_marketing.get_data_id()] = FRE_marketing
-    #         costs_db['FRE Costs'] = fre_dict
-    #
-    #         # ------ Creating and Storing AC Objects ----- #
-    #         AC_ES = Data(row['Month'], row['Year'], 'Administration Costs: Employee Salaries', row['Administration Costs: Employee Salaries'])
-    #         ac_dict[AC_ES.get_data_id()] = AC_ES
-    #
-    #         AC_ET = Data(row['Month'], row['Year'], 'Administration Costs: Employee Training', row['Administration Costs: Employee Training'])
-    #         ac_dict[AC_ET.get_data_id()] = AC_ET
-    #
-    #         AC_OS = Data(row['Month'], row['Year'], 'Administration Costs: Office Supplies', row['Administration Costs: Office Supplies'])
-    #         ac_dict[AC_OS.get_data_id()] = AC_OS
-    #
-    #         AC_LF = Data(row['Month'], row['Year'], 'Administration Costs: Legal Fees', row['Administration Costs: Legal Fees'])
-    #         ac_dict[AC_LF.get_data_id()] = AC_LF
-    #         costs_db['AC Costs'] = ac_dict
-    #
-    #         # ------ Creating and Storing UC Objects ----- #
-    #         UC_water = Data(row['Month'], row['Year'], 'Utilities Costs: Water', row['Utilities Costs: Water'])
-    #         uc_dict[UC_water.get_data_id()] = UC_water
-    #
-    #         UC_electricity = Data(row['Month'], row['Year'], 'Utilities Costs: Electricity', row['Utilities Costs: Electricity'])
-    #         uc_dict[UC_electricity.get_data_id()] = UC_electricity
-    #         costs_db['UC Costs'] = uc_dict
-    #
-    # costs_db.close()
-    #
-    # # Retrieve Costs for each category and sub-category
-    # costs_db = shelve.open('costs.db', 'r')
-    # cc_dict = costs_db['Campaign Costs']
-    # cap_dict = costs_db['CAP Costs']
-    # fre_dict = costs_db['FRE Costs']
-    # isc_dict = costs_db['ISC Costs']
-    # ac_dict = costs_db['AC Costs']
-    # uc_dict = costs_db['UC Costs']
-    # costs_db.close()
-    #
+    cc_dict = {}
+    cap_dict = {}
+    fre_dict = {}
+    isc_dict = {}
+    ac_dict = {}
+    uc_dict = {}
+    costs_db = shelve.open('costs.db', 'c')
 
+    try:
+        cc_dict = costs_db['Campaign Costs']
+        cap_dict = costs_db['CAP Costs']
+        fre_dict = costs_db['FRE Costs']
+        isc_dict = costs_db['ISC Costs']
+        ac_dict = costs_db['AC Costs']
+        uc_dict = costs_db['UC Costs']
 
+    except:
+        print("error in retrieving data from costs.db")
+
+    with open("Staff_RG_costs.csv", 'r') as costs_data_file:
+        reader = csv.DictReader(costs_data_file)
+        for row in reader:
+            # ------ Creating and Storing Campaign Costs Objects ----- #
+            ccON = CampaignCosts(row['Month'], row['Year'], row['Campaign Costs: Online'], row['Campaign Costs: Offline'])
+            cc_dict[ccON.get_data_id()] = ccON
+            costs_db['Campaign Costs'] = cc_dict
+
+            # ------ Creating and Storing ISC Objects ----- #
+            ISC = ISC(row['Month'], row['Year'], row['Inventory Storage Costs'])
+            isc_dict[ISC.get_data_id()] = ISC
+            costs_db['ISC Costs'] = isc_dict
+
+            # ------ Creating and Storing CAP Objects ----- #
+            CAP_supplies = CapCosts(row['Month'], row['Year'], row['Charitable Programs: Supplies'], row['Charitable Programs: Manpower'], row['Charitable Programs: Manpower'])
+            cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
+            costs_db['CAP Costs'] = cap_dict
+
+            # ------ Creating and Storing FRE Objects ----- #
+            FRE_catering = FreCosts(row['Month'], row['Year'], row['Fund-raising Expenses: Catering'], row['Fund-raising Expenses: Venue Rental'], row['Fund Raising Expenses: Marketing'])
+            fre_dict[FRE_catering.get_data_id()] = FRE_catering
+            costs_db['FRE Costs'] = fre_dict
+
+            # ------ Creating and Storing AC Objects ----- #
+            AC_ES = AdminCosts(row['Month'], row['Year'], row['Administration Costs: Employee Salaries'], row['Administration Costs: Employee Training'],
+                         row['Administration Costs: Office Supplies'], row['Administration Costs: Legal Fees'])
+            ac_dict[AC_ES.get_data_id()] = AC_ES
+            costs_db['AC Costs'] = ac_dict
+
+            # ------ Creating and Storing UC Objects ----- #
+            UC_water = UtilitiesCosts(row['Month'], row['Year'], row['Utilities Costs: Water'], row['Utilities Costs: Electricity'])
+            uc_dict[UC_water.get_data_id()] = UC_water
+            costs_db['UC Costs'] = uc_dict
+
+    costs_db.close()
+
+    # Retrieve Costs for each category and sub-category
+    costs_db = shelve.open('costs.db', 'r')
+    cc_dict = costs_db['Campaign Costs']
+    cap_dict = costs_db['CAP Costs']
+    fre_dict = costs_db['FRE Costs']
+    isc_dict = costs_db['ISC Costs']
+    ac_dict = costs_db['AC Costs']
+    uc_dict = costs_db['UC Costs']
+    costs_db.close()
     return render_template('staff/RG/cost_analysis.html')
 
 
