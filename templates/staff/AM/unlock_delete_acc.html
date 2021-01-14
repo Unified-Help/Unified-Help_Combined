@@ -37,7 +37,7 @@
 <div>
   <br><br><br>
   <h4 class="display-5">Customer Account</h4>
-  <table class="table table-striped" style="width:800px; height:300px;">
+  <table class="table table-striped" style="width:900px; height:300px;">
     <thead>
       <tr>
         <th>User ID</th>
@@ -45,6 +45,7 @@
         <th>Email</th>
         <th>Gender</th>
         <th>Password</th>
+        <th>Created On</th>
         <th></th>
       </tr>
     </thead>
@@ -56,6 +57,7 @@
         <td>{{ user.get_email() }}</td>
         <td>{{ user.get_gender() }}</td>
         <td>{{ user.get_password() }}</td>
+        <td>{{ user.get_date_time() }}</td>
         <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
         <td>
           <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">

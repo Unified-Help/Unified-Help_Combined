@@ -657,6 +657,7 @@ def login():
             session["gender"] = b.get_gender()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
+            print(b.get_date_time())
             return redirect(url_for('profile'))
 
     return render_template('customer/AM/login.html')
