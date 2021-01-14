@@ -63,13 +63,17 @@
           </thead>
           <tbody>
           {% for post in announcements_list|reverse %}
+          {% set user_name = post.get_username() %}
+          {% set username = user_name %}
           {%- if loop.index > 3 %}{% break %}{% endif %}
           <tr>
             <td>
               <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_announcements_posts_post', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}">{{ post.get_post_subject() }} - Forum Post ID: {{ post.get_forum_announcements_post_id() }}</a></h3>
             </td>
             <td>
-              <p style="margin:auto;padding:10px 0px 10px 5px;">by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
+              <p style="margin:auto;padding:10px 0px 10px 5px;">by {{ username }}
+                <br/> {{post.get_date_time() }}
+              </p>
             </td>
             <td>
               <p> </p>

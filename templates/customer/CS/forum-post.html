@@ -71,9 +71,11 @@
                 <td colspan="2" style="background-color:#ffffff">
                   {% for post in list %}
                   {% if category == 'Pinned Posts' %}
+                  {% if session_username == post_author %}
                   <a href="{{ url_for('forum_pinned_posts_post_update', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px"></i></a>
                   <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_pinned_post_id()}}" style="padding-left:30px;"></i>
-                    <!-- The Modal -->
+                  {% endif %}
+                  <!-- The Modal -->
                     <div class="modal" id="myModal_{{post.get_forum_pinned_post_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -98,9 +100,11 @@
                       </div>
                     </div>
                   {% elif category == 'Announcements' %}
+                  {% if session_username == post_author %}
                   <a href="{{ url_for('forum_announcements_posts_post_update', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px;"></i></a>
                   <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_announcements_post_id()}}" style="padding-left:30px;"></i>
-                    <!-- The Modal -->
+                  {% endif %}
+                  <!-- The Modal -->
                     <div class="modal" id="myModal_{{post.get_forum_announcements_post_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content">
@@ -125,9 +129,11 @@
                       </div>
                     </div>
                   {% elif category == 'Unified Help Community' %}
+                  {% if session['username'] == post_author %}
                   <a href="{{ url_for('forum_uhc_post_update', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px;"></i></a>
                   <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_uhc_post_id()}}" style="padding-left:30px;"></i>
-                    <!-- The Modal -->
+                  {% endif %}
+                  <!-- The Modal -->
                     <div class="modal" id="myModal_{{post.get_forum_uhc_post_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content">
