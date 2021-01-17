@@ -1,0 +1,50 @@
+{% extends "staff/base.html" %}
+
+{% block title %} Unified Help - Incoming Items{% endblock %}
+
+<!-- Any css files/ internal css in here -->
+{% block head %}
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.23/datatables.min.css"/>-->
+{% endblock %}
+
+<!-- Page content in here -->
+{% block content %}
+<div class="col-lg-12" style="margin: 1% 1.5%;">
+<!--    Back Button-->
+<!--    <a class="choose col-lg-1" href="/donate">-->
+<!--        <button type="button" class="btn btn-secondary" value="Donate">&#x3c; Back</button>-->
+<!--    </a>-->
+    <br><br>
+    <h2>Donation History</h2>
+    <div class="col-lg-12">
+        <table class="table table-striped table-hover" style="border-radius: 50px;">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Item ID</th>
+                    <th>Item Description</th>
+                    <th>Collection Information<br>(Pick-Up or Drop-off)</th>
+                    <th>Address Information</th>
+                    <th>Contact Information</th>
+                    <th>Confirmation Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>No incoming items</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+<!-- Link any js files here -->
+{% block script %}
+<!--<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.23/datatables.min.js"></script>-->
+
+<!--<script>-->
+<!--    $(document).ready( function () {-->
+<!--    $('#table_id').DataTable();-->
+<!--    } );-->
+<!--</script>-->
+{% endblock %}

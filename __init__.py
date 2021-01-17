@@ -151,13 +151,14 @@ def donate_Item():
         except:
             print("Error in retrieving Donors IM from donorChoices")
 
-        donor = DonateItem(donate_item.donateToWho.data, donate_item.itemName.data, donate_item.itemName.data,
+        donor = DonateItem(donate_item.donateToWho.data, donate_item.itemType.data, donate_item.itemName.data,
                            donate_item.itemWeight.data, donate_item.itemHeight.data, donate_item.itemLength.data,
                            donate_item.itemWidth.data, donate_item.collectionType.data, donate_item.collectionDate.data,
                            donate_item.collectionMonth.data, donate_item.collectionTime.data,
                            donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
                            donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data)
         donor.set_itemID()
+        donor.set_collection_status("Pending")
 
         if request.form.get('Cancel') == 'Cancel':
             donor.set_status("Pending")
@@ -864,7 +865,57 @@ def delete(id):
 
 @app.route("/incoming_items")
 def incoming_item():
-    return render_template('staff/TP/incoming_item.html')
+    donorsI_dict = {}
+    try:
+        db = shelve.open("donorChoices", "r")
+        donorsI_dict = db["Items"]
+        donorsI_list = []
+        for key in donorsI_dict:
+            donorI = donorsI_dict.get(key)
+            donorsI_list.append(donorI)
+        return render_template('staff/TP/incoming_item.html', donorsI_list=donorsI_list)
+    except:
+        return render_template('staff/TP/incoming_item.html')
+
+
+@app.route("/incoming_items/confirmation/<string:id>", methods=['GET', 'POST'])
+def incoming_item_confirmation(id):
+    if request.method == 'POST':
+        donorsI_dict = {}
+        db = shelve.open('donorChoices', 'w')
+
+        donorsI_dict = db['Items']
+        donor = donorsI_dict.get(id)
+
+        if request.form.get('Confirm') == 'Confirm':
+            donor.set_collection_status("Confirmed")
+
+        db['Items'] = donorsI_dict
+
+        db.close()
+
+        return redirect(url_for('incoming_item'))
+
+
+@app.route("/incoming_items/archive/<string:id>", methods=['GET', 'POST'])
+def incoming_item_archive(id):
+    if request.method == 'POST':
+        donorsI_dict = {}
+        db = shelve.open('donorChoices', 'w')
+
+        donorsI_dict = db['Items']
+        donor = donorsI_dict.get(id)
+
+        if request.form.get('Archive') == 'Archive':
+            donor.set_collection_status("Archive")
+
+        print(donor.get_collection_status())
+
+        db['Items'] = donorsI_dict
+
+        db.close()
+
+        return redirect(url_for('incoming_item'))
 
 
 # ------------ Customer Support ------------ #

@@ -134,6 +134,7 @@ class DonateItem:
 
         # Donation Status
         self.__status = ""
+        self.__collection_status = ""
 
     # Accessors
     def get_itemID(self):
@@ -189,6 +190,9 @@ class DonateItem:
 
     def get_status(self):
         return self.__status
+
+    def get_collection_status(self):
+        return self.__collection_status
 
     # Mutators
     def set_itemID(self):
@@ -255,3 +259,6 @@ class DonateItem:
 
     def set_status(self, status):
         self.__status = status
+
+    def set_collection_status(self, collection_status):
+        self.__collection_status = collection_status

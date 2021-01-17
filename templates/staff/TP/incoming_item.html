@@ -4,7 +4,7 @@
 
 <!-- Any css files/ internal css in here -->
 {% block head %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.23/datatables.min.css"/>
+<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.23/datatables.min.css"/>-->
 {% endblock %}
 
 <!-- Page content in here -->
@@ -15,7 +15,7 @@
 <!--        <button type="button" class="btn btn-secondary" value="Donate">&#x3c; Back</button>-->
 <!--    </a>-->
     <br><br>
-    <h2>Donation History</h2>
+    <h2 class="col-lg-12">Donation History</h2>
     <div class="col-lg-12">
         <table class="table table-striped table-hover" style="border-radius: 50px;">
             <thead class="thead-dark">
@@ -30,26 +30,101 @@
             </thead>
             <tbody>
             {% for donorI in donorsI_list %}
-                {% if donorI.get_status() == "Confirmed" or donorI.get_status() == "Pending" %}
+                {% if donorI.get_collection_status() == "Confirmed" or donorI.get_collection_status() == "Pending" %}
                 <tr>
                     <!-- Donation ID -->
-                    <td><a href="/donate/itemupdate/{{ donorI.get_itemID() }}" style="color:#eb5d1e;">{{ donorI.get_itemID() }}</a></td>
+                    <td>{{ donorI.get_itemID() }}</td>
 
                     <!-- Donation Description -->
-                    <td>{{ donorI.get_donate_type() }}: <br> {{ donorI.get_item_name() }}</td>
+                    <td>{{ donorI.get_item_type() }}: <br> {{ donorI.get_item_name() }}</td>
 
-                    <!-- Donate to Who -->
-                    <td>{{ donorI.get_donate_who() }}</td>
+                    <!-- Collection Information -->
+                    <td>{{ donorI.get_collection_type() }} <br> Date: {{ donorI.get_date() }}/{{ donorI.get_month() }}/21 <br>
+                    Time: {{ donorI.get_time() }}</td>
 
-                    <!-- If item donation, only show collection type -->
-                    <td>{{ donorI.get_collection_type() }}</td>
+                    <!-- Address Information, If We Pick Up -->
+                    {% if donorI.get_collection_type() == "We Pick Up" %}
+                    <td>{{ donorI.get_address1() }} <br> {{ donorI.get_address2() }} <br> {{ donorI.get_address3() }} <br>
+                    {{ donorI.get_postal_code() }}</td>
+                    {% elif donorI.get_collection_type() == "Drop Off" %}
+                    <td>--</td>
+                    {% endif %}
+
+                    <!-- Contact Information -->
                     <td>--</td>
 
-                    <!-- Donation Confirmation -->
-                    {% if donorI.get_status() == "Confirmed" %}
-                    <td>{{ donorI.get_status() }}</td>
-                    {% elif donorI.get_status() == "Pending" %}
-                    <td><a href="/donate/details/confirmation/{{ donorI.get_itemID() }}" style="color:#eb5d1e;">{{ donorI.get_status() }}</a></td>
+                    <!-- Collection Confirmation -->
+                    {% if donorI.get_collection_status() == "Confirmed"  and donorI.get_status() == "Confirmed" %}
+                    <td>
+                        <form action="{{url_for('incoming_item_archive', id=donorI.get_itemID())}}" method="POST">
+
+                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Archive_{{donorI.get_itemID()}}">
+                                {{ donorI.get_collection_status() }}</a>
+
+                            <!-- The Modal -->
+                            <div class="modal" id="Archive_{{donorI.get_itemID()}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Remove</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            Archive item donation?
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <input type="submit" name="Archive" value="Archive" class="btn btn-success">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </td>
+                    {% elif donorI.get_collection_status() == "Pending" and donorI.get_status() == "Confirmed" %}
+                    <td>
+                        <form action="{{url_for('incoming_item_confirmation', id=donorI.get_itemID())}}" method="POST">
+
+                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Confirmation_{{donorI.get_itemID()}}">
+                                {{ donorI.get_collection_status() }}</a>
+
+                            <!-- The Modal -->
+                            <div class="modal" id="Confirmation_{{donorI.get_itemID()}}">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Confirmation</h4>
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        </div>
+
+                                        <!-- Modal body -->
+                                        <div class="modal-body">
+                                            Confirm collection of item donation?
+                                        </div>
+
+                                        <!-- Modal footer -->
+                                        <div class="modal-footer">
+                                            <input type="submit" name="Confirm" value="Confirm" class="btn btn-success">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </td>
                     {% else %}
                     <td> </td>
                     {% endif %}
@@ -66,11 +141,11 @@
 
 <!-- Link any js files here -->
 {% block script %}
-<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.23/datatables.min.js"></script>
+<!--<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jq-3.3.1/dt-1.10.23/datatables.min.js"></script>-->
 
-<script>
-    $(document).ready( function () {
-    $('#table_id').DataTable();
-    } );
-</script>
+<!--<script>-->
+<!--    $(document).ready( function () {-->
+<!--    $('#table_id').DataTable();-->
+<!--    } );-->
+<!--</script>-->
 {% endblock %}

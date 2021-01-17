@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../Flask Prac/.idea/Flask Prac.iml" filepath="$PROJECT_DIR$/../../Flask Prac/.idea/Flask Prac.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Unified-Help_Combined.iml" filepath="$PROJECT_DIR$/.idea/Unified-Help_Combined.iml" />
     </modules>
   </component>
