@@ -476,10 +476,6 @@ def forum_announcements_posts_post(forum_announcements_post_id):
 
     announcements_list = []
     post = announcements_dict.get(forum_announcements_post_id)
-    try:
-        session_username = session["username"]
-    except:
-        return redirect(url_for('forum_announcements_posts_post',forum_announcements_post_id = post.get_forum_announcements_post_id))
     announcements_list.append(post)
     post_subject = post.get_post_subject()
     post_author = post.get_username()
@@ -490,7 +486,7 @@ def forum_announcements_posts_post(forum_announcements_post_id):
     return render_template('customer/CS/forum-post.html', list=announcements_list, category=category,
                            post_subject=post_subject,
                            post_author=post_author,
-                           post_datetime=post_datetime, post_message=post_message, post_edited=post_edited,session_username=session_username)
+                           post_datetime=post_datetime, post_message=post_message, post_edited=post_edited)
 
 
 @app.route("/forum/announcements/update/<int:forum_announcements_post_id>", methods=['GET', 'POST'])
@@ -563,10 +559,6 @@ def forum_uhc_posts_post(forum_uhc_post_id):
 
     uhc_list = []
     post = uhc_dict.get(forum_uhc_post_id)
-    try:
-        session_username = session["username"]
-    except:
-        return redirect(url_for('forum_uhc_posts_post',forum_uhc_post_id = post.get_forum_uhc_post_id() ))
     uhc_list.append(post)
     post_subject = post.get_post_subject()
     post_author = post.get_username()
@@ -576,7 +568,7 @@ def forum_uhc_posts_post(forum_uhc_post_id):
     post_edited = post.get_edited()
     return render_template('customer/CS/forum-post.html', list=uhc_list, category=category, post_subject=post_subject,
                            post_author=post_author,
-                           post_datetime=post_datetime, post_message=post_message, post_edited=post_edited,session_username=session_username)
+                           post_datetime=post_datetime, post_message=post_message, post_edited=post_edited)
 
 
 @app.route("/forum/uhc/update/<int:forum_uhc_post_id>", methods=['GET', 'POST'])
