@@ -22,9 +22,9 @@ class donateItem(Form):
     itemName = StringField("Name of Item*",
                            [validators.Length(min=1, max=150), validators.DataRequired()])
     itemWeight = FloatField("Weight of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
-    itemHeight = FloatField("Height of Item", [validators.NumberRange(min=0, max=150), validators.Optional()])
-    itemLength = FloatField("Length of Item", [validators.NumberRange(min=0, max=150), validators.Optional()])
-    itemWidth = FloatField("Width of Item", [validators.NumberRange(min=0, max=150), validators.Optional()])
+    itemHeight = FloatField("Height of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
+    itemLength = FloatField("Length of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
+    itemWidth = FloatField("Width of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
     # itemImage = FileField('Picture of Item', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
 
     # Collection Types and Information
