@@ -780,6 +780,9 @@ def staff_home():
 def staff_profile():
     return render_template('staff/AM/staff_profile.html')
 
+@app.route("/staff_login", methods=['GET', 'POST'])
+def staff_login():
+    return render_template('staff/AM/stafflogin.html')
 
 @app.route("/account_management")
 def account_management():
