@@ -1211,7 +1211,7 @@ section {
 --------------------------------------------------------------*/
 #footer {
   background: #fff;
-  padding: 0 0 30px 0;
+  padding: 0 0 0 0;
   color: #212529;
   font-size: 14px;
   background: #fef8f5;
@@ -1270,7 +1270,7 @@ section {
 }
 
 #footer .footer-top {
-  padding: 60px 0 30px 0;
+  padding: 60px 0 0 0;
   background: #fff;
 }
 
