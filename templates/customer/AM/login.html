@@ -8,13 +8,13 @@
 
 <body>
   {% block content %}
-<body>
   <section class="hero is-info is-fullheight" style="background-color:white">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
           <div class="column is-half">
             <form method="POST">
+              <h1 class="display-6">Customer Login</h1>
               <div class="field">
                 <label class="label">Username</label>
                 <div class="control has-icons-left has-icons-right">
@@ -38,6 +38,7 @@
                   <button type="submit" class="button is-success">
                     Login
                   </button>
+                  <br><br>
                   <button type="submit" class="button is-success"><a href="{{url_for('create_user')}}" style="text-decoration:none;">Create Account</a>
                   </button>
                   <button type="submit" class="button is-success">
