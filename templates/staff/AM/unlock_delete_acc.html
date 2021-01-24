@@ -97,7 +97,94 @@
     {% endfor %}
     </tbody>
   </table>
+  </div>
+ {% if 'staff_created' in session %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('staff_created', None) }} was created.
 </div>
+{% elif 'staff_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('staff_updated', None) }} was updated.
+</div>
+{% elif 'staff_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('staff_deleted', None) }} was deleted.
+</div>
+
+{% endif %}
+<div>
+  {% if count == 0 %}
+  <p>There are no staff.</p>
+  {% elif count == 1 %}
+  <p>There is 1 staff.</p>
+  {% else %}
+  <p>There are {{ count }} staff.</p>
+  {% endif %}
+</div>
+<div>
+    <h4 class="display-5">Staff Account</h4>
+  <table class="table table-striped" style="width:900px; height:300px;">
+    <thead>
+      <tr>
+        <th>Staff ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Gender</th>
+        <th>Password</th>
+        <th>Created On</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for staff in staff_list %}
+      <tr>
+        <td>{{ staff.get_staff_id() }}</td>
+        <td>{{ staff.get_username() }}</td>
+        <td>{{ staff.get_email() }}</td>
+        <td>{{ staff.get_gender() }}</td>
+        <td>{{ staff.get_password() }}</td>
+        <td>{{ staff.get_date_time() }}</td>
+        <td><a href="/updateStaff/{{staff.get_user_id()}}" class="btn btn-warning">Update</a></td>
+        <td>
+          <form action="{{url_for('delete_staff', id=staff.get_user_id())}}" method="POST">
+            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{staff.get_username()}} {{staff.get_email()}}?');"-->
+            <!-- Button to Open the Modal -->
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{staff.get_user_id()}}"> Delete
+    </button>
+               <!-- The Modal -->
+    <div class="modal" id="myModal_{{staff.get_user_id()}}">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Delete Confirmation</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            Are you sure you want to delete {{staff.get_username()}} {{staff.get_email()}}?
+          </div>
+
+          <!-- Modal footer -->
+          <div class="modal-footer">
+            <input type="submit" value="Delete" class="btn btn-danger">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+    </table>
 {% endblock %}
 
 <!-- Link any js files here -->

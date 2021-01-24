@@ -15,6 +15,7 @@ from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCount
 # Account Management Imports
 from Forms import CreateUserForm, LoginForm
 from User import User
+from Staff import Staff
 from datetime import timedelta
 
 # Report Generation Imports
@@ -776,13 +777,82 @@ def staff_home():
 
 
 # ------------ Account Management ------------ #
+
+@app.route('/createStaff', methods=['GET', 'POST'])
+def create_staff():
+    create_staff_form = CreateUserForm(request.form)
+    if request.method == 'POST' and create_staff_form.validate():
+        staff_dict = {}
+        db = shelve.open('staff.db', 'c')
+
+        try:
+            staff_dict = db['Staff']
+        except:
+            print("Error in retrieving Staff from staff.db.")
+
+        staff = Staff(create_staff_form.username.data, create_staff_form.email.data, create_staff_form.gender.data,
+                    create_staff_form.password.data, create_staff_form.confirm_password.data)
+        staff.set_date_time(staff.get_date_time())
+        staff_dict[staff.get_staff_id()] = staff
+        db['Staff'] = staff_dict
+
+        db.close()
+
+        session['staff_created'] = staff.get_username()
+
+        return redirect(url_for('staff_profile'))
+    return render_template('staff/AM/CreateStaffAccount.html', form=create_staff_form)
+
 @app.route("/staff_profile")
 def staff_profile():
-    return render_template('staff/AM/staff_profile.html')
+    if "username" in session:
+        username1 = session["username"]
+        return render_template('staff/AM/staff_profile.html', username=username1)
+    update_staff_form = CreateUserForm(request.form)
+    if request.method == 'POST' and update_staff_form.validate():
+        staff_dict = {}
+        db = shelve.open('staff.db', 'c')
+        staff_dict = db['Staff']
+
+        staff = staff_dict.get(id)
+        staff.set_username(update_staff_form.username.data)
+        staff.set_email(update_staff_form.email.data)
+        staff.set_gender(update_staff_form.gender.data)
+        staff.set_password(update_staff_form.password.data)
+
+        db['Staff'] = staff_dict
+        db.close()
+
+        session['staff_updated'] = user.get_username()
+
+        return redirect(url_for('retrieve'))
+    else:
+        return redirect(url_for('staff_login'))
 
 @app.route("/staff_login", methods=['GET', 'POST'])
 def staff_login():
+    create_stafflogin_form = CreateUserForm(request.form)
+    staff_dict = {}
+    db = shelve.open('staff.db', 'r')
+    staff_dict = db['Staff']
+    db.close()
+
+    staff_list = []
+    for key in staff_dict:
+        a = staff_dict[key]
+        if a.get_username() == create_stafflogin_form.username.data and a.get_password() == create_stafflogin_form.password.data:
+            session["username"] = a.get_username()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            print(a.get_date_time())
+            return redirect(url_for('staff_profile'))
+
     return render_template('staff/AM/stafflogin.html')
+
+@app.route('/logout')
+def staff_logout():
+    session.pop('username', None)
+    return render_template('staff/home.html')
 
 @app.route("/account_management")
 def account_management():
@@ -791,67 +861,67 @@ def account_management():
 
 @app.route('/retrieve')
 def retrieve():
-    users_dict = {}
-    db = shelve.open('account.db', 'r')
-    users_dict = db['Users']
+    staff_dict = {}
+    db = shelve.open('staff.db', 'r')
+    staff_dict = db['Staff']
     db.close()
 
-    users_list = []
-    for key in users_dict:
-        user = users_dict.get(key)
-        users_list.append(user)
+    staff_list = []
+    for key in staff_dict:
+        staff = staff_dict.get(key)
+        staff_list.append(staff)
 
-    return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
+    return render_template('staff/AM/unlock_delete_acc.html', count=len(staff_list), staff_list=staff_list)
 
 
-@app.route('/update/<int:id>/', methods=['GET', 'POST'])
-def update(id):
-    update_user_form = CreateUserForm(request.form)
-    if request.method == 'POST' and update_user_form.validate():
-        users_dict = {}
-        db = shelve.open('account.db', 'c')
-        users_dict = db['Users']
+@app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
+def updateStaff(id):
+    update_staff_form = CreateUserForm(request.form)
+    if request.method == 'POST' and update_staff_form.validate():
+        staff_dict = {}
+        db = shelve.open('staff.db', 'c')
+        staff_dict = db['Staff']
 
-        user = users_dict.get(id)
-        user.set_username(update_user_form.username.data)
-        user.set_email(update_user_form.email.data)
-        user.set_gender(update_user_form.gender.data)
-        user.set_password(update_user_form.password.data)
+        staff = staff_dict.get(id)
+        staff.set_username(update_staff_form.username.data)
+        staff.set_email(update_staff_form.email.data)
+        staff.set_gender(update_staff_form.gender.data)
+        staff.set_password(update_staff_form.password.data)
 
-        db['Users'] = users_dict
+        db['Staff'] = staff_dict
         db.close()
 
-        session['user_updated'] = user.get_username()
+        session['staff_updated'] = staff.get_username()
 
         return redirect(url_for('retrieve'))
     else:
-        users_dict = {}
-        db = shelve.open('account.db', 'r')
-        users_dict = db['Users']
+        staff_dict = {}
+        db = shelve.open('staff.db', 'r')
+        staff_dict = db['Staff']
         db.close()
 
-        user = users_dict.get(id)
-        update_user_form.username.data = user.get_username()
-        update_user_form.email.data = user.get_email()
-        update_user_form.gender.data = user.get_gender()
-        update_user_form.password.data = user.get_password()
-        update_user_form.confirm_password.data = user.get_confirm_password()
+        staff = staff_dict.get(id)
+        update_staff_form.username.data = staff.get_username()
+        update_staff_form.email.data = staff.get_email()
+        update_staff_form.gender.data = staff.get_gender()
+        update_staff_form.password.data = staff.get_password()
+        update_staff_form.confirm_password.data = staff.get_confirm_password()
 
-        return render_template('staff/AM/updateAccount.html', form=update_user_form)
+        return render_template('staff/AM/updateAccount.html', form=update_staff_form)
 
 
-@app.route('/delete/<int:id>', methods=['POST'])
-def delete(id):
-    users_dict = {}
-    db = shelve.open('account.db', 'w')
-    users_dict = db['Users']
+@app.route('/delete_staff/<int:id>', methods=['POST'])
+def delete_staff(id):
+    staff_dict = {}
+    db = shelve.open('staff.db', 'w')
+    staff_dict = db['Staff']
 
-    user = users_dict.pop(id)
+    staff = staff_dict.pop(id)
 
-    db['Users'] = users_dict
+    db['Staff'] = staff_dict
     db.close()
 
-    session['user_deleted'] = user.get_username()
+    session['staff_deleted'] = staff.get_username()
 
     return redirect(url_for('retrieve'))
 
