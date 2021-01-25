@@ -25,6 +25,23 @@
 </div>
 
 {% endif %}
+ {% if 'staff_created' in session %}
+<div class="alert alert-success alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('staff_created', None) }} was created.
+</div>
+{% elif 'staff_updated' in session %}
+<div class="alert alert-warning alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('staff_updated', None) }} was updated.
+</div>
+{% elif 'staff_deleted' in session %}
+<div class="alert alert-danger alert-dismissible">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ session.pop('staff_deleted', None) }} was deleted.
+</div>
+
+{% endif %}
 <div>
   {% if count == 0 %}
   <p>There are no users.</p>
@@ -98,32 +115,6 @@
     </tbody>
   </table>
   </div>
- {% if 'staff_created' in session %}
-<div class="alert alert-success alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('staff_created', None) }} was created.
-</div>
-{% elif 'staff_updated' in session %}
-<div class="alert alert-warning alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('staff_updated', None) }} was updated.
-</div>
-{% elif 'staff_deleted' in session %}
-<div class="alert alert-danger alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('staff_deleted', None) }} was deleted.
-</div>
-
-{% endif %}
-<div>
-  {% if count == 0 %}
-  <p>There are no staff.</p>
-  {% elif count == 1 %}
-  <p>There is 1 staff.</p>
-  {% else %}
-  <p>There are {{ count }} staff.</p>
-  {% endif %}
-</div>
 <div>
     <h4 class="display-5">Staff Account</h4>
   <table class="table table-striped" style="width:900px; height:300px;">

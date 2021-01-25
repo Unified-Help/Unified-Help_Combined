@@ -31,10 +31,17 @@
 
           <!-- Account Management -->
           <li class="drop-down"><a href="#">Account</a>
+            {% if authenticated %}
+            <ul>
+              <li class="navLinks"><a href="{{url_for('profile')}}">Profile</a></li>
+              <li><a href="{{url_for('logout')}}">Logout</a></li>
+            </ul>
+            {% else %}
             <ul>
               <li class="navLinks"><a href="{{url_for('login')}}">Login</a></li>
               <li class="navLinks"><a href="{{url_for('profile')}}">Profile</a></li>
             </ul>
+            {% endif %}
           </li>
         </ul>
       </nav><!-- .nav-menu -->

@@ -1,11 +1,11 @@
 import datetime
 
 class Staff:
-    count_id = 0
+    countID = 0
 
     def __init__(self, username, email, gender, password, confirm_password):
-        Staff.count_id += 1
-        self.__staff_id = Staff.count_id
+        Staff.countID += 1
+        self.__staff_id = Staff.countID
         self.__username = username
         self.__email = email
         self.__gender = gender
