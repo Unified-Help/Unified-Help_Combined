@@ -34,7 +34,7 @@
             {%- if loop.index > 3 %}{% break %}{% endif %}
             <tr>
               <td>
-                <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_pinned_posts_post', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}">{{ post.get_post_subject() }} - Forum Post ID: {{ post.get_forum_pinned_post_id() }}</a></h3>
+                <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_pinned_posts_post', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}">{{ post.get_post_subject() }} #{{ post.get_forum_pinned_post_id() }}</a></h3>
               </td>
               <td>
                 <p>by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
@@ -68,7 +68,7 @@
           {%- if loop.index > 3 %}{% break %}{% endif %}
           <tr>
             <td>
-              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_announcements_posts_post', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}">{{ post.get_post_subject() }} - Forum Post ID: {{ post.get_forum_announcements_post_id() }}</a></h3>
+              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_announcements_posts_post', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}">{{ post.get_post_subject() }} #{{ post.get_forum_announcements_post_id() }}</a></h3>
             </td>
             <td>
               <p style="margin:auto;padding:10px 0px 10px 5px;">by {{ username }}
@@ -102,7 +102,7 @@
             {%- if loop.index > 3 %}{% break %}{% endif %}
           <tr>
             <td>
-              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_uhc_posts_post', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}">{{ post.get_post_subject() }}  - Forum Post ID: {{ post.get_forum_uhc_post_id() }}</a></h3>
+              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_uhc_posts_post', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}">{{ post.get_post_subject() }}  #{{ post.get_forum_uhc_post_id() }}</a></h3>
             </td>
             <td>
               <p>by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
