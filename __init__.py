@@ -9,7 +9,7 @@ from donateItem import donateItem
 from Donate import DonateMoney, DonateItem
 
 # Customer Support Imports
-from ForumForm import createForumPost, updateForumPost, staff_createForumPost
+from ForumForm import createForumPost, updateForumPost, staff_createForumPost, ForumPostReply
 from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCounter, ForumUHCPostCounter
 
 # Account Management Imports
@@ -470,8 +470,12 @@ def create_forum_post():
                            session_username=session_username)
 
 
+ROWS_PER_PAGE = 10
+
+
 @app.route("/forum/pinned_posts")
 def forum_pinned_posts():
+    page = request.args.get('page', 1, type=int)
     pinned_posts_dict = {}
     db = shelve.open('forumdb', 'c')
     pinned_posts_dict = db['PinnedPosts']
@@ -489,25 +493,34 @@ def forum_pinned_posts():
 @app.route("/forum/pinned_posts/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post(forum_pinned_posts_id):
     pinned_posts_dict = {}
+    user_dict = {}
     db = shelve.open('forumdb', 'c')
     pinned_posts_dict = db['PinnedPosts']
+    userdb = shelve.open('account.db', 'r')
+    user_dict = userdb['Users']
     pinned_posts_list = []
+    user_list = []
 
     post = pinned_posts_dict.get(forum_pinned_posts_id)
     pinned_posts_list.append(post)
-    post_id = post.get_forum_pinned_post_id
-    post_subject = post.get_post_subject()
-    post_author = post.get_username()
-    post_datetime = post.get_date_time()
-    post_message = post.get_post_message()
-    post_edited = post.get_edited()
-    category = pinned_posts_list[0].get_category()
+    for key in user_dict:
+        user = user_dict.get(key)
+        user_list.append(user)
     db.close()
-    return render_template('customer/CS/forum-post.html', list=pinned_posts_list, category=category,
-                           post_subject=post_subject,
-                           post_author=post_author,
-                           post_datetime=post_datetime, post_message=post_message, post_id=post_id,
-                           post_edited=post_edited)
+    userdb.close()
+
+    # Reply form
+    reply_form = ForumPostReply(request.form)
+    if request.method == 'POST':
+        db = shelve.open('forumdb', 'c')
+        pinned_posts_dict = db['PinnedPosts']
+
+        post = pinned_posts_dict.get(forum_pinned_posts_id)
+        post.set_post_reply(reply_form.reply_message.data)
+
+
+
+    return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list, user_list=user_list)
 
 
 @app.route("/forum/pinned_posts/update/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
