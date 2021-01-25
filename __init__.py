@@ -39,6 +39,66 @@ def home():
 
 
 # Transaction Processing (Donations)
+@app.route('/donate/money/login', methods=['GET', 'POST'])
+def donate_money_login():
+    create_login_form = CreateUserForm(request.form)
+    users_dict = {}
+    db = shelve.open('account.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        b = users_dict[key]
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            return redirect(url_for('donate_Money'))
+
+    return render_template('customer/AM/login.html')
+
+
+@app.route('/donate/item/login', methods=['GET', 'POST'])
+def donate_item_login():
+    create_login_form = CreateUserForm(request.form)
+    users_dict = {}
+    db = shelve.open('account.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        b = users_dict[key]
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            return redirect(url_for('donate_Item'))
+
+    return render_template('customer/AM/login.html')
+
+
+@app.route('/donate/history/login', methods=['GET', 'POST'])
+def donate_history_login():
+    create_login_form = CreateUserForm(request.form)
+    users_dict = {}
+    db = shelve.open('account.db', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        b = users_dict[key]
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            return redirect(url_for('donateHistory'))
+
+    return render_template('customer/AM/login.html')
+
+
 @app.route("/donate")
 def donate():
     return render_template('customer/TP/Donate.html')
@@ -46,54 +106,77 @@ def donate():
 
 @app.route("/donate/history")
 def donateHistory():
-    # Displaying Donation History
-    donorsM_dict = {}
-    donorsI_dict = {}
     try:
-        db = shelve.open("donorChoices", "r")
-
-        # If only Money donations are created and Items are empty
-        if "Money" in db and "Items" not in db:
-            # Money History
-            donorsM_dict = db["Money"]
-            donorsM_list = []
-            for key in donorsM_dict:
-                donorM = donorsM_dict.get(key)
-                donorsM_list.append(donorM)
-            return render_template('customer/TP/donationHistory.html', donorsI_list='', donorsM_list=donorsM_list)
-
-        # If only Item donations are created and Money is empty
-        if "Money" not in db and "Items" in db:
-            # Item History
-            donorsI_dict = db["Items"]
-            donorsI_list = []
-            for key in donorsI_dict:
-                donorI = donorsI_dict.get(key)
-                donorsI_list.append(donorI)
-            return render_template('customer/TP/donationHistory.html', donorsI_list=donorsI_list, donorsM_list='')
-
-        # Once both item and money donations has been made
-        if "Money" in db and "Items" in db:
-            # Money History
-            donorsM_dict = db["Money"]
-            donorsM_list = []
-            for key in donorsM_dict:
-                donorM = donorsM_dict.get(key)
-                donorsM_list.append(donorM)
-
-            # Item History
-            donorsI_dict = db["Items"]
-            donorsI_list = []
-            for key in donorsI_dict:
-                donorI = donorsI_dict.get(key)
-                donorsI_list.append(donorI)
-
-            return render_template('customer/TP/donationHistory.html', donorsI_list=donorsI_list,
-                                   donorsM_list=donorsM_list)
-        db.close()
-
+        SID = session["username"]
     except:
-        return render_template('customer/TP/donationHistoryEmpty.html')
+        return redirect(url_for('donate_history_login'))
+    else:
+        # Displaying Donation History
+        donorsM_dict = {}
+        donorsI_dict = {}
+        try:
+            db = shelve.open("donorChoices", "r")
+
+            # If only Money donations are created and Items are empty
+            if "Money" in db and "Items" not in db:
+                # Money History
+                donorsM_dict = db["Money"]
+                donorsM_list = []
+                for key in donorsM_dict:
+                    donorM = donorsM_dict.get(key)
+                    donorsM_list.append(donorM)
+                print("hi")
+                return render_template('customer/TP/donationHistory.html', donorsI_list='', donorsM_list=donorsM_list)
+
+            # If only Item donations are created and Money is empty
+            if "Money" not in db and "Items" in db:
+                # Item History
+                donorsIID_dict = db["Items"]
+                donorsIID_list = []
+                for key in donorsIID_dict:
+                    donorIID = donorsIID_dict.get(key)
+                    donorsIID_list.append(donorIID)
+
+                # donorsIID_dict = db["Items"]
+                # donorsIID_list = []
+                # donorI_dID = []
+                # for key in donorsIID_dict:
+                #     donorIID = donorsIID_dict.get(key)
+                #     donorsIID_list.append(donorIID)
+                #
+                #     for donation_id in donorsIID_list:
+                #         donorI_dID.append(donorsIID_list[donation_id])
+
+                # print("hi")
+                # print(donorI_dID)
+                # print(donorsIID_list)
+                return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list, donorsM_list='')
+
+            # Once both item and money donations has been made
+            if "Money" in db and "Items" in db:
+                # Money History
+                donorsM_dict = db["Money"]
+                donorsM_list = []
+                for key in donorsM_dict:
+                    donorM = donorsM_dict.get(key)
+                    donorsM_list.append(donorM)
+
+                # Item History
+                donorsIID_dict = db["Items"]
+                donorsIID_list = []
+                for key in donorsIID_dict:
+                    donorIID = donorsIID_dict.get(key)
+                    donorsIID_list.append(donorIID)
+
+                # print(donorI_dID)
+                print("hi")
+                return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list,
+                                       donorsM_list=donorsM_list)
+
+            db.close()
+
+        except:
+            return render_template('customer/TP/donationHistoryEmpty.html')
 
 
 @app.route("/donate/details")
@@ -103,79 +186,98 @@ def donateDetails():
 
 @app.route("/donate/details/money", methods=['GET', 'POST'])
 def donate_Money():
-    # Monetary Donations
-    donate_money = donateMoney(request.form)
-    if request.method == "POST" and donate_money.validate():
-        donor_moneychoices = {}
+    try:
+        SID = session["username"]
+    except:
+        return redirect(url_for('donate_money_login'))
+    else:
+        # Monetary Donations
+        donate_money = donateMoney(request.form)
+        if request.method == "POST" and donate_money.validate():
+            donor_moneychoices = {}
 
-        dbMC = shelve.open("donorChoices", "c")
+            dbMC = shelve.open("donorChoices", "c")
 
-        try:
-            donor_moneychoices = dbMC["Money"]
-        except:
-            print("Error in retrieving Donors MC from donorMoneyChoices")
+            try:
+                donor_moneychoices = dbMC["Money"]
+            except:
+                print("Error in retrieving Donors MC from donorMoneyChoices")
 
-        donor = DonateMoney(donate_money.donateToWho.data, donate_money.moneyAmount.data,
-                            donate_money.cardInfo_Name.data,
-                            donate_money.cardInfo_Number.data, donate_money.cardInfo_CVV.data,
-                            donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data)
-        donor.set_moneyID()
+            donor = DonateMoney(donate_money.donateToWho.data, donate_money.moneyAmount.data,
+                                donate_money.cardInfo_Name.data,
+                                donate_money.cardInfo_Number.data, donate_money.cardInfo_CVV.data,
+                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data)
+            donor.set_moneyID()
 
-        if request.form.get('Cancel') == 'Cancel':
-            donor.set_status("Pending")
-        if request.form.get('Confirm') == 'Confirm':
-            donor.set_status("Confirmed")
-        # print(donor.get_status())
+            if request.form.get('Cancel') == 'Cancel':
+                donor.set_status("Pending")
+            if request.form.get('Confirm') == 'Confirm':
+                donor.set_status("Confirmed")
+            # print(donor.get_status())
 
-        donor_moneychoices[donor.get_moneyID()] = donor
+            donor_moneychoices[donor.get_moneyID()] = donor
 
-        dbMC["Money"] = donor_moneychoices
+            dbMC["Money"] = donor_moneychoices
 
-        dbMC.close()
+            dbMC.close()
 
-        return redirect(url_for('donateHistory'))
+            return redirect(url_for('donateHistory'))
 
-    return render_template('customer/TP/donateMoney.html', form=donate_money)
+        return render_template('customer/TP/donateMoney.html', form=donate_money)
 
 
 @app.route("/donate/details/item", methods=['GET', 'POST'])
 def donate_Item():
-    # Item Donations
-    donate_item = donateItem(request.form)
-    if request.method == "POST":
-        donor_itemchoices = {}
+    try:
+        SID = session["username"]
+    except:
+        return redirect(url_for('donate_item_login'))
+    else:
+        # Item Donations
+        donate_item = donateItem(request.form)
+        if request.method == "POST":
+            donor_itemchoices = {}
+            donorID_item = {}
 
-        dbIM = shelve.open("donorChoices", "c")
+            dbIM = shelve.open("donorChoices", "c")
 
-        try:
-            donor_itemchoices = dbIM["Items"]
-        except:
-            print("Error in retrieving Donors IM from donorChoices")
+            try:
+                donor_itemchoices = dbIM["Items"]
+            except:
+                print("Error in retrieving Donors IM from donorChoices")
 
-        donor = DonateItem(donate_item.donateToWho.data, donate_item.itemType.data, donate_item.itemName.data,
-                           donate_item.itemWeight.data, donate_item.itemHeight.data, donate_item.itemLength.data,
-                           donate_item.itemWidth.data, donate_item.collectionType.data, donate_item.collectionDate.data,
-                           donate_item.collectionMonth.data, donate_item.collectionTime.data,
-                           donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
-                           donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data)
-        donor.set_itemID()
-        donor.set_collection_status("Pending")
+            donor = DonateItem(donate_item.donateToWho.data, donate_item.itemType.data, donate_item.itemName.data,
+                               donate_item.itemWeight.data, donate_item.itemHeight.data, donate_item.itemLength.data,
+                               donate_item.itemWidth.data, donate_item.collectionType.data,
+                               donate_item.collectionDate.data,
+                               donate_item.collectionMonth.data, donate_item.collectionTime.data,
+                               donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
+                               donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data)
+            donor.set_itemID()
+            donor.set_collection_status("Pending")
 
-        if request.form.get('Cancel') == 'Cancel':
-            donor.set_status("Pending")
-        if request.form.get('Confirm') == 'Confirm':
-            donor.set_status("Confirmed")
-        # print(donor.get_status())
+            if request.form.get('Cancel') == 'Cancel':
+                donor.set_status("Pending")
+            if request.form.get('Confirm') == 'Confirm':
+                donor.set_status("Confirmed")
+            # print(donor.get_status())
 
-        donor_itemchoices[donor.get_itemID()] = donor
+            # {donation ID: donation info}
+            donor_itemchoices[donor.get_itemID()] = donor
 
-        dbIM["Items"] = donor_itemchoices
+            # {donor ID: {donation ID: donation info}}
+            # donorID_item[SID] = donor_itemchoices
+            # print(donorID_item[SID])
 
-        dbIM.close()
+            # Maybe try {donor ID: [donation info1, donation info2]}
 
-        return redirect(url_for('donateHistory'))
+            dbIM["Items"] = donorID_item
 
-    return render_template('customer/TP/donateItem.html', form=donate_item)
+            dbIM.close()
+
+            return redirect(url_for('donateHistory'))
+
+        return render_template('customer/TP/donateItem.html', form=donate_item)
 
 
 @app.route("/donate/details/confirmation/<string:id>", methods=['GET', 'POST'])
@@ -791,7 +893,7 @@ def create_staff():
             print("Error in retrieving Staff from staff.db.")
 
         staff = Staff(create_staff_form.username.data, create_staff_form.email.data, create_staff_form.gender.data,
-                    create_staff_form.password.data, create_staff_form.confirm_password.data)
+                      create_staff_form.password.data, create_staff_form.confirm_password.data)
         staff.set_date_time(staff.get_date_time())
         staff_dict[staff.get_staff_id()] = staff
         db['Staff'] = staff_dict
@@ -802,6 +904,7 @@ def create_staff():
 
         return redirect(url_for('staff_profile'))
     return render_template('staff/AM/CreateStaffAccount.html', form=create_staff_form)
+
 
 @app.route("/staff_profile")
 def staff_profile():
@@ -829,6 +932,7 @@ def staff_profile():
     else:
         return redirect(url_for('staff_login'))
 
+
 @app.route("/staff_login", methods=['GET', 'POST'])
 def staff_login():
     create_stafflogin_form = CreateUserForm(request.form)
@@ -849,10 +953,12 @@ def staff_login():
 
     return render_template('staff/AM/stafflogin.html')
 
+
 @app.route('/logout')
 def staff_logout():
     session.pop('username', None)
     return render_template('staff/home.html')
+
 
 @app.route("/account_management")
 def account_management():

@@ -53,29 +53,29 @@
                 </tr>
                 {% endif %}
             {% endfor %}
-            {% for donorI in donorsI_list %}
-                {% if donorI.get_status() == "Confirmed" or donorI.get_status() == "Pending" %}
+            {% for donorI_dID in donorI_dID %}
+                {% if donorI_dID.get_status() == "Confirmed" or donorI_dID.get_status() == "Pending" %}
                 <tr>
                     <!-- Donation ID -->
-                    <td><a href="/donate/itemupdate/{{ donorI.get_itemID() }}" style="color:#eb5d1e;">{{ donorI.get_itemID() }}</a></td>
+                    <td><a href="/donate/itemupdate/{{ donorI_dID.get_itemID() }}" style="color:#eb5d1e;">{{ donorI_dID.get_itemID() }}</a></td>
 
                     <!-- Donation Description -->
-                    <td>{{ donorI.get_donate_type() }}: <br> {{ donorI.get_item_name() }}</td>
+                    <td>{{ donorI_dID.get_donate_type() }}: <br> {{ donorI_dID.get_item_name() }}</td>
 
                     <!-- Donate to Who -->
-                    <td>{{ donorI.get_donate_who() }}</td>
+                    <td>{{ donorI_dID.get_donate_who() }}</td>
 
                     <!-- If item donation, only show collection type -->
-                    <td>{{ donorI.get_collection_type() }} <br> Date: {{ donorI.get_date() }}/{{ donorI.get_month() }}/21 <br>
-                    Time: {{ donorI.get_time() }}</td>
+                    <td>{{ donorI_dID.get_collection_type() }} <br> Date: {{ donorI_dID.get_date() }}/{{ donorI_dID.get_month() }}/21 <br>
+                    Time: {{ donorI_dID.get_time() }}</td>
 
                     <td>--</td>
 
                     <!-- Donation Confirmation -->
-                    {% if donorI.get_status() == "Confirmed" %}
-                    <td>{{ donorI.get_status() }}</td>
-                    {% elif donorI.get_status() == "Pending" %}
-                    <td><a href="/donate/details/confirmation/{{ donorI.get_itemID() }}" style="color:#eb5d1e;">{{ donorI.get_status() }}</a></td>
+                    {% if donorI_dID.get_status() == "Confirmed" %}
+                    <td>{{ donorI_dID.get_status() }}</td>
+                    {% elif donorI_dID.get_status() == "Pending" %}
+                    <td><a href="/donate/details/confirmation/{{ donorI_dID.get_itemID() }}" style="color:#eb5d1e;">{{ donorI_dID.get_status() }}</a></td>
                     {% else %}
                     <td> </td>
                     {% endif %}
