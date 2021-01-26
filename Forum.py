@@ -82,11 +82,14 @@ class ForumPinnedPostsCounter(ForumPost):
 
     def set_forum_pinned_post_id(self):
         # # Use with -> Don't need to close db
-        with shelve.open('forumdb','r') as db:
-            if len(db['PinnedPosts']) == 0:
-                forum_pinned_post_id = 0
-            else:
-                forum_pinned_post_id = list(db['PinnedPosts'].keys())[-1]
+        try:
+            with shelve.open('forumdb','r') as db:
+                if len(db['PinnedPosts']) == 0:
+                    forum_pinned_post_id = 0
+                else:
+                    forum_pinned_post_id = list(db['PinnedPosts'].keys())[-1]
+        except:
+            forum_pinned_post_id = 0
 
         forum_pinned_post_id += 1
         self.__forum_pinned_post_id = forum_pinned_post_id
