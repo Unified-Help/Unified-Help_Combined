@@ -927,7 +927,7 @@ def create_staff():
 def staff_profile():
     if "username" in session:
         username1 = session["username"]
-        return render_template('staff/AM/staff_profile.html', username=username1)
+        return render_template('staff/AM/staff_profile.html', username1=username)
     update_staff_form = CreateUserForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
@@ -943,7 +943,7 @@ def staff_profile():
         db['Staff'] = staff_dict
         db.close()
 
-        session['staff_updated'] = user.get_username()
+        session['staff_updated'] = staff.get_username()
 
         return redirect(url_for('retrieve'))
     else:
@@ -983,7 +983,7 @@ def account_management():
 
 
 @app.route('/retrieve')
-def retrieve():
+def retrieve_staff():
     staff_dict = {}
     db = shelve.open('staff.db', 'r')
     staff_dict = db['Staff']
@@ -998,7 +998,7 @@ def retrieve():
 
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
-def updateStaff(id):
+def update_staff(id):
     update_staff_form = CreateUserForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
@@ -1046,7 +1046,7 @@ def delete_staff(id):
 
     session['staff_deleted'] = staff.get_username()
 
-    return redirect(url_for('retrieve'))
+    return redirect(url_for('retrieve_staff'))
 
 
 # ------------ Transaction Processing ------------ #
