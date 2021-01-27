@@ -57,19 +57,22 @@ class DonateMoney:
         return self.__status
 
     # Mutators
-    def set_moneyID(self):
-        try:
-            with shelve.open('donorChoices', 'r') as db:
-                if len(db['Money']) == 0:
-                    donatemoneyid_counter = 0
-                else:
-                    donatemoneyid_counter = int(list(db['Money'].keys())[-1].split('M')[-1])
-        except:
-            donatemoneyid_counter = 0
+    def set_moneyID(self, moneyID):
+        self.__moneyID = moneyID
 
-        donatemoneyid_counter += 1
-        self.__moneyID = "M" + str(donatemoneyid_counter)
-        # self.__moneyID = moneyID
+    # def set_moneyID(self):
+    #     try:
+    #         with shelve.open('donorChoices', 'r') as db:
+    #             if len(db['Money']) == 0:
+    #                 donatemoneyid_counter = 0
+    #             else:
+    #                 donatemoneyid_counter = int(list(db['Money'].keys())[-1].split('M')[-1])
+    #     except:
+    #         donatemoneyid_counter = 0
+    #
+    #     donatemoneyid_counter += 1
+    #     self.__moneyID = "M" + str(donatemoneyid_counter)
+    #     # self.__moneyID = moneyID
 
     def set_donate_type(self, donate_type):
         self.__donate_type = donate_type
@@ -195,19 +198,8 @@ class DonateItem:
         return self.__collection_status
 
     # Mutators
-    def set_itemID(self):
-        try:
-            with shelve.open('donorChoices', 'r') as db:
-                if len(db['Items']) == 0:
-                    donateitemid_counter = 0
-                else:
-                    donateitemid_counter = int(list(db['Items'].keys())[-1].split('I')[-1])
-        except:
-            donateitemid_counter = 0
-
-        donateitemid_counter += 1
-        self.__itemID = "I" + str(donateitemid_counter)
-        # self.__itemID = itemID
+    def set_itemID(self, itemID):
+        self.__itemID = itemID
 
     def set_donate_type(self, donate_type):
         self.__donate_type = donate_type
