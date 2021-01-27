@@ -43,7 +43,7 @@ class donateItem(Form):
                                            ('09', 'September'), ('10', 'October'), ('11', 'November'),
                                            ('12', 'December')])
 
-    collectionTime = StringField("Pick a Time*", [validators.Length(min=1, max=4),
+    collectionTime = IntegerField("Pick a Time*", [validators.NumberRange(min=0, max=2359),
                                                   validators.DataRequired()])
     collectionType = RadioField('Type of Collection*', choices=[('Drop Off', 'Drop Off'), ('We Pick Up', 'We Pick Up')],
                                 default='Drop Off')

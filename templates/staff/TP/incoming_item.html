@@ -24,28 +24,28 @@
                 </tr>
             </thead>
             <tbody>
-            {% for donorI in donorsI_list %}
-                {% if donorI.get_collection_status() == "Confirmed" or donorI.get_collection_status() == "Pending" %}
+            {% for donorIID in donorsIID_list %}
+                {% if donorIID.get_collection_status() == "Confirmed" or donorIID.get_collection_status() == "Pending" %}
                 <tr>
                     <!-- Donation ID -->
-                    <td>{{ donorI.get_itemID() }}</td>
+                    <td>{{ donorIID.get_itemID() }}</td>
 
                     <!-- Donation Description -->
                     <td>
-                        {{ donorI.get_item_type() }}: <br> {{ donorI.get_item_name() }} <br>
-                        Weight: {{ donorI.get_item_weight() }}kg <br>
-                        Size: {{ donorI.get_item_height() }}m x {{ donorI.get_item_length() }}m x {{ donorI.get_item_width() }}m
+                        {{ donorIID.get_item_type() }}: <br> {{ donorIID.get_item_name() }} <br>
+                        Weight: {{ donorIID.get_item_weight() }}kg <br>
+                        Size: {{ donorIID.get_item_height() }}m x {{ donorIID.get_item_length() }}m x {{ donorIID.get_item_width() }}m
                     </td>
 
                     <!-- Collection Information -->
-                    <td>{{ donorI.get_collection_type() }} <br> Date: {{ donorI.get_date() }}/{{ donorI.get_month() }}/21 <br>
-                    Time: {{ donorI.get_time() }}</td>
+                    <td>{{ donorIID.get_collection_type() }} <br> Date: {{ donorIID.get_date() }}/{{ donorIID.get_month() }}/21 <br>
+                    Time: {{ donorIID.get_time() }}</td>
 
                     <!-- Address Information, If We Pick Up -->
-                    {% if donorI.get_collection_type() == "We Pick Up" %}
-                    <td>{{ donorI.get_address1() }} <br> {{ donorI.get_address2() }} <br> {{ donorI.get_address3() }} <br>
-                    {{ donorI.get_postal_code() }}</td>
-                    {% elif donorI.get_collection_type() == "Drop Off" %}
+                    {% if donorIID.get_collection_type() == "We Pick Up" %}
+                    <td>{{ donorIID.get_address1() }} <br> {{ donorIID.get_address2() }} <br> {{ donorIID.get_address3() }} <br>
+                    {{ donorIID.get_postal_code() }}</td>
+                    {% elif donorIID.get_collection_type() == "Drop Off" %}
                     <td>--</td>
                     {% endif %}
 
@@ -53,15 +53,15 @@
                     <td>--</td>
 
                     <!-- Collection Confirmation -->
-                    {% if donorI.get_collection_status() == "Confirmed"  and donorI.get_status() == "Confirmed" %}
+                    {% if donorIID.get_collection_status() == "Confirmed"  and donorIID.get_status() == "Confirmed" %}
                     <td>
-                        <form action="{{url_for('incoming_item_archive', id=donorI.get_itemID())}}" method="POST">
+                        <form action="{{url_for('incoming_item_archive', id=donorIID.get_itemID())}}" method="POST">
 
-                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Archive_{{donorI.get_itemID()}}">
-                                {{ donorI.get_collection_status() }}</a>
+                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Archive_{{donorIID.get_itemID()}}">
+                                {{ donorIID.get_collection_status() }}</a>
 
                             <!-- The Modal -->
-                            <div class="modal" id="Archive_{{donorI.get_itemID()}}">
+                            <div class="modal" id="Archive_{{donorIID.get_itemID()}}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
 
@@ -89,15 +89,15 @@
                         </form>
 
                     </td>
-                    {% elif donorI.get_collection_status() == "Pending" and donorI.get_status() == "Confirmed" %}
+                    {% elif donorIID.get_collection_status() == "Pending" and donorIID.get_status() == "Confirmed" %}
                     <td>
-                        <form action="{{url_for('incoming_item_confirmation', id=donorI.get_itemID())}}" method="POST">
+                        <form action="{{url_for('incoming_item_confirmation', id=donorIID.get_itemID())}}" method="POST">
 
-                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Confirmation_{{donorI.get_itemID()}}">
-                                {{ donorI.get_collection_status() }}</a>
+                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Confirmation_{{donorIID.get_itemID()}}">
+                                {{ donorIID.get_collection_status() }}</a>
 
                             <!-- The Modal -->
-                            <div class="modal" id="Confirmation_{{donorI.get_itemID()}}">
+                            <div class="modal" id="Confirmation_{{donorIID.get_itemID()}}">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
 

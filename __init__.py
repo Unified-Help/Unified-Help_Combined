@@ -113,65 +113,72 @@ def donateHistory():
     else:
         # Displaying Donation History
         donorsM_dict = {}
-        donorsI_dict = {}
+        donorsIID_dict = {}
         try:
             db = shelve.open("donorChoices", "r")
 
             # If only Money donations are created and Items are empty
             if "Money" in db and "Items" not in db:
                 # Money History
-                donorsM_dict = db["Money"]
-                donorsM_list = []
-                for key in donorsM_dict:
-                    donorM = donorsM_dict.get(key)
-                    donorsM_list.append(donorM)
-                print("hi")
-                return render_template('customer/TP/donationHistory.html', donorsI_list='', donorsM_list=donorsM_list)
+                donorsMID_dict = db["Money"]
+                useridsM = [*donorsMID_dict]
+                donorsMID_list = []
+
+                if SID in useridsM:
+                    donorsList = donorsMID_dict[SID]
+                    for i in range(len(donorsList)):
+                        donorMID = donorsList[i]
+                        donorsMID_list.append(donorMID)
+                        # print(donorsMID_list)
+
+                return render_template('customer/TP/donationHistory.html', donorsIID_list='', donorsMID_list=donorsMID_list)
 
             # If only Item donations are created and Money is empty
             if "Money" not in db and "Items" in db:
                 # Item History
                 donorsIID_dict = db["Items"]
+                userids = [*donorsIID_dict]
                 donorsIID_list = []
-                for key in donorsIID_dict:
-                    donorIID = donorsIID_dict.get(key)
-                    donorsIID_list.append(donorIID)
 
-                # donorsIID_dict = db["Items"]
-                # donorsIID_list = []
-                # donorI_dID = []
-                # for key in donorsIID_dict:
-                #     donorIID = donorsIID_dict.get(key)
-                #     donorsIID_list.append(donorIID)
-                #
-                #     for donation_id in donorsIID_list:
-                #         donorI_dID.append(donorsIID_list[donation_id])
+                if SID in userids:
+                    donorsList = donorsIID_dict[SID]
+                    for i in range(len(donorsList)):
+                        donorIID = donorsList[i]
+                        donorsIID_list.append(donorIID)
+                        # print(donorsIID_list)
 
-                # print("hi")
-                # print(donorI_dID)
-                # print(donorsIID_list)
-                return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list, donorsM_list='')
+                return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list, donorsMID_list='')
 
             # Once both item and money donations has been made
             if "Money" in db and "Items" in db:
                 # Money History
-                donorsM_dict = db["Money"]
-                donorsM_list = []
-                for key in donorsM_dict:
-                    donorM = donorsM_dict.get(key)
-                    donorsM_list.append(donorM)
+                donorsMID_dict = db["Money"]
+                useridsM = [*donorsMID_dict]
+                donorsMID_list = []
+
+                if SID in useridsM:
+                    donorsList = donorsMID_dict[SID]
+                    for i in range(len(donorsList)):
+                        donorMID = donorsList[i]
+                        donorsMID_list.append(donorMID)
+                        # print(donorsMID_list)
 
                 # Item History
                 donorsIID_dict = db["Items"]
+                useridsI = [*donorsIID_dict]
                 donorsIID_list = []
-                for key in donorsIID_dict:
-                    donorIID = donorsIID_dict.get(key)
-                    donorsIID_list.append(donorIID)
+
+                if SID in useridsI:
+                    donorsList = donorsIID_dict[SID]
+                    for i in range(len(donorsList)):
+                        donorIID = donorsList[i]
+                        donorsIID_list.append(donorIID)
+                        # print(donorsIID_list)
 
                 # print(donorI_dID)
-                print("hi")
+                # print("hi")
                 return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list,
-                                       donorsM_list=donorsM_list)
+                                       donorsMID_list=donorsMID_list)
 
             db.close()
 
@@ -191,15 +198,30 @@ def donate_Money():
     except:
         return redirect(url_for('donate_money_login'))
     else:
+        SID = session["username"]
         # Monetary Donations
         donate_money = donateMoney(request.form)
         if request.method == "POST" and donate_money.validate():
             donor_moneychoices = {}
+            donationinfoM = []
+            donationinfoMNest = []
+            donorIDnInfo = {}
 
             dbMC = shelve.open("donorChoices", "c")
 
             try:
                 donor_moneychoices = dbMC["Money"]
+
+                userids = [*donor_moneychoices]
+                print(userids)
+                print(SID)
+                if SID in userids:
+                    donationinfoM.append(donor_moneychoices[SID])
+
+                for x in donationinfoM:
+                    for y in x:
+                        donationinfoMNest.append(y)
+
             except:
                 print("Error in retrieving Donors MC from donorMoneyChoices")
 
@@ -207,17 +229,38 @@ def donate_Money():
                                 donate_money.cardInfo_Name.data,
                                 donate_money.cardInfo_Number.data, donate_money.cardInfo_CVV.data,
                                 donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data)
-            donor.set_moneyID()
+            # donor.set_moneyID()
+            # set the money ID counter
+            donoCounter = []
+            if "MoneyCounter" not in dbMC:
+                dbMC["MoneyCounter"] = donoCounter
 
+            donoCounter = dbMC["MoneyCounter"]
+            if len(donoCounter) == 0:
+                moneyID = "M1"
+            else:
+                donateitemid_counter = donoCounter[-1]
+                x = donateitemid_counter.split("M")
+                num = int(x[1])
+                num += 1
+                moneyID = "M" + str(num)
+            donoCounter.append(moneyID)
+            dbMC["MoneyCounter"] = donoCounter
+
+            donor.set_moneyID(moneyID)
+
+            # setting the donation status "pending" or "confirmed"
             if request.form.get('Cancel') == 'Cancel':
                 donor.set_status("Pending")
             if request.form.get('Confirm') == 'Confirm':
                 donor.set_status("Confirmed")
             # print(donor.get_status())
 
-            donor_moneychoices[donor.get_moneyID()] = donor
+            # {donor ID: [donation info1, donation info2]}
+            donationinfoMNest.append(donor)
+            donorIDnInfo[SID] = donationinfoMNest
 
-            dbMC["Money"] = donor_moneychoices
+            dbMC["Money"] = donorIDnInfo
 
             dbMC.close()
 
@@ -233,16 +276,35 @@ def donate_Item():
     except:
         return redirect(url_for('donate_item_login'))
     else:
+        SID = session["username"]
         # Item Donations
         donate_item = donateItem(request.form)
         if request.method == "POST":
             donor_itemchoices = {}
-            donorID_item = {}
+            donationinfoI = []
+            donationinfoINest = []
+            donorIDnInfo = {}
 
             dbIM = shelve.open("donorChoices", "c")
 
             try:
                 donor_itemchoices = dbIM["Items"]
+                # print(donor_itemchoices)
+
+                userids = [*donor_itemchoices]
+                print(userids)
+                print(SID)
+                if SID in userids:
+                    donationinfoI.append(donor_itemchoices[SID])
+                    # list(donanationinfoI)
+                    # donor_itemchoices.pop(donor_itemchoices[SID])
+
+                # print(donationinfoI)
+                for x in donationinfoI:
+                    for y in x:
+                        donationinfoINest.append(y)
+                # print(donationinfoINest)
+
             except:
                 print("Error in retrieving Donors IM from donorChoices")
 
@@ -253,25 +315,39 @@ def donate_Item():
                                donate_item.collectionMonth.data, donate_item.collectionTime.data,
                                donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
                                donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data)
-            donor.set_itemID()
+            # donor.set_itemID()
+            donoCounter = []
+            if "ItemCounter" not in dbIM:
+                dbIM["ItemCounter"] = donoCounter
+
+            donoCounter = dbIM["ItemCounter"]
+            if len(donoCounter) == 0:
+                itemID = "I1"
+            else:
+                donateitemid_counter = donoCounter[-1]
+                x = donateitemid_counter.split("I")
+                num = int(x[1])
+                num += 1
+                itemID = "I" + str(num)
+            donoCounter.append(itemID)
+            dbIM["ItemCounter"] = donoCounter
+
+            donor.set_itemID(itemID)
+
             donor.set_collection_status("Pending")
 
+            # setting the donation status "pending" or "confirmed"
             if request.form.get('Cancel') == 'Cancel':
                 donor.set_status("Pending")
             if request.form.get('Confirm') == 'Confirm':
                 donor.set_status("Confirmed")
             # print(donor.get_status())
 
-            # {donation ID: donation info}
-            donor_itemchoices[donor.get_itemID()] = donor
+            # {donor ID: [donation info1, donation info2]}
+            donationinfoINest.append(donor)
+            donorIDnInfo[SID] = donationinfoINest
 
-            # {donor ID: {donation ID: donation info}}
-            # donorID_item[SID] = donor_itemchoices
-            # print(donorID_item[SID])
-
-            # Maybe try {donor ID: [donation info1, donation info2]}
-
-            dbIM["Items"] = donorID_item
+            dbIM["Items"] = donorIDnInfo
 
             dbIM.close()
 
@@ -282,13 +358,21 @@ def donate_Item():
 
 @app.route("/donate/details/confirmation/<string:id>", methods=['GET', 'POST'])
 def donate_Confirmation(id):
+    SID = session["username"]
     if request.method == 'POST':
         donation_dict = {}
 
         db = shelve.open('donorChoices', 'w')
         if id[0] == "M":
             donation_dict = db['Money']
-            donor = donation_dict.get(id)
+            donoinfoList = donation_dict[SID]
+            updatedonoinfo = ""
+
+            for i in range(len(donoinfoList)):
+                if donoinfoList[i].get_moneyID() == id:
+                    updatedonoinfo = donoinfoList[i]
+
+            donor = updatedonoinfo
 
             # Change status with respect to choice
             if request.form.get('Delete') == 'Delete':
@@ -301,7 +385,14 @@ def donate_Confirmation(id):
 
         elif id[0] == "I":
             donation_dict = db['Items']
-            donor = donation_dict.get(id)
+            donoinfoList = donation_dict[SID]
+            updatedonoinfo = ""
+
+            for i in range(len(donoinfoList)):
+                if donoinfoList[i].get_itemID() == id:
+                    updatedonoinfo = donoinfoList[i]
+
+            donor = updatedonoinfo
 
             # Change status with respect to choice
             if request.form.get('Delete') == 'Delete':
@@ -325,14 +416,22 @@ def donate_Confirmation(id):
 
 @app.route("/donate/itemupdate/<string:id>", methods=['GET', 'POST'])
 def donate_ItemUpdate(id):
+    SID = session["username"]
     update_donate_item = donateItem(request.form)
     if request.method == 'POST':
         donors_dict = {}
 
         dbUP = shelve.open('donorChoices', 'w')
         donors_dict = dbUP['Items']
+        donoinfoList = donors_dict[SID]
+        updatedonoinfo = ""
 
-        donor = donors_dict.get(id)
+        for i in range(len(donoinfoList)):
+            if donoinfoList[i].get_itemID() == id:
+                updatedonoinfo = donoinfoList[i]
+
+        # donor = donors_dict.get(id)
+        donor = updatedonoinfo
 
         # Item Specifications
         donor.set_item_weight(update_donate_item.itemWeight.data)
@@ -362,9 +461,15 @@ def donate_ItemUpdate(id):
 
         dbUP = shelve.open('donorChoices', 'r')
         donors_dict = dbUP["Items"]
-        dbUP.close()
+        donoinfoList = donors_dict[SID]
+        updatedonoinfo = ""
 
-        donor = donors_dict.get(id)
+        for i in range(len(donoinfoList)):
+            if donoinfoList[i].get_itemID() == id:
+                updatedonoinfo = donoinfoList[i]
+
+        # donor = donors_dict.get(id)
+        donor = updatedonoinfo
 
         # Item Specifications
         update_donate_item.itemWeight.data = donor.get_item_weight()
@@ -383,6 +488,8 @@ def donate_ItemUpdate(id):
         update_donate_item.pickupAddress2.data = donor.get_address2()
         update_donate_item.pickupAddress3.data = donor.get_address3()
         update_donate_item.pickupPostalCode.data = donor.get_postal_code()
+
+        dbUP.close()
 
         return render_template('customer/TP/donateItemUpdate.html', form=update_donate_item)
 
@@ -1049,27 +1156,40 @@ def delete_staff(id):
 
 @app.route("/incoming_items")
 def incoming_item():
+    SID = session["username"]
     donorsI_dict = {}
     try:
         db = shelve.open("donorChoices", "r")
-        donorsI_dict = db["Items"]
-        donorsI_list = []
-        for key in donorsI_dict:
-            donorI = donorsI_dict.get(key)
-            donorsI_list.append(donorI)
-        return render_template('staff/TP/incoming_item.html', donorsI_list=donorsI_list)
+        donorsIID_dict = db["Items"]
+        useridsI = [*donorsIID_dict]
+        donorsIID_list = []
+
+        if SID in useridsI:
+            donorsList = donorsIID_dict[SID]
+            for i in range(len(donorsList)):
+                donorIID = donorsList[i]
+                donorsIID_list.append(donorIID)
+        return render_template('staff/TP/incoming_item.html', donorsIID_list=donorsIID_list)
     except:
         return render_template('staff/TP/incoming_item.html')
 
 
 @app.route("/incoming_items/confirmation/<string:id>", methods=['GET', 'POST'])
 def incoming_item_confirmation(id):
+    SID = session["username"]
     if request.method == 'POST':
         donorsI_dict = {}
         db = shelve.open('donorChoices', 'w')
 
         donorsI_dict = db['Items']
-        donor = donorsI_dict.get(id)
+        donoinfoList = donorsI_dict[SID]
+        updatedonoinfo = ""
+
+        for i in range(len(donoinfoList)):
+            if donoinfoList[i].get_itemID() == id:
+                updatedonoinfo = donoinfoList[i]
+
+        donor = updatedonoinfo
 
         if request.form.get('Confirm') == 'Confirm':
             donor.set_collection_status("Confirmed")
@@ -1083,12 +1203,20 @@ def incoming_item_confirmation(id):
 
 @app.route("/incoming_items/archive/<string:id>", methods=['GET', 'POST'])
 def incoming_item_archive(id):
+    SID = session["username"]
     if request.method == 'POST':
         donorsI_dict = {}
         db = shelve.open('donorChoices', 'w')
 
         donorsI_dict = db['Items']
-        donor = donorsI_dict.get(id)
+        donoinfoList = donorsI_dict[SID]
+        updatedonoinfo = ""
+
+        for i in range(len(donoinfoList)):
+            if donoinfoList[i].get_itemID() == id:
+                updatedonoinfo = donoinfoList[i]
+
+        donor = updatedonoinfo
 
         if request.form.get('Archive') == 'Archive':
             donor.set_collection_status("Archive")

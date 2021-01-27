@@ -1,2 +1,4 @@
-'Items', (1024, 1195)
-'Money', (2560, 526)
+'MoneyCounter', (0, 62)
+'Money', (512, 534)
+'ItemCounter', (1536, 44)
+'Items', (4608, 1803)
