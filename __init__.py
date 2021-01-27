@@ -16,7 +16,7 @@ from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCount
 from Forms import CreateUserForm, LoginForm
 from User import User
 from Staff import Staff
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 # Report Generation Imports
 from Staff_RG_manual_upload import ManualUploadForm
@@ -508,17 +508,21 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     for key in user_dict:
         user = user_dict.get(key)
         user_list.append(user)
-    db.close()
     userdb.close()
 
     # Reply form
+    # {pinned_post_id:{post_reply_id:[datetime,username,reply_message]}}}
     reply_form = ForumPostReply(request.form)
     if request.method == 'POST':
-        db = shelve.open('forumdb', 'c')
-        pinned_posts_dict = db['PinnedPosts']
-        post = pinned_posts_dict.get(forum_pinned_posts_id)
-        post.set_post_reply(reply_form.reply_message.data)
-
+        ppPost = ForumPinnedPostsCounter()
+        ppPost.set_post_reply_id()
+        pinned_post_reply_list = []
+        pinned_post_reply_list.append(session['username'])
+        pinned_post_reply_list.append(reply_form.reply_message.data)
+        pinned_post_reply_dict = {}
+        pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
+        db[session['forum_pinned_post_id']] = pinned_post_reply_dict
+    db.close()
 
     return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list, user_list=user_list)
 
