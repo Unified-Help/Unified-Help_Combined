@@ -3,6 +3,7 @@ from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, v
 import shelve
 from ForumForm import Form
 import datetime
+from datetime import datetime
 
 class ForumPost:
     def __init__(self):
@@ -78,15 +79,19 @@ class ForumPinnedPostsCounter(ForumPost):
     def __init__(self):
         super().__init__()
         self.__forum_pinned_post_id = ''
+        self.__post_reply_id = ''
 
 
     def set_forum_pinned_post_id(self):
         # # Use with -> Don't need to close db
-        with shelve.open('forumdb','r') as db:
-            if len(db['PinnedPosts']) == 0:
-                forum_pinned_post_id = 0
-            else:
-                forum_pinned_post_id = list(db['PinnedPosts'].keys())[-1]
+        try:
+            with shelve.open('forumdb','r') as db:
+                if len(db['PinnedPosts']) == 0:
+                    forum_pinned_post_id = 0
+                else:
+                    forum_pinned_post_id = list(db['PinnedPosts'].keys())[-1]
+        except:
+            forum_pinned_post_id = 0
 
         forum_pinned_post_id += 1
         self.__forum_pinned_post_id = forum_pinned_post_id
@@ -94,16 +99,27 @@ class ForumPinnedPostsCounter(ForumPost):
     def get_forum_pinned_post_id(self):
         return self.__forum_pinned_post_id
 
-    def set_post_reply(self):
-        pinned_post_id = {}
-        with shelve.open('forumdb','r') as db:
-            pinned_posts_dict = db['PinnedPosts']
-            pinned_post_id = pinned_posts_dict.get(self.get_forum_pinned_post_id())
-            pinned_post_id[session['username']] = {self.get_date_time():self.get_reply_message()}
-            self.__post_reply = pinned_post_id
+    # def set_post_reply(self,post_reply):
+    #     self.__post_reply = post_reply
+    #
+    # def get_post_reply(self):
+    #     return self.__post_reply
 
-    def get_post_reply(self):
-        return self.__post_reply
+    def set_post_reply_id(self):
+        try:
+            with shelve.open('forumdb','r') as db:
+                if len(db['PinnedPosts'][self.__forum_pinned_post_id][self.__post_reply_id]) == 0:
+                    post_reply_id = 0
+                else:
+                    post_reply_id = list(db['PinnedPosts'].keys())[-1]
+        except:
+            post_reply_id = 0
+
+        post_reply_id += 1
+        self.__post_reply_id = post_reply_id
+
+    def get_post_reply_id(self):
+        return self.__post_reply_id
 
 
 class ForumAnnoucementsPostCounter(ForumPost):

@@ -1,11 +1,11 @@
-import datetime
+import datetime, shelve
 
 class User:
-    count_id = 0
+     # count_id = 0
 
     def __init__(self, username, email, gender, password, confirm_password):
-        User.count_id += 1
-        self.__user_id = User.count_id
+        # User.count_id += 1
+        self.__user_id = 0
         self.__username = username
         self.__email = email
         self.__gender = gender
@@ -34,8 +34,18 @@ class User:
     def get_date_time(self):
         return self.__datetime
 
-    def set_user_id(self, user_id):
-        self.__user_id = user_id
+    def set_user_id(self):
+        try:
+            with shelve.open('account', 'r') as db:
+                if len(db['Users']) == 0:
+                    user_id_counter = 0
+                else:
+                    user_id_counter = int(list(db['Users'].keys())[+1])
+        except:
+            user_id_counter = 0
+
+        user_id_counter += 1
+        self.__user_id = user_id_counter
 
     def set_username(self, username):
         self.__username = username

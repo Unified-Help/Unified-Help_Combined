@@ -16,7 +16,7 @@ from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCount
 from Forms import CreateUserForm, LoginForm
 from User import User
 from Staff import Staff
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 # Report Generation Imports
 from Staff_RG_manual_upload import ManualUploadForm
@@ -599,6 +599,7 @@ def forum_pinned_posts():
 # Specific Forum Post ID - Pinned Posts
 @app.route("/forum/pinned_posts/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post(forum_pinned_posts_id):
+
     pinned_posts_dict = {}
     user_dict = {}
     db = shelve.open('forumdb', 'c')
@@ -609,25 +610,28 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     user_list = []
 
     post = pinned_posts_dict.get(forum_pinned_posts_id)
+    session['forum_pinned_post_id'] = forum_pinned_posts_id
     pinned_posts_list.append(post)
     for key in user_dict:
         user = user_dict.get(key)
         user_list.append(user)
-    db.close()
     userdb.close()
 
     # Reply form
+    # {pinned_post_id:{post_reply_id:[datetime,username,reply_message]}}}
     reply_form = ForumPostReply(request.form)
     if request.method == 'POST':
-        db = shelve.open('forumdb', 'c')
-        pinned_posts_dict = db['PinnedPosts']
+        ppPost = ForumPinnedPostsCounter()
+        ppPost.set_post_reply_id()
+        pinned_post_reply_list = []
+        pinned_post_reply_list.append(session['username'])
+        pinned_post_reply_list.append(reply_form.reply_message.data)
+        pinned_post_reply_dict = {}
+        pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
+        db[session['forum_pinned_post_id']] = pinned_post_reply_dict
+    db.close()
 
-        post = pinned_posts_dict.get(forum_pinned_posts_id)
-        post.set_post_reply(reply_form.reply_message.data)
-
-
-
-    return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list, user_list=user_list)
+    return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list, user_list=user_list)
 
 
 @app.route("/forum/pinned_posts/update/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
@@ -1030,7 +1034,7 @@ def create_staff():
 def staff_profile():
     if "username" in session:
         username1 = session["username"]
-        return render_template('staff/AM/staff_profile.html', username=username1)
+        return render_template('staff/AM/staff_profile.html', username1=username)
     update_staff_form = CreateUserForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
@@ -1046,7 +1050,7 @@ def staff_profile():
         db['Staff'] = staff_dict
         db.close()
 
-        session['staff_updated'] = user.get_username()
+        session['staff_updated'] = staff.get_username()
 
         return redirect(url_for('retrieve'))
     else:
@@ -1086,7 +1090,7 @@ def account_management():
 
 
 @app.route('/retrieve')
-def retrieve():
+def retrieve_staff():
     staff_dict = {}
     db = shelve.open('staff.db', 'r')
     staff_dict = db['Staff']
@@ -1101,7 +1105,7 @@ def retrieve():
 
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
-def updateStaff(id):
+def update_staff(id):
     update_staff_form = CreateUserForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
@@ -1149,7 +1153,7 @@ def delete_staff(id):
 
     session['staff_deleted'] = staff.get_username()
 
-    return redirect(url_for('retrieve'))
+    return redirect(url_for('retrieve_staff'))
 
 
 # ------------ Transaction Processing ------------ #

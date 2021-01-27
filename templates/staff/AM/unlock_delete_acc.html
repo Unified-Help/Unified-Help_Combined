@@ -23,9 +23,7 @@
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   {{ session.pop('user_deleted', None) }} was deleted.
 </div>
-
-{% endif %}
- {% if 'staff_created' in session %}
+ {% elif 'staff_created' in session %}
 <div class="alert alert-success alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
   {{ session.pop('staff_created', None) }} was created.
@@ -113,12 +111,7 @@
       </tr>
     {% endfor %}
     </tbody>
-  </table>
-  </div>
-<div>
-    <h4 class="display-5">Staff Account</h4>
-  <table class="table table-striped" style="width:900px; height:300px;">
-    <thead>
+        <thead>
       <tr>
         <th>Staff ID</th>
         <th>Username</th>
@@ -175,7 +168,8 @@
       </tr>
     {% endfor %}
     </tbody>
-    </table>
+  </table>
+  </div>
 {% endblock %}
 
 <!-- Link any js files here -->
