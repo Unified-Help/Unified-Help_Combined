@@ -846,10 +846,9 @@ def forum_uhc_post_delete(forum_uhc_post_id):
 @app.route('/createUser', methods=['GET', 'POST'])
 def create_user():
     create_user_form = CreateUserForm(request.form)
-    if request.method == 'POST' and create_user_form.validate():
+    if request.method == "POST" and create_user_form.validate():
         users_dict = {}
         db = shelve.open('account.db', 'c')
-
         try:
             users_dict = db['Users']
         except:
@@ -858,6 +857,21 @@ def create_user():
         user = User(create_user_form.username.data, create_user_form.email.data, create_user_form.gender.data,
                     create_user_form.password.data, create_user_form.confirm_password.data)
         user.set_date_time(user.get_date_time())
+
+        userCounter = []
+        if "UserCounter" not in db:
+            db["UserCounter"] = userCounter
+
+        userCounter = db["UserCounter"]
+        if len(userCounter) == 0:
+            userID = 1
+        else:
+            userid_counter = userCounter[-1]
+            userid_counter += 1
+        userCounter.append(userid_counter)
+        db["UserCounter"] = userCounter
+        user.set_user_id(userid_counter)
+
         users_dict[user.get_user_id()] = user
         db['Users'] = users_dict
 
@@ -1034,7 +1048,7 @@ def create_staff():
 def staff_profile():
     if "username" in session:
         username1 = session["username"]
-        return render_template('staff/AM/staff_profile.html', username1=username)
+        return render_template('staff/AM/staff_profile.html', username1=username1)
     update_staff_form = CreateUserForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
@@ -1052,7 +1066,7 @@ def staff_profile():
 
         session['staff_updated'] = staff.get_username()
 
-        return redirect(url_for('retrieve'))
+        #return redirect(url_for('retrieve'))
     else:
         return redirect(url_for('staff_login'))
 
