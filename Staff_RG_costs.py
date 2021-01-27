@@ -15,7 +15,7 @@ class Data:
         return self.__year
 
     def get_data_id(self):
-        return self.__data_id
+        return str(self.__data_id)
 
     # Mutator Methods
     def set_month(self, month):
@@ -42,7 +42,7 @@ class CampaignCosts(Data):
         return self.__offline_costs
 
     def get_total(self):
-        total = self.__offline_costs + self.__online_costs
+        total = int(self.__offline_costs) + int(self.__online_costs)
         return total
 
     # Mutator Methods
@@ -85,7 +85,7 @@ class CapCosts(Data):
         return self.__vr
 
     def get_total(self):
-        total = self.__supplies + self.__manpower + self.__vr
+        total = int(self.__supplies) + int(self.__manpower) + int(self.__vr)
         return total
 
     # Mutator Methods
@@ -117,7 +117,7 @@ class FreCosts(Data):
         return self.__marketing
 
     def get_total(self):
-        total = self.__catering + self.__vr + self.__marketing
+        total = int(self.__catering) + int(self.__vr) + int(self.__marketing)
         return total
 
     # Mutator Methods
@@ -153,7 +153,7 @@ class AdminCosts(Data):
         return self.__legal_fees
 
     def get_total(self):
-        total = self.__emp_salary + self.__emp_training + self.__office_supplies + self.__legal_fees
+        total = int(self.__emp_salary) + int(self.__emp_training) + int(self.__office_supplies) + int(self.__legal_fees)
         return total
 
     # Mutator Methods
@@ -184,7 +184,7 @@ class UtilitiesCosts(Data):
         return self.__electricity
 
     def get_total(self):
-        total = self.__water + self.__electricity
+        total = int(self.__water) + int(self.__electricity)
         return total
 
     # Mutator Methods
