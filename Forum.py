@@ -3,6 +3,7 @@ from wtforms import Form, StringField, RadioField, SelectField, TextAreaField, v
 import shelve
 from ForumForm import Form
 import datetime
+from datetime import datetime
 
 class ForumPost:
     def __init__(self):
@@ -97,13 +98,17 @@ class ForumPinnedPostsCounter(ForumPost):
     def get_forum_pinned_post_id(self):
         return self.__forum_pinned_post_id
 
-    def set_post_reply(self):
+    def set_post_reply(self,post_reply):
         pinned_post_id = {}
         with shelve.open('forumdb','r') as db:
-            pinned_posts_dict = db['PinnedPosts']
-            pinned_post_id = pinned_posts_dict.get(self.get_forum_pinned_post_id())
-            pinned_post_id[session['username']] = {self.get_date_time():self.get_reply_message()}
-            self.__post_reply = pinned_post_id
+            pinned_post_reply_list = []
+            pinned_post_reply_list.append(session['username'])
+            pinned_post_reply_list.append(post_reply)
+            pinned_post_reply_dict = {}
+            pinned_post_reply_dict[datetime.now()] = pinned_post_reply_list
+            db[session['forum_pinned_post_id']] = pinned_post_reply_dict
+            self.__post_reply = post_reply
+
 
     def get_post_reply(self):
         return self.__post_reply
