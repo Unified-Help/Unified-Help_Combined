@@ -11,6 +11,7 @@ class User:
         self.__gender = gender
         self.__password = password
         self.__confirm_password = confirm_password
+        self.__account_status = "Customer"
         self.__datetime = datetime.datetime.now()
 
     def get_user_id(self):
@@ -30,6 +31,9 @@ class User:
 
     def get_confirm_password(self):
         return self.__confirm_password
+
+    def get_account_status(self):
+        return self.__account_status
 
     def get_date_time(self):
         return self.__datetime
@@ -51,6 +55,9 @@ class User:
 
     def set_confirm_password(self, confirm_password):
         self.__confirm_password = confirm_password
+
+    def set_account_status(self, account_status):
+        self.__account_status = account_status
 
     def set_date_time(self, datetime):
         self.__datetime = datetime
