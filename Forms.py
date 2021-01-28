@@ -3,7 +3,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo
 from flask_wtf import FlaskForm
 
 class CreateUserForm(Form):
-    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=25)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
     password = PasswordField('Password', validators=[DataRequired()])

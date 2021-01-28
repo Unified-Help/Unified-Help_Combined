@@ -582,7 +582,7 @@ ROWS_PER_PAGE = 10
 
 @app.route("/forum/pinned_posts")
 def forum_pinned_posts():
-    page = request.args.get('page', 1, type=int)
+    # page = request.args.get('page', 1, type=int)
     pinned_posts_dict = {}
     db = shelve.open('forumdb', 'c')
     pinned_posts_dict = db['PinnedPosts']
@@ -599,7 +599,6 @@ def forum_pinned_posts():
 # Specific Forum Post ID - Pinned Posts
 @app.route("/forum/pinned_posts/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post(forum_pinned_posts_id):
-
     pinned_posts_dict = {}
     user_dict = {}
     db = shelve.open('forumdb', 'c')
@@ -619,20 +618,20 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
 
     # Reply form
     # {pinned_post_id:{post_reply_id:[datetime,username,reply_message]}}}
-    reply_form = ForumPostReply(request.form)
-    if request.method == 'POST':
-        ppPost = ForumPinnedPostsCounter()
-        ppPost.set_post_reply_id()
-        pinned_post_reply_list = []
-        pinned_post_reply_list.append(session['username'])
-        pinned_post_reply_list.append(reply_form.reply_message.data)
-        pinned_post_reply_dict = {}
-        pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
-        db[session['forum_pinned_post_id']] = pinned_post_reply_dict
+    # reply_form = ForumPostReply(request.form)
+    # if request.method == 'POST':
+    #     ppPost = ForumPinnedPostsCounter()
+    #     ppPost.set_post_reply_id()
+    #     pinned_post_reply_list = []
+    #     pinned_post_reply_list.append(session['username'])
+    #     pinned_post_reply_list.append(reply_form.reply_message.data)
+    #     pinned_post_reply_dict = {}
+    #     pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
+    #     db[session['forum_pinned_post_id']] = pinned_post_reply_dict
     db.close()
 
-    return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list, user_list=user_list)
-
+    # return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list, user_list=user_list)
+    return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list, user_list=user_list)
 
 @app.route("/forum/pinned_posts/update/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post_update(forum_pinned_posts_id):
@@ -641,8 +640,8 @@ def forum_pinned_posts_post_update(forum_pinned_posts_id):
         pinned_posts_dict = {}
         db = shelve.open('forumdb', 'w')
         pinned_posts_dict = db['PinnedPosts']
-
         post = pinned_posts_dict.get(forum_pinned_posts_id)
+
         post.set_post_message(forum_pinned_posts_form_update.post_message.data)
         post.set_edited()
         db['PinnedPosts'] = pinned_posts_dict
@@ -650,17 +649,16 @@ def forum_pinned_posts_post_update(forum_pinned_posts_id):
         return redirect(url_for('forum_pinned_posts_post', forum_pinned_posts_id=post.get_forum_pinned_post_id()))
     else:
         pinned_posts_dict = {}
+        pinned_posts_list = []
         db = shelve.open('forumdb', 'r')
         pinned_posts_dict = db['PinnedPosts']
         db.close()
 
         post = pinned_posts_dict.get(forum_pinned_posts_id)
-        post_id = post.get_forum_pinned_post_id()
-        post_subject = post.get_post_subject()
+        pinned_posts_list.append(post)
         forum_pinned_posts_form_update.post_message.data = post.get_post_message()
-        category = post.get_category()
         return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update,
-                               category=category, post_id=post_id, post_subject=post_subject)
+                               list=pinned_posts_list)
 
 
 @app.route('/forum/pinned_posts/delete/<int:forum_pinned_posts_id>', methods=['GET', 'POST'])
@@ -696,24 +694,23 @@ def forum_announcements_posts():
 @app.route("/forum/announcements/<int:forum_announcements_post_id>")
 def forum_announcements_posts_post(forum_announcements_post_id):
     announcements_dict = {}
+    user_dict = {}
     db = shelve.open('forumdb', 'c')
     announcements_dict = db['Announcements']
-
-    db.close()
-
+    userdb = shelve.open('account.db', 'r')
+    user_dict = userdb['Users']
     announcements_list = []
+    user_list = []
+
     post = announcements_dict.get(forum_announcements_post_id)
+    session['forum_announcements_post_id'] = forum_announcements_post_id
     announcements_list.append(post)
-    post_subject = post.get_post_subject()
-    post_author = post.get_username()
-    post_datetime = post.get_date_time()
-    post_message = post.get_post_message()
-    category = announcements_list[0].get_category()
-    post_edited = post.get_edited()
-    return render_template('customer/CS/forum-post.html', list=announcements_list, category=category,
-                           post_subject=post_subject,
-                           post_author=post_author,
-                           post_datetime=post_datetime, post_message=post_message, post_edited=post_edited)
+    for key in user_dict:
+        user = user_dict.get(key)
+        user_list.append(user)
+    userdb.close()
+    db.close()
+    return render_template('customer/CS/forum-post.html', post_list=announcements_list, user_list=user_list)
 
 
 @app.route("/forum/announcements/update/<int:forum_announcements_post_id>", methods=['GET', 'POST'])
@@ -733,17 +730,16 @@ def forum_announcements_posts_post_update(forum_announcements_post_id):
                                 forum_announcements_post_id=post.get_forum_announcements_post_id()))
     else:
         announcements_dict = {}
+        announcements_list = []
         db = shelve.open('forumdb', 'r')
         announcements_dict = db['Announcements']
         db.close()
 
         post = announcements_dict.get(forum_announcements_post_id)
-        post_id = post.get_forum_announcements_post_id()
-        post_subject = post.get_post_subject()
+        announcements_list.append(post)
         forum_announcements_form_update.post_message.data = post.get_post_message()
-        category = post.get_category()
         return render_template('customer/CS/forum-post_update.html', form=forum_announcements_form_update,
-                               category=category, post_id=post_id, post_subject=post_subject)
+                               list=announcements_list)
 
 
 @app.route('/forum/announcements/delete/<int:forum_announcements_post_id>', methods=['GET', 'POST'])
@@ -781,21 +777,24 @@ def forum_uhc_posts_post(forum_uhc_post_id):
     uhc_dict = {}
     db = shelve.open('forumdb', 'c')
     uhc_dict = db['UHC']
+    userdb = shelve.open('account.db', 'r')
+    user_dict = userdb['Users']
+    uhc_list = []
+    user_list = []
+
+
+    post = uhc_dict.get(forum_uhc_post_id)
+    session['forum_uhc_post_id'] = forum_uhc_post_id
+    uhc_list.append(post)
+    for key in user_dict:
+        user = user_dict.get(key)
+        user_list.append(user)
+    userdb.close()
+
 
     db.close()
 
-    uhc_list = []
-    post = uhc_dict.get(forum_uhc_post_id)
-    uhc_list.append(post)
-    post_subject = post.get_post_subject()
-    post_author = post.get_username()
-    post_datetime = post.get_date_time()
-    post_message = post.get_post_message()
-    category = uhc_list[0].get_category()
-    post_edited = post.get_edited()
-    return render_template('customer/CS/forum-post.html', list=uhc_list, category=category, post_subject=post_subject,
-                           post_author=post_author,
-                           post_datetime=post_datetime, post_message=post_message, post_edited=post_edited)
+    return render_template('customer/CS/forum-post.html', post_list=uhc_list, user_list=user_list)
 
 
 @app.route("/forum/uhc/update/<int:forum_uhc_post_id>", methods=['GET', 'POST'])
@@ -814,17 +813,16 @@ def forum_uhc_post_update(forum_uhc_post_id):
         return redirect(url_for('forum_uhc_posts_post', forum_uhc_post_id=post.get_forum_uhc_post_id()))
     else:
         uhc_dict = {}
+        uhc_list = []
         db = shelve.open('forumdb', 'r')
         uhc_dict = db['UHC']
         db.close()
 
         post = uhc_dict.get(forum_uhc_post_id)
-        post_id = post.get_forum_uhc_post_id()
-        post_subject = post.get_post_subject()
+        uhc_list.append(post)
         forum_uhc_form_update.post_message.data = post.get_post_message()
-        category = post.get_category()
         return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update,
-                               category=category, post_id=post_id, post_subject=post_subject)
+                               list=uhc_list)
 
 
 @app.route('/forum/uhc/delete/<int:forum_uhc_post_id>', methods=['GET', 'POST'])

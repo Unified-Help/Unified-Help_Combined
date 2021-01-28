@@ -17,18 +17,20 @@
     </nav>
     <div class="container my-3">
       <nav class="breadcrumb">
+        {% for post in list %}
         <a href="{{url_for('forum')}}" class="breadcrumb-item" style="text-decoration: none">Unified Help Forum</a>
-        {% if category == 'Pinned Posts' %}
-        <a href="{{ url_for('forum_pinned_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>
-        <a href="{{ url_for('forum_pinned_posts_post', forum_pinned_posts_id = post_id) }}" class="breadcrumb-item" style="text-decoration: none">{{ post_subject }}</a>
-        {% elif category == 'Announcements' %}
-        <a href="{{ url_for('forum_announcements_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>
-        <a href="{{ url_for('forum_announcements_posts_post', forum_announcements_post_id = post_id) }}" class="breadcrumb-item" style="text-decoration: none">{{ post_subject }}</a>
-        {% elif category == 'Unified Help Community' %}
-        <a href="{{ url_for('forum_uhc_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>
-        <a href="{{ url_for('forum_uhc_posts_post', forum_uhc_post_id = post_id) }}" class="breadcrumb-item" style="text-decoration: none">{{ post_subject }}</a>
+        {% if post.get_category() == 'Pinned Posts' %}
+        <a href="{{ url_for('forum_pinned_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ post.get_category() }} Overview</a>
+        <a href="{{ url_for('forum_pinned_posts_post', forum_pinned_posts_id = post.get_forum_pinned_post_id()) }}" class="breadcrumb-item" style="text-decoration: none">{{ post.get_post_subject() }}</a>
+        {% elif post.get_category() == 'Announcements' %}
+        <a href="{{ url_for('forum_announcements_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ post.get_category() }} Overview</a>
+        <a href="{{ url_for('forum_announcements_posts_post', forum_announcements_post_id = post.get_forum_pinned_post_id()) }}" class="breadcrumb-item" style="text-decoration: none">{{ post.get_post_subject() }}</a>
+        {% elif post.get_category() == 'Unified Help Community' %}
+        <a href="{{ url_for('forum_uhc_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ post.get_category() }} Overview</a>
+        <a href="{{ url_for('forum_uhc_posts_post', forum_uhc_post_id = post.get_forum_pinned_post_id()) }}" class="breadcrumb-item" style="text-decoration: none">{{ post.get_post_subject() }}</a>
         {% endif %}
         <span class="breadcrumb-item active">Edit Message</span>
+        {% endfor %}
       </nav>
 
       <div class="row">
