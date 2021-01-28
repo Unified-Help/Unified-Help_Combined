@@ -627,7 +627,6 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     #     ppPost = ForumPinnedPostsCounter()
     #     ppPost.set_post_reply_id()
     #     pinned_posts_dict[post.get_forum_pinned_post_id()] = ppPost
-
         # pinned_post_reply_list = []
         # pinned_post_reply_list.append(session['username'])
         # pinned_post_reply_list.append(reply_form.reply_message.data)
@@ -636,14 +635,9 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
         # db[session['forum_pinned_post_id']] = pinned_post_reply_dict
     db.close()
 
-<<<<<<< Updated upstream
-    # return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list, user_list=user_list)
-    return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list, user_list=user_list)
-=======
-    return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list,
+    return render_template('customer/CS/forum-post.html',  post_list=pinned_posts_list,
                            user_list=user_list)
 
->>>>>>> Stashed changes
 
 @app.route("/forum/pinned_posts/update/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post_update(forum_pinned_posts_id):
