@@ -617,17 +617,21 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     userdb.close()
 
     # Reply form
-    # {pinned_post_id:{post_reply_id:[datetime,username,reply_message]}}}
+    # {pinned_post_id:{post_reply_id:[datetime,username,reply_message]}
+    #                  ,{post_reply_id:[datetime,username,reply_message]}
+    # }}
     # reply_form = ForumPostReply(request.form)
     # if request.method == 'POST':
     #     ppPost = ForumPinnedPostsCounter()
     #     ppPost.set_post_reply_id()
-    #     pinned_post_reply_list = []
-    #     pinned_post_reply_list.append(session['username'])
-    #     pinned_post_reply_list.append(reply_form.reply_message.data)
-    #     pinned_post_reply_dict = {}
-    #     pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
-    #     db[session['forum_pinned_post_id']] = pinned_post_reply_dict
+    #     pinned_posts_dict[post.get_forum_pinned_post_id()] = ppPost
+
+        # pinned_post_reply_list = []
+        # pinned_post_reply_list.append(session['username'])
+        # pinned_post_reply_list.append(reply_form.reply_message.data)
+        # pinned_post_reply_dict = {}
+        # pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
+        # db[session['forum_pinned_post_id']] = pinned_post_reply_dict
     db.close()
 
     # return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list, user_list=user_list)

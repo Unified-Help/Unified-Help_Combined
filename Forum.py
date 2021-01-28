@@ -16,7 +16,7 @@ class ForumPost:
         self.__upvotes = 0
         self.__downvotes = 0
         self.__edited = False
-        self.__datetime = datetime.datetime.now()
+        self.__datetime = datetime.now()
 
     # Mutator
     def set_username(self, username):
@@ -111,11 +111,19 @@ class ForumPinnedPostsCounter(ForumPost):
     #             if len(db['PinnedPosts'][self.__forum_pinned_post_id][self.__post_reply_id]) == 0:
     #                 post_reply_id = 0
     #             else:
-    #                 post_reply_id = list(db['PinnedPosts'].keys())[-1]
+    #                 a = list(db['PinnedPosts'][self.__forum_pinned_post_id].keys())
+    #                 post_reply_id = int(a[-1])
+    #                 print(post_reply_id)
+                    # a = list(db['PinnedPosts'][self.__forum_pinned_post_id].keys()[-1])
+                    # post_reply_id = db['PinnedPosts'][self.__forum_pinned_post_id][a]
+                    # print(post_reply_id)
+                    # a = list(db["1"].keys())[-1]
+                    # print(db["1"][a])
     #     except:
     #         post_reply_id = 0
     #
     #     post_reply_id += 1
+    #     print(post_reply_id)
     #     self.__post_reply_id = post_reply_id
     #
     # def get_post_reply_id(self):
