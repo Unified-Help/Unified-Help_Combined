@@ -131,7 +131,8 @@ def donateHistory():
                         donorsMID_list.append(donorMID)
                         # print(donorsMID_list)
 
-                return render_template('customer/TP/donationHistory.html', donorsIID_list='', donorsMID_list=donorsMID_list)
+                return render_template('customer/TP/donationHistory.html', donorsIID_list='',
+                                       donorsMID_list=donorsMID_list)
 
             # If only Item donations are created and Money is empty
             if "Money" not in db and "Items" in db:
@@ -147,7 +148,8 @@ def donateHistory():
                         donorsIID_list.append(donorIID)
                         # print(donorsIID_list)
 
-                return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list, donorsMID_list='')
+                return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list,
+                                       donorsMID_list='')
 
             # Once both item and money donations has been made
             if "Money" in db and "Items" in db:
@@ -634,8 +636,14 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
         # db[session['forum_pinned_post_id']] = pinned_post_reply_dict
     db.close()
 
+<<<<<<< Updated upstream
     # return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list, user_list=user_list)
     return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list, user_list=user_list)
+=======
+    return render_template('customer/CS/forum-post.html', form=reply_form, post_list=pinned_posts_list,
+                           user_list=user_list)
+
+>>>>>>> Stashed changes
 
 @app.route("/forum/pinned_posts/update/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post_update(forum_pinned_posts_id):
@@ -1068,7 +1076,7 @@ def staff_profile():
 
         session['staff_updated'] = staff.get_username()
 
-        #return redirect(url_for('retrieve'))
+        # return redirect(url_for('retrieve'))
     else:
         return redirect(url_for('staff_login'))
 
@@ -1375,46 +1383,46 @@ def cost_analysis():
     except:
         print("error in retrieving data from costs.db")
 
-    with open("Staff_RG_costs.csv", 'r') as costs_data_file:
-        reader = csv.DictReader(costs_data_file)
-        for row in reader:
-            # ------ Creating and Storing Campaign Costs Objects ----- #
-            ccON = CampaignCosts(row['Month'], row['Year'], row['Campaign Costs: Online'],
-                                 row['Campaign Costs: Offline'])
-            cc_dict[ccON.get_data_id()] = ccON
-            costs_db['Campaign Costs'] = cc_dict
-            print(len(cc_dict))
+        with open("Staff_RG_costs.csv", 'r') as costs_data_file:
+            reader = csv.DictReader(costs_data_file)
+            for row in reader:
+                # ------ Creating and Storing Campaign Costs Objects ----- #
+                ccON = CampaignCosts(row['Month'], row['Year'], row['Campaign Costs: Online'],
+                                     row['Campaign Costs: Offline'])
+                cc_dict[ccON.get_data_id()] = ccON
+                costs_db['Campaign Costs'] = cc_dict
 
-            # ------ Creating and Storing ISC Objects ----- #
-            isc = ISC(row['Month'], row['Year'], row['Inventory Storage Costs'])
-            isc_dict[isc.get_data_id()] = isc
-            costs_db['ISC Costs'] = isc_dict
+                # ------ Creating and Storing ISC Objects ----- #
+                isc = ISC(row['Month'], row['Year'], row['Inventory Storage Costs'])
+                isc_dict[isc.get_data_id()] = isc
+                costs_db['ISC Costs'] = isc_dict
 
-            # ------ Creating and Storing CAP Objects ----- #
-            CAP_supplies = CapCosts(row['Month'], row['Year'], row['Charitable Programs: Supplies'],
-                                    row['Charitable Programs: Manpower'], row['Charitable Programs: Venue Rental'])
-            cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
-            costs_db['CAP Costs'] = cap_dict
+                # ------ Creating and Storing CAP Objects ----- #
+                CAP_supplies = CapCosts(row['Month'], row['Year'], row['Charitable Programs: Supplies'],
+                                        row['Charitable Programs: Manpower'], row['Charitable Programs: Venue Rental'])
+                cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
+                costs_db['CAP Costs'] = cap_dict
 
-            # ------ Creating and Storing FRE Objects ----- #
-            FRE_catering = FreCosts(row['Month'], row['Year'], row['Fund-raising Expenses: Catering'],
-                                    row['Fund-raising Expenses: Venue Rental'], row['Fund Raising Expenses: Marketing'])
-            fre_dict[FRE_catering.get_data_id()] = FRE_catering
-            costs_db['FRE Costs'] = fre_dict
+                # ------ Creating and Storing FRE Objects ----- #
+                FRE_catering = FreCosts(row['Month'], row['Year'], row['Fund-raising Expenses: Catering'],
+                                        row['Fund-raising Expenses: Venue Rental'],
+                                        row['Fund Raising Expenses: Marketing'])
+                fre_dict[FRE_catering.get_data_id()] = FRE_catering
+                costs_db['FRE Costs'] = fre_dict
 
-            # ------ Creating and Storing AC Objects ----- #
-            AC_ES = AdminCosts(row['Month'], row['Year'], row['Administration Costs: Employee Salaries'],
-                               row['Administration Costs: Employee training'],
-                               row['Administration Costs: Office Supplies'], row['Administration Costs: Legal Fees'])
-            ac_dict[AC_ES.get_data_id()] = AC_ES
-            costs_db['AC Costs'] = ac_dict
+                # ------ Creating and Storing AC Objects ----- #
+                AC_ES = AdminCosts(row['Month'], row['Year'], row['Administration Costs: Employee Salaries'],
+                                   row['Administration Costs: Employee training'],
+                                   row['Administration Costs: Office Supplies'],
+                                   row['Administration Costs: Legal Fees'])
+                ac_dict[AC_ES.get_data_id()] = AC_ES
+                costs_db['AC Costs'] = ac_dict
 
-            # ------ Creating and Storing UC Objects ----- #
-            UC_water = UtilitiesCosts(row['Month'], row['Year'], row['Utilities Costs: Water'],
-                                      row['Utilities Costs: Electricity'])
-            uc_dict[UC_water.get_data_id()] = UC_water
-            costs_db['UC Costs'] = uc_dict
-    print(len(cc_dict))
+                # ------ Creating and Storing UC Objects ----- #
+                UC_water = UtilitiesCosts(row['Month'], row['Year'], row['Utilities Costs: Water'],
+                                          row['Utilities Costs: Electricity'])
+                uc_dict[UC_water.get_data_id()] = UC_water
+                costs_db['UC Costs'] = uc_dict
     costs_db.close()
 
     # Retrieve Costs from shelve and store in dictionary
@@ -1483,19 +1491,24 @@ def cost_analysis():
     for key in cap_dict:
         cc = cap_dict.get(key)
         if now.year == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()),
+                    int(cc.get_total())]
             cap_chart_data_1.append(data)
         elif now.year - 1 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()),
+                    int(cc.get_total())]
             cap_chart_data_2.append(data)
         elif now.year - 2 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()),
+                    int(cc.get_total())]
             cap_chart_data_3.append(data)
         elif now.year - 3 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()),
+                    int(cc.get_total())]
             cap_chart_data_4.append(data)
         elif now.year - 4 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()),
+                    int(cc.get_total())]
             cap_chart_data_5.append(data)
 
     fre_chart_data_1 = []
@@ -1506,19 +1519,24 @@ def cost_analysis():
     for key in fre_dict:
         cc = fre_dict.get(key)
         if now.year == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()),
+                    int(cc.get_total())]
             fre_chart_data_1.append(data)
         elif now.year - 1 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()),
+                    int(cc.get_total())]
             fre_chart_data_2.append(data)
         elif now.year - 2 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()),
+                    int(cc.get_total())]
             fre_chart_data_3.append(data)
         elif now.year - 3 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()),
+                    int(cc.get_total())]
             fre_chart_data_4.append(data)
         elif now.year - 4 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()),
+                    int(cc.get_total())]
             fre_chart_data_5.append(data)
 
     ac_chart_data_1 = []
@@ -1529,19 +1547,24 @@ def cost_analysis():
     for key in ac_dict:
         cc = ac_dict.get(key)
         if now.year == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()), int(cc.get_legal_fees()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()),
+                    int(cc.get_legal_fees()), int(cc.get_total())]
             ac_chart_data_1.append(data)
         elif now.year - 1 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()), int(cc.get_legal_fees()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()),
+                    int(cc.get_legal_fees()), int(cc.get_total())]
             ac_chart_data_2.append(data)
         elif now.year - 2 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()), int(cc.get_legal_fees()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()),
+                    int(cc.get_legal_fees()), int(cc.get_total())]
             ac_chart_data_3.append(data)
         elif now.year - 3 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()), int(cc.get_legal_fees()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()),
+                    int(cc.get_legal_fees()), int(cc.get_total())]
             ac_chart_data_4.append(data)
         elif now.year - 4 == int(cc.get_year()):
-            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()), int(cc.get_legal_fees()), int(cc.get_total())]
+            data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()),
+                    int(cc.get_legal_fees()), int(cc.get_total())]
             ac_chart_data_5.append(data)
 
     uc_chart_data_1 = []
@@ -1567,12 +1590,13 @@ def cost_analysis():
             data = [cc.get_month(), int(cc.get_water()), int(cc.get_electricity()), int(cc.get_total())]
             uc_chart_data_5.append(data)
 
-    return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2, cc_data2=cc_chart_data_3,
-                                                          isc_data=isc_chart_data_1, isc_data1=isc_chart_data_2, isc_data2=isc_chart_data_3,
-                                                          cap_data=cap_chart_data_1, cap_data1=cap_chart_data_2, cap_data2=cap_chart_data_3,
-                                                          fre_data=fre_chart_data_1, fre_data1=fre_chart_data_2, fre_data2=fre_chart_data_3,
-                                                          ac_data=ac_chart_data_1, ac_data1=ac_chart_data_2, ac_data2=ac_chart_data_3,
-                                                          uc_data=uc_chart_data_1, uc_data1=uc_chart_data_2, uc_data2=uc_chart_data_3,)
+    return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
+                           cc_data2=cc_chart_data_3,
+                           isc_data=isc_chart_data_1, isc_data1=isc_chart_data_2, isc_data2=isc_chart_data_3,
+                           cap_data=cap_chart_data_1, cap_data1=cap_chart_data_2, cap_data2=cap_chart_data_3,
+                           fre_data=fre_chart_data_1, fre_data1=fre_chart_data_2, fre_data2=fre_chart_data_3,
+                           ac_data=ac_chart_data_1, ac_data1=ac_chart_data_2, ac_data2=ac_chart_data_3,
+                           uc_data=uc_chart_data_1, uc_data1=uc_chart_data_2, uc_data2=uc_chart_data_3, )
 
 
 @app.route("/upload_insert_data")
@@ -1595,33 +1619,104 @@ def manual_insertForm():
     manual_upload_form = ManualUploadForm(request.form)
     if request.method == 'POST' and manual_upload_form.validate():
         cost_dict = {}
-        db = shelve.open('cost.db', 'w')
-        if manual_upload_form.data_field.data == "Campaign Costs: Online" or "Campaign Costs: Offline":
+        db = shelve.open('costs.db', 'w')
+
+        # Update Campaign Costs
+        if manual_upload_form.data_field.data == "Campaign Costs: Online" or manual_upload_form.data_field.data == "Campaign Costs: Offline":
             cost_dict = db["Campaign Costs"]
+            field = manual_upload_form.data_field.data
+            for key in cost_dict:
+                cc = cost_dict.get(key)
+                if (str(cc.get_year()) + str(cc.get_month())) == manual_upload_form.year.data + manual_upload_form.month.data:
+                    if field == "Campaign Costs: Online":
+                        cc.set_online_costs(manual_upload_form.data_value.data)
+                        print(cc.get_online_costs())
+                    else:
+                        cc.set_offline_costs(manual_upload_form.data_value.data)
+                    break
+            db["Campaign Costs"] = cost_dict
+
+        # Update Inventory Storage Costs
         elif manual_upload_form.data_field.data == "Inventory Storage Costs":
             cost_dict = db["ISC Costs"]
-        elif manual_upload_form.data_field.data == "Charitable Programs: Supplies" or "Charitable Programs: Manpower" or "Charitable Programs: Venue Rental":
-            cost_dict = db["CAP Costs"]
-        elif manual_upload_form.data_field.data == "Fund-raising Expenses: Catering" or "Fund Raising Expenses: Marketing" or "Fund-raising Expenses: Venue Rental":
-            cost_dict = db["FRE Costs"]
-        elif manual_upload_form.data_field.data == "Administration Costs: Employee Salaries" or "Administration Costs: Employee training" or "Administration Costs: Office Supplies" or "Administration Costs: Legal Fees":
-            cost_dict = db["AC Costs"]
-        elif manual_upload_form.data_field.data == "Utilities Costs: Water" or "Utilities Costs: Electricity":
-            cost_dict = db["UC Costs"]
+            field = manual_upload_form.data_field.data
+            for key in cost_dict:
+                cc = cost_dict.get(key)
+                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                    if field == "Inventory Storage Costs":
+                        cc.set_isc(manual_upload_form.data_value.data)
+                    break
+            db["ISC Costs"] = cost_dict
 
-        # try:
-        #     cost_dict = db['cost']
-        # except:
-        #     print("Error in retrieving Users from storage.db.")
-        #
-        # cost_object = Data(manual_upload_form.month, manual_upload_form.data_field)
-        # cost_dict["yes"] = cost_object
-        # db['cost'] = cost_dict
-        #
-        # # Test codes
-        # cost_dict = db['cost']
-        # user = cost_dict["yes"]
-        # db.close()
+        # Update Charitable Programme Costs
+        elif manual_upload_form.data_field.data == "Charitable Programs: Supplies" or manual_upload_form.data_field.data == "Charitable Programs: Manpower" or manual_upload_form.data_field.data == "Charitable Programs: Venue Rental":
+            cost_dict = db["CAP Costs"]
+            field = manual_upload_form.data_field.data
+            for key in cost_dict:
+                cc = cost_dict.get(key)
+                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                    if field == "Charitable Programs: Supplies":
+                        cc.set_supplies(manual_upload_form.data_value.data)
+                    elif field == "Charitable Programs: Manpower":
+                        cc.set_manpower(manual_upload_form.data_value.data)
+                    elif field == "Charitable Programs: Venue Rental":
+                        cc.set_vr(manual_upload_form.data_value.data)
+                    break
+            db["CAP Costs"] = cost_dict
+
+        # Update Fund Raising Cost
+        elif manual_upload_form.data_field.data == "Fund-raising Expenses: Catering" or manual_upload_form.data_field.data == "Fund Raising Expenses: Marketing" or manual_upload_form.data_field.data == "Fund-raising Expenses: Venue Rental":
+            cost_dict = db["FRE Costs"]
+            field = manual_upload_form.data_field.data
+            for key in cost_dict:
+                cc = cost_dict.get(key)
+                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                    if field == "Fund-raising Expenses: Catering":
+                        cc.set_catering(manual_upload_form.data_value.data)
+                    elif field == "Fund Raising Expenses: Marketing":
+                        cc.set_vr(manual_upload_form.data_value.data)
+                    elif field == "Fund-raising Expenses: Venue Rental":
+                        cc.set_marketing(manual_upload_form.data_value.data)
+                    break
+            db["FRE Costs"] = cost_dict
+
+        # Update Admin Costs
+        elif manual_upload_form.data_field.data == "Administration Costs: Employee Salaries" or manual_upload_form.data_field.data == "Administration Costs: Employee training" or manual_upload_form.data_field.data == "Administration Costs: Office Supplies" or manual_upload_form.data_field.data == "Administration Costs: Legal Fees":
+            cost_dict = db["AC Costs"]
+            field = manual_upload_form.data_field.data
+            for key in cost_dict:
+                cc = cost_dict.get(key)
+                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                    if field == "Administration Costs: Employee Salaries":
+                        cc.set_emp_salary(manual_upload_form.data_value.data)
+                    elif field == "Administration Costs: Employee training":
+                        cc.set_emp_training(manual_upload_form.data_value.data)
+                    elif field == "Administration Costs: Office Supplies":
+                        cc.set_office_supplies(manual_upload_form.data_value.data)
+                    elif field == "Administration Costs: Legal Fees":
+                        cc.set_legal_fees(manual_upload_form.data_value.data)
+                    break
+            db["AC Costs"] = cost_dict
+
+        # Update Utility Costs
+        elif manual_upload_form.data_field.data == "Utilities Costs: Water" or manual_upload_form.data_field.data == "Utilities Costs: Electricity":
+            cost_dict = db["UC Costs"]
+            field = manual_upload_form.data_field.data
+            for key in cost_dict:
+                cc = cost_dict.get(key)
+                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                    if field == "Utilities Costs: Water":
+                        cc.set_water(manual_upload_form.data_value.data)
+                    else:
+                        cc.set_electricity(manual_upload_form.data_value.data)
+                    break
+            db["UC Costs"] = cost_dict
+
+        db.close()
+        return redirect(url_for('cost_analysis'))
+
+    else:
+        print("hi")
 
     return render_template('staff/RG/manual_insertForm.html', form=manual_upload_form)
 

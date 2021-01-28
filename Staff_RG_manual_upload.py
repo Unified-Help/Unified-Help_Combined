@@ -37,10 +37,10 @@ class ManualUploadForm(Form):
                              default='')
 
     month = SelectField("Month", [validators.DataRequired()],
-                        choices=[('01', 'January'), ('02', 'Feburary'), ('03', 'March'), ('04', 'April'),
-                                 ('05', 'May'), ('06', 'June'), ('07', 'July'), ('08', 'August'),
-                                 ('09', 'September'), ('10', 'October'), ('11', 'November'),
-                                 ('12', 'December')])
+                        choices=[('JAN', 'January'), ('FEB', 'Feburary'), ('MAR', 'March'), ('APR', 'April'),
+                                 ('MAY', 'May'), ('JUN', 'June'), ('JULY', 'July'), ('AUG', 'August'),
+                                 ('SEP', 'September'), ('OCT', 'October'), ('NOV', 'November'),
+                                 ('DEC', 'December')])
 
     global year_choices
     year = SelectField("Year", [validators.DataRequired()], choices=year_choices)
