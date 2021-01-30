@@ -122,6 +122,7 @@ class DonateItem:
         self.__item_height = item_height
         self.__item_length = item_length
         self.__item_width = item_width
+        self.__item_image = ""
 
         # Collection Details
         self.__collection_type = collection_type
@@ -166,6 +167,9 @@ class DonateItem:
 
     def get_item_height(self):
         return self.__item_height
+
+    def get_item_image(self):
+        return self.__item_image
 
     def get_collection_type(self):
         return self.__collection_type
@@ -224,6 +228,9 @@ class DonateItem:
 
     def set_item_height(self, item_height):
         self.__item_height = item_height
+
+    def set_item_image(self, item_image):
+        self.__item_image = item_image
 
     def set_collection_type(self, collection_type):
         self.__collection_type = collection_type

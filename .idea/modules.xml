@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../../Flask Prac/.idea/Flask Prac.iml" filepath="$PROJECT_DIR$/../../Flask Prac/.idea/Flask Prac.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Unified-Help_Combined.iml" filepath="$PROJECT_DIR$/.idea/Unified-Help_Combined.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Assignment Templates/Photo Gallery/templatemo_553_xtra_blog/.idea/templatemo_553_xtra_blog.iml" filepath="$PROJECT_DIR$/../Assignment Templates/Photo Gallery/templatemo_553_xtra_blog/.idea/templatemo_553_xtra_blog.iml" />
     </modules>
   </component>
 </project>

@@ -7,6 +7,7 @@ import shelve
 from donateMoney import donateMoney
 from donateItem import donateItem
 from Donate import DonateMoney, DonateItem
+import os
 
 # Customer Support Imports
 from ForumForm import createForumPost, updateForumPost, staff_createForumPost, ForumPostReply
@@ -112,7 +113,7 @@ def donateHistory():
         return redirect(url_for('donate_history_login'))
     else:
         # Displaying Donation History
-        donorsM_dict = {}
+        donorsMID_dict = {}
         donorsIID_dict = {}
         try:
             db = shelve.open("donorChoices", "r")
@@ -271,6 +272,9 @@ def donate_Money():
         return render_template('customer/TP/donateMoney.html', form=donate_money)
 
 
+app.config["Item_Donations"] = "static/customer/img/Idonation"
+
+
 @app.route("/donate/details/item", methods=['GET', 'POST'])
 def donate_Item():
     try:
@@ -317,7 +321,8 @@ def donate_Item():
                                donate_item.collectionMonth.data, donate_item.collectionTime.data,
                                donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
                                donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data)
-            # donor.set_itemID()
+
+            # Setting Item Donation ID
             donoCounter = []
             if "ItemCounter" not in dbIM:
                 dbIM["ItemCounter"] = donoCounter
@@ -335,6 +340,12 @@ def donate_Item():
             dbIM["ItemCounter"] = donoCounter
 
             donor.set_itemID(itemID)
+
+            # Upload image
+            if request.files:
+                image = request.files['image']
+                donor.set_item_image(image.filename)
+                image.save(os.path.join(app.config["Item_Donations"], image.filename))
 
             donor.set_collection_status("Pending")
 
@@ -494,6 +505,38 @@ def donate_ItemUpdate(id):
         dbUP.close()
 
         return render_template('customer/TP/donateItemUpdate.html', form=update_donate_item)
+
+
+@app.route("/donate/gallery")
+def donateGallery():
+    # Error ?????
+    # Displaying Donation History
+    donorsIID_dict = {}
+    try:
+        db = shelve.open("donorChoices", "r")
+
+        # If only Item donations are created and Money is empty
+        if "Money" not in db and "Items" in db:
+            # Item History
+            donorsIID_dict = db["Items"]
+            # userids = [*donorsIID_dict]
+            donorsIID_list = []
+
+            for key in donorsIID_dict:
+                donorsList = donorsIID_dict[key]
+                for i in range(len(donorsList)):
+                    donorIID = donorsList[i]
+                    donorsIID_list.append(donorIID)
+                    # print(donorsIID_list)
+
+            return render_template('customer/TP/donationGallery.html', donorsIID_list=donorsIID_list)
+
+        db.close()
+
+    except:
+        return render_template('customer/TP/donationGallery.html')
+
+    # return render_template('customer/TP/donationGallery.html')
 
 
 # Customer Support

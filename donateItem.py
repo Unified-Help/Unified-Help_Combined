@@ -25,6 +25,7 @@ class donateItem(Form):
     itemHeight = FloatField("Height of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
     itemLength = FloatField("Length of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
     itemWidth = FloatField("Width of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
+    itemImage = TextAreaField("Select Image")
     # itemImage = FileField('Picture of Item', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
 
     # Collection Types and Information
