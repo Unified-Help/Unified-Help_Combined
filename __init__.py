@@ -1249,7 +1249,7 @@ def incoming_item():
     try:
         db = shelve.open("donorChoices", "r")
         donorsIID_dict = db["Items"]
-        useridsI = [*donorsIID_dict]
+        # useridsI = [*donorsIID_dict]
         donorsIID_list = []
         unnested_donorsIID_list = []
 
