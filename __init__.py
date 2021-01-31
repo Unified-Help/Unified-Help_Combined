@@ -273,6 +273,19 @@ def donate_Money():
 
 
 app.config["Item_Donations"] = "static/customer/img/Idonation"
+app.config["Allowed_Images_Type"] = ["PNG", "JPG", "JPEG"]
+
+
+def allowed_images(filename):
+    if not "." in filename:
+        return False
+
+    file = filename.rsplit(".", 1)[1]
+
+    if file.upper() in app.config["Allowed_Images_Type"]:
+        return True
+    else:
+        return False
 
 
 @app.route("/donate/details/item", methods=['GET', 'POST'])
@@ -285,7 +298,7 @@ def donate_Item():
         SID = session["username"]
         # Item Donations
         donate_item = donateItem(request.form)
-        if request.method == "POST":
+        if request.method == "POST" and donate_item.validate():
             donor_itemchoices = {}
             donationinfoI = []
             donationinfoINest = []
@@ -344,9 +357,19 @@ def donate_Item():
             # Upload image
             if request.files:
                 image = request.files['image']
+
+                if image.filename == "":
+                    print("Image must have filename")
+                    return redirect(request.url)
+
+                if not allowed_images(image.filename):
+                    print("That image type is not allowed")
+                    return redirect(request.url)
+
                 donor.set_item_image(image.filename)
                 image.save(os.path.join(app.config["Item_Donations"], image.filename))
 
+            # Setting the collection status (for staff side)
             donor.set_collection_status("Pending")
 
             # setting the donation status "pending" or "confirmed"
@@ -519,17 +542,19 @@ def donateGallery():
         if "Money" not in db and "Items" in db:
             # Item History
             donorsIID_dict = db["Items"]
-            # userids = [*donorsIID_dict]
+            useridsI = [*donorsIID_dict]
             donorsIID_list = []
+            unnested_donorsIID_list = []
 
             for key in donorsIID_dict:
-                donorsList = donorsIID_dict[key]
-                for i in range(len(donorsList)):
-                    donorIID = donorsList[i]
-                    donorsIID_list.append(donorIID)
-                    # print(donorsIID_list)
+                donorinfo_list = donorsIID_dict[key]
+                donorsIID_list.append(donorinfo_list)
 
-            return render_template('customer/TP/donationGallery.html', donorsIID_list=donorsIID_list)
+            for x in donorsIID_list:
+                for y in x:
+                    unnested_donorsIID_list.append(y)
+
+            return render_template('customer/TP/donationGallery.html', donorsIID_list=unnested_donorsIID_list)
 
         db.close()
 
@@ -670,15 +695,15 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     #     ppPost = ForumPinnedPostsCounter()
     #     ppPost.set_post_reply_id()
     #     pinned_posts_dict[post.get_forum_pinned_post_id()] = ppPost
-        # pinned_post_reply_list = []
-        # pinned_post_reply_list.append(session['username'])
-        # pinned_post_reply_list.append(reply_form.reply_message.data)
-        # pinned_post_reply_dict = {}
-        # pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
-        # db[session['forum_pinned_post_id']] = pinned_post_reply_dict
+    # pinned_post_reply_list = []
+    # pinned_post_reply_list.append(session['username'])
+    # pinned_post_reply_list.append(reply_form.reply_message.data)
+    # pinned_post_reply_dict = {}
+    # pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
+    # db[session['forum_pinned_post_id']] = pinned_post_reply_dict
     db.close()
 
-    return render_template('customer/CS/forum-post.html',  post_list=pinned_posts_list,
+    return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list,
                            user_list=user_list)
 
 
@@ -831,7 +856,6 @@ def forum_uhc_posts_post(forum_uhc_post_id):
     uhc_list = []
     user_list = []
 
-
     post = uhc_dict.get(forum_uhc_post_id)
     session['forum_uhc_post_id'] = forum_uhc_post_id
     uhc_list.append(post)
@@ -839,7 +863,6 @@ def forum_uhc_posts_post(forum_uhc_post_id):
         user = user_dict.get(key)
         user_list.append(user)
     userdb.close()
-
 
     db.close()
 
@@ -1228,13 +1251,22 @@ def incoming_item():
         donorsIID_dict = db["Items"]
         useridsI = [*donorsIID_dict]
         donorsIID_list = []
+        unnested_donorsIID_list = []
 
-        if SID in useridsI:
-            donorsList = donorsIID_dict[SID]
-            for i in range(len(donorsList)):
-                donorIID = donorsList[i]
-                donorsIID_list.append(donorIID)
-        return render_template('staff/TP/incoming_item.html', donorsIID_list=donorsIID_list)
+        for key in donorsIID_dict:
+            donorinfo_list = donorsIID_dict[key]
+            donorsIID_list.append(donorinfo_list)
+
+        for x in donorsIID_list:
+            for y in x:
+                unnested_donorsIID_list.append(y)
+
+        # if SID in useridsI:
+        #     donorsList = donorsIID_dict[SID]
+        #     for i in range(len(donorsList)):
+        #         donorIID = donorsList[i]
+        #         donorsIID_list.append(donorIID)
+        return render_template('staff/TP/incoming_item.html', donorsIID_list=unnested_donorsIID_list)
     except:
         return render_template('staff/TP/incoming_item.html')
 
@@ -1664,7 +1696,8 @@ def manual_insertForm():
             field = manual_upload_form.data_field.data
             for key in cost_dict:
                 cc = cost_dict.get(key)
-                if (str(cc.get_year()) + str(cc.get_month())) == manual_upload_form.year.data + manual_upload_form.month.data:
+                if (str(cc.get_year()) + str(
+                        cc.get_month())) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Campaign Costs: Online":
                         cc.set_online_costs(manual_upload_form.data_value.data)
                         print(cc.get_online_costs())
@@ -1679,7 +1712,8 @@ def manual_insertForm():
             field = manual_upload_form.data_field.data
             for key in cost_dict:
                 cc = cost_dict.get(key)
-                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                if str(cc.get_year()) + str(
+                        cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Inventory Storage Costs":
                         cc.set_isc(manual_upload_form.data_value.data)
                     break
@@ -1691,7 +1725,8 @@ def manual_insertForm():
             field = manual_upload_form.data_field.data
             for key in cost_dict:
                 cc = cost_dict.get(key)
-                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                if str(cc.get_year()) + str(
+                        cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Charitable Programs: Supplies":
                         cc.set_supplies(manual_upload_form.data_value.data)
                     elif field == "Charitable Programs: Manpower":
@@ -1707,7 +1742,8 @@ def manual_insertForm():
             field = manual_upload_form.data_field.data
             for key in cost_dict:
                 cc = cost_dict.get(key)
-                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                if str(cc.get_year()) + str(
+                        cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Fund-raising Expenses: Catering":
                         cc.set_catering(manual_upload_form.data_value.data)
                     elif field == "Fund Raising Expenses: Marketing":
@@ -1723,7 +1759,8 @@ def manual_insertForm():
             field = manual_upload_form.data_field.data
             for key in cost_dict:
                 cc = cost_dict.get(key)
-                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                if str(cc.get_year()) + str(
+                        cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Administration Costs: Employee Salaries":
                         cc.set_emp_salary(manual_upload_form.data_value.data)
                     elif field == "Administration Costs: Employee training":
@@ -1741,7 +1778,8 @@ def manual_insertForm():
             field = manual_upload_form.data_field.data
             for key in cost_dict:
                 cc = cost_dict.get(key)
-                if str(cc.get_year()) + str(cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
+                if str(cc.get_year()) + str(
+                        cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Utilities Costs: Water":
                         cc.set_water(manual_upload_form.data_value.data)
                     else:

@@ -1,5 +1,5 @@
 {% extends "customer/base.html" %}
-{% block title %}Donate Item{% endblock %}
+{% block title %}Donation Gallery{% endblock %}
 
 {% block head %}
 {% endblock %}
@@ -15,29 +15,13 @@
 {% for donorIID in donorsIID_list %}
     <tr>
         <!-- Donation ID -->
-        <td><a href="/donate/itemupdate/{{ donorIID.get_itemID() }}" style="color:#eb5d1e;">{{ donorIID.get_itemID() }}</a></td>
+        <td>{{ donorIID.get_itemID() }}</td>
 
         <!-- Donation Description -->
         <td>{{ donorIID.get_donate_type() }}: <br> {{ donorIID.get_item_name() }}</td>
 
-        <!-- Donate to Who -->
-        <td>{{ donorIID.get_donate_who() }}</td>
-
-        <!-- If item donation, only show collection type -->
-        <td>{{ donorIID.get_collection_type() }} <br> Date: {{ donorIID.get_date() }}/{{ donorIID.get_month() }}/21 <br>
-        Time: {{ donorIID.get_time() }}</td>
-
-        <td>--</td>
-
-        <!-- Donation Confirmation -->
-        {% if donorIID.get_status() == "Confirmed" %}
-        <td>{{ donorIID.get_status() }}</td>
-        {% elif donorIID.get_status() == "Pending" %}
-        <td><a href="/donate/details/confirmation/{{ donorIID.get_itemID() }}" style="color:#eb5d1e;">{{ donorIID.get_status() }}</a></td>
-        {% else %}
-        <td> </td>
-        {% endif %}
-
+        <!-- Image -->
+        <td><img src="static/customer/img/Idonation/{{ donorIID.get_item_image() }}" class="img-fluid" style="width: 30%;"></td>
     </tr>
 {% endfor %}
 
