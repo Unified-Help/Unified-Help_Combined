@@ -1,5 +1,5 @@
 # Imports
-from flask import Flask, render_template, request, redirect, url_for, session, g
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 # from flask_login import login_required, LoginManager
 import shelve
 
@@ -24,6 +24,8 @@ from Staff_RG_manual_upload import ManualUploadForm
 import csv
 import datetime
 from Staff_RG_costs import Data, CampaignCosts, ISC, CapCosts, FreCosts, AdminCosts, UtilitiesCosts
+from Staff_RG_update_history import History
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 # Jinja for loop lib
@@ -1665,8 +1667,14 @@ def upload_dataForm():
 
 @app.route("/manual_insertForm", methods=['GET', 'POST'])
 def manual_insertForm():
+    global old_value
+    global field
+    global cc
     manual_upload_form = ManualUploadForm(request.form)
     if request.method == 'POST' and manual_upload_form.validate():
+        now = datetime.datetime.now()
+        now_time = now.strftime("%X")
+        now_date = now.strftime("%x")
         cost_dict = {}
         db = shelve.open('costs.db', 'w')
 
@@ -1679,9 +1687,10 @@ def manual_insertForm():
                 if (str(cc.get_year()) + str(
                         cc.get_month())) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Campaign Costs: Online":
+                        old_value = cc.get_online_costs()
                         cc.set_online_costs(manual_upload_form.data_value.data)
-                        print(cc.get_online_costs())
                     else:
+                        old_value = cc.get_offline_costs()
                         cc.set_offline_costs(manual_upload_form.data_value.data)
                     break
             db["Campaign Costs"] = cost_dict
@@ -1695,6 +1704,7 @@ def manual_insertForm():
                 if str(cc.get_year()) + str(
                         cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Inventory Storage Costs":
+                        old_value = cc.get_isc()
                         cc.set_isc(manual_upload_form.data_value.data)
                     break
             db["ISC Costs"] = cost_dict
@@ -1708,10 +1718,13 @@ def manual_insertForm():
                 if str(cc.get_year()) + str(
                         cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Charitable Programs: Supplies":
+                        old_value = cc.get_supplies()
                         cc.set_supplies(manual_upload_form.data_value.data)
                     elif field == "Charitable Programs: Manpower":
+                        old_value = cc.get_manpower()
                         cc.set_manpower(manual_upload_form.data_value.data)
                     elif field == "Charitable Programs: Venue Rental":
+                        old_value = cc.get_vr()
                         cc.set_vr(manual_upload_form.data_value.data)
                     break
             db["CAP Costs"] = cost_dict
@@ -1725,10 +1738,13 @@ def manual_insertForm():
                 if str(cc.get_year()) + str(
                         cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Fund-raising Expenses: Catering":
+                        old_value = cc.get_catering()
                         cc.set_catering(manual_upload_form.data_value.data)
                     elif field == "Fund Raising Expenses: Marketing":
+                        old_value = cc.get_vr()
                         cc.set_vr(manual_upload_form.data_value.data)
                     elif field == "Fund-raising Expenses: Venue Rental":
+                        old_value = cc.get_marketing()
                         cc.set_marketing(manual_upload_form.data_value.data)
                     break
             db["FRE Costs"] = cost_dict
@@ -1742,12 +1758,16 @@ def manual_insertForm():
                 if str(cc.get_year()) + str(
                         cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Administration Costs: Employee Salaries":
+                        old_value = cc.get_emp_salary()
                         cc.set_emp_salary(manual_upload_form.data_value.data)
                     elif field == "Administration Costs: Employee training":
+                        old_value = cc.get_emp_training()
                         cc.set_emp_training(manual_upload_form.data_value.data)
                     elif field == "Administration Costs: Office Supplies":
+                        old_value = cc.get_office_supplies()
                         cc.set_office_supplies(manual_upload_form.data_value.data)
                     elif field == "Administration Costs: Legal Fees":
+                        old_value = cc.get_legal_fees()
                         cc.set_legal_fees(manual_upload_form.data_value.data)
                     break
             db["AC Costs"] = cost_dict
@@ -1761,13 +1781,27 @@ def manual_insertForm():
                 if str(cc.get_year()) + str(
                         cc.get_month()) == manual_upload_form.year.data + manual_upload_form.month.data:
                     if field == "Utilities Costs: Water":
+                        old_value = cc.get_water()
                         cc.set_water(manual_upload_form.data_value.data)
                     else:
+                        old_value = cc.get_electricity()
                         cc.set_electricity(manual_upload_form.data_value.data)
                     break
             db["UC Costs"] = cost_dict
-
+        changes = History(field, cc.get_month(), cc.get_year(), old_value, manual_upload_form.data_value.data,
+                          now_date, now_time, "Kenobi")
         db.close()
+
+        changes_dict = {}
+        db1 = shelve.open('Staff_RG_update_history.db', 'c')
+        try:
+            changes_dict = db1['history']
+        except:
+            print("Error in retrieving update history from Staff_RG_update_history.db")
+
+        changes.set_change_id("U" + str(len(changes_dict) + 1))
+        changes_dict[changes.get_change_id()] = changes
+        db1['history'] = changes_dict
         return redirect(url_for('cost_analysis'))
 
     else:
@@ -1776,17 +1810,52 @@ def manual_insertForm():
     return render_template('staff/RG/manual_insertForm.html', form=manual_upload_form)
 
 
-@app.route("/file_uploadForm")
+@app.route("/update_history")
+def update_history():
+    changes_dict = {}
+    try:
+        db2 = shelve.open("Staff_RG_update_history.db", "r")
+    except FileNotFoundError:
+        print("Database not found")
+
+    try:
+        changes_dict = db2['history']
+    except:
+        print("Error in retrieving data from shelve.")
+
+    changes_list = []
+    for key in changes_dict:
+        change = changes_dict.get(key)
+        changes_list.append(change)
+
+    return render_template("staff/RG/update_history.html", update_history=changes_list)
+
+
+ALLOWED_EXTENSIONS = {"csv"}
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route("/file_uploadForm", methods=["GET", "POST"])
 def file_upload():
-    return render_template("staff/RG/file_uploadForm.html")
-
-
-@app.route("/uploader", methods=["GET", "POST"])
-def file_uploader():
     if request.method == 'POST':
-        f = request.files['file']
-        f.save((f.filename))
-        return 'file uploaded successfully'
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(file.filename))
+    return render_template("staff/RG/file_uploadForm.html")
 
 
 # Error Handling
