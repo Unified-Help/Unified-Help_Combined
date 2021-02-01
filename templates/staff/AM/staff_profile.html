@@ -9,23 +9,6 @@
 
 <body>
   {% block content %}
-  {% if 'user_created' in session %}
-<div class="alert alert-success alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('user_created', None) }} was created.
-</div>
-{% elif 'user_updated' in session %}
-<div class="alert alert-warning alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('user_updated', None) }} was updated.
-</div>
-{% elif 'user_deleted' in session %}
-<div class="alert alert-danger alert-dismissible">
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('user_deleted', None) }} was deleted.
-</div>
-
-{% endif %}
     <section class="hero is-success is-fullheight" style="background-color:white; text-align:center;">
       <br><br><br>
       <a href="{{url_for('staff_logout')}}"><button type="submit">Log Out</button></a></li>
@@ -35,54 +18,18 @@
           <h1 class="title" style="color:black;">
             {{username1}}'s Profile
           </h1>
+{% for staff in staffs_list %}
+   {{ staff.get_user_id() }}
+   {{ staff.get_username() }}
+   {{ staff.get_email() }}
+   {{ staff.get_gender() }}
+   {{ staff.get_password() }}
+   {{ staff.get_date_time() }}
+{% endfor %}
+          <a href="/updateStaff" class="btn btn-warning">Update</a>
         </div>
       </div>
     </section>
-  <div>
-  <table class="table table-striped">
-    <tbody>
-    {% for user in users_list %}
-      <tr>
-        <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
-        <td>
-          <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
-            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_username()}} {{user.get_email()}}?');"-->
-            <!-- Button to Open the Modal -->
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{user.get_user_id()}}"> Delete
-    </button>
-
-    <!-- The Modal -->
-    <div class="modal" id="myModal_{{user.get_user_id()}}">
-      <div class="modal-dialog">
-        <div class="modal-content">
-
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-title">Delete Confirmation</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body">
-            Are you sure you want to delete {{user.get_username()}} {{user.get_email()}}?
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-            <input type="submit" value="Delete" class="btn btn-danger">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-          </form>
-        </td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
-</div>
   {% endblock %}
 
 

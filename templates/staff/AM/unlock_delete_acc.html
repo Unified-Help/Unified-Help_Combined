@@ -50,9 +50,18 @@
   {% endif %}
 </div>
 <div>
-  <br><br><br>
+  {% if count1 == 0 %}
+  <p>There are no staffs.</p>
+  {% elif count1 == 1 %}
+  <p>There is 1 staff.</p>
+  {% else %}
+  <p>There are {{ count1 }} staffs.</p>
+  {% endif %}
+</div>
+<div>
+  <br><br>
   <h4 class="display-5">Customer Account</h4>
-  <table class="table table-striped" style="width:900px; height:300px;">
+  <table class="table table-striped">
     <thead>
       <tr>
         <th>User ID</th>
@@ -111,6 +120,10 @@
       </tr>
     {% endfor %}
     </tbody>
+  </table>
+    <br><br>
+    <h4 class="display-5">Staff Account</h4>
+  <table class="table table-striped">
         <thead>
       <tr>
         <th>Staff ID</th>
@@ -122,8 +135,7 @@
         <th></th>
       </tr>
     </thead>
-    <tbody>
-    {% for staff in staff_list %}
+    {% for staff in staffs_list %}
       <tr>
         <td>{{ staff.get_staff_id() }}</td>
         <td>{{ staff.get_username() }}</td>
@@ -167,7 +179,6 @@
         </td>
       </tr>
     {% endfor %}
-    </tbody>
   </table>
   </div>
 {% endblock %}

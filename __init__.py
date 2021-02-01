@@ -14,7 +14,7 @@ from ForumForm import createForumPost, updateForumPost, staff_createForumPost, F
 from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCounter, ForumUHCPostCounter
 
 # Account Management Imports
-from Forms import CreateUserForm, LoginForm
+from Forms import CreateUserForm, CreateStaffForm
 from User import User
 from Staff import Staff
 from datetime import timedelta, datetime
@@ -983,24 +983,6 @@ def profile():
         email = session["email"]
         gender = session["gender"]
         return render_template('customer/AM/profile.html', username=username, email=email, gender=gender)
-    update_user_form = CreateUserForm(request.form)
-    if request.method == 'POST' and update_user_form.validate():
-        users_dict = {}
-        db = shelve.open('account.db', 'c')
-        users_dict = db['Users']
-
-        user = users_dict.get(id)
-        user.set_username(update_user_form.username.data)
-        user.set_email(update_user_form.email.data)
-        user.set_gender(update_user_form.gender.data)
-        user.set_password(update_user_form.password.data)
-
-        db['Users'] = users_dict
-        db.close()
-
-        session['user_updated'] = user.get_username()
-
-        return redirect(url_for('retrieve_users'))
     else:
         return redirect(url_for('login'))
 
@@ -1090,7 +1072,7 @@ def staff_home():
 
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
-    create_staff_form = CreateUserForm(request.form)
+    create_staff_form = CreateStaffForm(request.form)
     if request.method == 'POST' and create_staff_form.validate():
         staff_dict = {}
         db = shelve.open('staff.db', 'c')
@@ -1172,25 +1154,23 @@ def staff_logout():
 def account_management():
     return render_template('staff/AM/unlock_delete_acc.html')
 
-
-@app.route('/retrieve')
+@app.route("/retrievestaff")
 def retrieve_staff():
     staff_dict = {}
     db = shelve.open('staff.db', 'r')
     staff_dict = db['Staff']
     db.close()
 
-    staff_list = []
-    for key in staff_dict:
-        staff = staff_dict.get(key)
-        staff_list.append(staff)
+    staffs_list = []
+    for key1 in staff_dict:
+        staff = staff_dict.get(key1)
+        staffs_list.append(staff)
 
-    return render_template('staff/AM/unlock_delete_acc.html', count=len(staff_list), staff_list=staff_list)
-
+    return render_template('staff/AM/unlock_delete_acc.html', count1=len(staffs_list), staffs_list=staffs_list)
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
 def update_staff(id):
-    update_staff_form = CreateUserForm(request.form)
+    update_staff_form = CreateStaffForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
         db = shelve.open('staff.db', 'c')
