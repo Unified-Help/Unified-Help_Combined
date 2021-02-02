@@ -1,5 +1,5 @@
 # Imports
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 # from flask_login import login_required, LoginManager
 import shelve
 
@@ -1156,6 +1156,7 @@ def staff_logout():
 def account_management():
     return render_template('staff/AM/unlock_delete_acc.html')
 
+
 @app.route("/retrievestaff")
 def retrieve_staff():
     staff_dict = {}
@@ -1169,6 +1170,7 @@ def retrieve_staff():
         staffs_list.append(staff)
 
     return render_template('staff/AM/unlock_delete_acc.html', count1=len(staffs_list), staffs_list=staffs_list)
+
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
 def update_staff(id):
@@ -1410,6 +1412,30 @@ def create_staff_forum_post():
 
 @app.route("/dashboard")
 def dashboard():
+    IDA_dict = {}
+    On_vs_Off_dict = {}
+    expenses_dict = {}
+    db = shelve.open("dashboard.db", "c")
+
+    try:
+        IDA_dict = db['IDA']
+        On_vs_off_dict = db['on_vs_off']
+
+    except:
+        print("Error retrieving values from shelve")
+
+    costs_db = shelve.open('costs.db', 'r')
+    cc_dict = costs_db['Campaign Costs']
+    cap_dict = costs_db['CAP Costs']
+    fre_dict = costs_db['FRE Costs']
+    isc_dict = costs_db['ISC Costs']
+    ac_dict = costs_db['AC Costs']
+    uc_dict = costs_db['UC Costs']
+    costs_db.close()
+
+    now = datetime.datetime.now()
+
+
     return render_template('staff/RG/dashboard.html')
 
 
@@ -1487,6 +1513,8 @@ def cost_analysis():
     costs_db.close()
 
     now = datetime.datetime.now()
+    #For dashboard
+    IDA_data = {}
 
     cc_chart_data_1 = []
     cc_chart_data_2 = []
@@ -1852,9 +1880,13 @@ def file_upload():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
+        if file.filename != '':
+            file_ext = os.path.splitext(file.filename)[1]
+            if file_ext not in app.config['ALLOWED_EXTENSIONS']:
+                abort(400)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(file.filename))
+            file.save(os.path.join("Staff_RG_costs"))
+            return redirect(url_for('cost_analysis'))
     return render_template("staff/RG/file_uploadForm.html")
 
 
