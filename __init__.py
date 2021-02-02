@@ -917,6 +917,8 @@ def forum_uhc_post_delete(forum_uhc_post_id):
 
 @app.route('/createUser', methods=['GET', 'POST'])
 def create_user():
+    if "username" in session:
+        return redirect(url_for('home'))
     create_user_form = CreateUserForm(request.form)
     if request.method == "POST" and create_user_form.validate():
         users_dict = {}
@@ -957,6 +959,8 @@ def create_user():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if "username" in session:
+        return redirect(url_for('home'))
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
     db = shelve.open('account.db', 'r')
@@ -1074,6 +1078,8 @@ def staff_home():
 
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
+    if "username" in session:
+        return redirect(url_for('staff_home'))
     create_staff_form = CreateStaffForm(request.form)
     if request.method == 'POST' and create_staff_form.validate():
         staff_dict = {}
@@ -1127,6 +1133,8 @@ def staff_profile():
 
 @app.route("/staff_login", methods=['GET', 'POST'])
 def staff_login():
+    if "username" in session:
+        return redirect(url_for('staff_home'))
     create_stafflogin_form = CreateUserForm(request.form)
     staff_dict = {}
     db = shelve.open('staff.db', 'r')
