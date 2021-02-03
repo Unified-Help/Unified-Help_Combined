@@ -263,9 +263,9 @@ def donate_Money():
 
             # {donor ID: [donation info1, donation info2]}
             donationinfoMNest.append(donor)
-            donorIDnInfo[SID] = donationinfoMNest
+            donor_moneychoices[SID] = donationinfoMNest
 
-            dbMC["Money"] = donorIDnInfo
+            dbMC["Money"] = donor_moneychoices
 
             dbMC.close()
 
@@ -310,11 +310,12 @@ def donate_Item():
 
             try:
                 donor_itemchoices = dbIM["Items"]
-                # print(donor_itemchoices)
+                print(donor_itemchoices)
 
                 userids = [*donor_itemchoices]
                 print(userids)
                 print(SID)
+                # If user has made a donation before
                 if SID in userids:
                     donationinfoI.append(donor_itemchoices[SID])
                     # list(donanationinfoI)
@@ -360,16 +361,17 @@ def donate_Item():
             if request.files:
                 image = request.files['image']
 
-                if image.filename == "":
-                    print("Image must have filename")
-                    return redirect(request.url)
-
-                if not allowed_images(image.filename):
-                    print("That image type is not allowed")
-                    return redirect(request.url)
+                # if image.filename == " ":
+                #     print("Image must have filename")
+                #     return redirect(request.url)
+                #
+                # if not allowed_images(image.filename):
+                #     print("That image type is not allowed")
+                #     return redirect(request.url)
 
                 donor.set_item_image(image.filename)
                 image.save(os.path.join(app.config["Item_Donations"], image.filename))
+                # return redirect(request.url)
 
             # Setting the collection status (for staff side)
             donor.set_collection_status("Pending")
@@ -382,10 +384,11 @@ def donate_Item():
             # print(donor.get_status())
 
             # {donor ID: [donation info1, donation info2]}
+            # change donorIDnInfo to donor_itemchoices
             donationinfoINest.append(donor)
-            donorIDnInfo[SID] = donationinfoINest
+            donor_itemchoices[SID] = donationinfoINest
 
-            dbIM["Items"] = donorIDnInfo
+            dbIM["Items"] = donor_itemchoices
 
             dbIM.close()
 
@@ -534,14 +537,16 @@ def donate_ItemUpdate(id):
 
 @app.route("/donate/gallery")
 def donateGallery():
-    # Error ?????
+    # TypeError: The view function did not return a valid response. The function either returned None or ended
+    # without a return statement.
+
     # Displaying Donation History
     donorsIID_dict = {}
     try:
         db = shelve.open("donorChoices", "r")
 
         # If only Item donations are created and Money is empty
-        if "Money" not in db and "Items" in db:
+        if "Items" in db:
             # Item History
             donorsIID_dict = db["Items"]
             useridsI = [*donorsIID_dict]
@@ -559,11 +564,10 @@ def donateGallery():
             return render_template('customer/TP/donationGallery.html', donorsIID_list=unnested_donorsIID_list)
 
         db.close()
-
     except:
-        return render_template('customer/TP/donationGallery.html')
+        return render_template('customer/TP/donationGalleryEmpty.html')
 
-    # return render_template('customer/TP/donationGallery.html')
+    return render_template('customer/TP/donationGalleryEmpty.html')
 
 
 # Customer Support
@@ -1236,7 +1240,7 @@ def delete_staff(id):
 
 @app.route("/incoming_items")
 def incoming_item():
-    SID = session["username"]
+    # SID = session["username"]
     donorsI_dict = {}
     try:
         db = shelve.open("donorChoices", "r")
@@ -1443,7 +1447,6 @@ def dashboard():
 
     now = datetime.datetime.now()
 
-
     return render_template('staff/RG/dashboard.html')
 
 
@@ -1521,7 +1524,7 @@ def cost_analysis():
     costs_db.close()
 
     now = datetime.datetime.now()
-    #For dashboard
+    # For dashboard
     IDA_data = {}
 
     cc_chart_data_1 = []
