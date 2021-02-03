@@ -50,6 +50,9 @@ class User:
     def set_gender(self, gender):
         self.__gender = gender
 
+    def set_contact(self, contact):
+        self.__contact = contact
+
     def set_password(self, password):
         self.__password = password
 
