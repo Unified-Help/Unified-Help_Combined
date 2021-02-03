@@ -1,16 +1,16 @@
 import datetime
 
 class Staff:
-    countID = 0
+    count_id = 0
 
-    def __init__(self, username, email, gender, password, confirm_password):
-        Staff.countID += 1
-        self.__staff_id = Staff.countID
-        self.__username = username
-        self.__email = email
-        self.__gender = gender
-        self.__password = password
-        self.__confirm_password = confirm_password
+    def __init__(self, staff_username, staff_email, staff_gender, staff_password, staff_confirm_password):
+        Staff.count_id += 1
+        self.__staff_id = Staff.count_id
+        self.__username = staff_username
+        self.__email = staff_email
+        self.__gender = staff_gender
+        self.__password = staff_password
+        self.__confirm_password = staff_confirm_password
         self.__account_status = "Staff"
         self.__datetime = datetime.datetime.now()
 
@@ -41,20 +41,20 @@ class Staff:
     def set_staff_id(self, staff_id):
         self.__staff_id = staff_id
 
-    def set_username(self, username):
-        self.__username = username
+    def set_username(self, staff_username):
+        self.__username = staff_username
 
-    def set_email(self, email):
-        self.__email = email
+    def set_email(self, staff_email):
+        self.__email = staff_email
 
-    def set_gender(self, gender):
-        self.__gender = gender
+    def set_gender(self, staff_gender):
+        self.__gender = staff_gender
 
-    def set_password(self, password):
-        self.__password = password
+    def set_password(self, staff_password):
+        self.__password = staff_password
 
-    def set_confirm_password(self, confirm_password):
-        self.__confirm_password = confirm_password
+    def set_confirm_password(self, staff_confirm_password):
+        self.__confirm_password = staff_confirm_password
 
     def set_account_status(self, account_status):
         self.__account_status = account_status

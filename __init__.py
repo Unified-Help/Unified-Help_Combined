@@ -1094,8 +1094,8 @@ def create_staff():
         except:
             print("Error in retrieving Staff from staff.db.")
 
-        staff = Staff(create_staff_form.username.data, create_staff_form.email.data, create_staff_form.gender.data,
-                      create_staff_form.password.data, create_staff_form.confirm_password.data)
+        staff = Staff(create_staff_form.staff_username.data, create_staff_form.staff_email.data, create_staff_form.staff_gender.data,
+                      create_staff_form.staff_password.data, create_staff_form.staff_confirm_password.data)
         staff.set_date_time(staff.get_date_time())
         staff_dict[staff.get_staff_id()] = staff
         db['Staff'] = staff_dict
@@ -1120,10 +1120,10 @@ def staff_profile():
         staff_dict = db['Staff']
 
         staff = staff_dict.get(id)
-        staff.set_username(update_staff_form.username.data)
-        staff.set_email(update_staff_form.email.data)
-        staff.set_gender(update_staff_form.gender.data)
-        staff.set_password(update_staff_form.password.data)
+        staff.set_username(update_staff_form.staff_username.data)
+        staff.set_email(update_staff_form.staff_email.data)
+        staff.set_gender(update_staff_form.staff_gender.data)
+        staff.set_password(update_staff_form.staff_password.data)
 
         db['Staff'] = staff_dict
         db.close()
@@ -1139,7 +1139,7 @@ def staff_profile():
 def staff_login():
     if "username" in session:
         return redirect(url_for('staff_home'))
-    create_stafflogin_form = CreateUserForm(request.form)
+    create_stafflogin_form = CreateStaffForm(request.form)
     staff_dict = {}
     db = shelve.open('staff.db', 'r')
     staff_dict = db['Staff']
@@ -1148,7 +1148,7 @@ def staff_login():
     staff_list = []
     for key in staff_dict:
         a = staff_dict[key]
-        if a.get_username() == create_stafflogin_form.username.data and a.get_password() == create_stafflogin_form.password.data:
+        if a.get_username() == create_stafflogin_form.staff_username.data and a.get_password() == create_stafflogin_form.staff_password.data:
             session["username"] = a.get_username()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
@@ -1193,10 +1193,10 @@ def update_staff(id):
         staff_dict = db['Staff']
 
         staff = staff_dict.get(id)
-        staff.set_username(update_staff_form.username.data)
-        staff.set_email(update_staff_form.email.data)
-        staff.set_gender(update_staff_form.gender.data)
-        staff.set_password(update_staff_form.password.data)
+        staff.set_username(update_staff_form.staff_username.data)
+        staff.set_email(update_staff_form.staff_email.data)
+        staff.set_gender(update_staff_form.staff_gender.data)
+        staff.set_password(update_staff_form.staff_password.data)
 
         db['Staff'] = staff_dict
         db.close()
@@ -1211,11 +1211,11 @@ def update_staff(id):
         db.close()
 
         staff = staff_dict.get(id)
-        update_staff_form.username.data = staff.get_username()
-        update_staff_form.email.data = staff.get_email()
-        update_staff_form.gender.data = staff.get_gender()
-        update_staff_form.password.data = staff.get_password()
-        update_staff_form.confirm_password.data = staff.get_confirm_password()
+        update_staff_form.staff_username.data = staff.get_username()
+        update_staff_form.staff_email.data = staff.get_email()
+        update_staff_form.staff_gender.data = staff.get_gender()
+        update_staff_form.staff_password.data = staff.get_password()
+        update_staff_form.staff_confirm_password.data = staff.get_confirm_password()
 
         return render_template('staff/AM/updateAccount.html', form=update_staff_form)
 

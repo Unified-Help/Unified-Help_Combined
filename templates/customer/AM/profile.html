@@ -22,14 +22,6 @@
           <h1 class="title" style="color:black;">
             Gender: {{gender}}
           </h1>
-{% for user in users_list %}
-   {{ user.get_user_id() }}
-   {{ user.get_username() }}
-   {{ user.get_email() }}
-   {{ user.get_gender() }}
-   {{ user.get_password() }}
-   {{ user.get_date_time() }}
-{% endfor %}
           <a href="/updateUser" class="btn btn-warning">Update</a>
         </div>
       </div>

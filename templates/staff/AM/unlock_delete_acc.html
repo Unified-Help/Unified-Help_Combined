@@ -121,12 +121,13 @@
     {% endfor %}
     </tbody>
   </table>
-    <br><br>
-    <h4 class="display-5">Staff Account</h4>
+</div>
+
+  <h4 class="display-5">Customer Account</h4>
   <table class="table table-striped">
-        <thead>
+    <thead>
       <tr>
-        <th>Staff ID</th>
+        <th>User ID</th>
         <th>Username</th>
         <th>Email</th>
         <th>Gender</th>
@@ -135,9 +136,10 @@
         <th></th>
       </tr>
     </thead>
+    <tbody>
     {% for staff in staffs_list %}
       <tr>
-        <td>{{ staff.get_staff_id() }}</td>
+        <td>{{ staff.get_user_id() }}</td>
         <td>{{ staff.get_username() }}</td>
         <td>{{ staff.get_email() }}</td>
         <td>{{ staff.get_gender() }}</td>
@@ -145,12 +147,13 @@
         <td>{{ staff.get_date_time() }}</td>
         <td><a href="/updateStaff/{{staff.get_user_id()}}" class="btn btn-warning">Update</a></td>
         <td>
-          <form action="{{url_for('delete_staff', id=staff.get_user_id())}}" method="POST">
-            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{staff.get_username()}} {{staff.get_email()}}?');"-->
+          <form action="{{url_for('delete_user', id=staff.get_user_id())}}" method="POST">
+            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_username()}} {{user.get_email()}}?');"-->
             <!-- Button to Open the Modal -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{staff.get_user_id()}}"> Delete
     </button>
-               <!-- The Modal -->
+
+    <!-- The Modal -->
     <div class="modal" id="myModal_{{staff.get_user_id()}}">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -179,8 +182,8 @@
         </td>
       </tr>
     {% endfor %}
+    </tbody>
   </table>
-  </div>
 {% endblock %}
 
 <!-- Link any js files here -->
