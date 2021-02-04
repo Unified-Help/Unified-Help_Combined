@@ -237,7 +237,8 @@ def donate_Money():
             donor = DonateMoney(donate_money.donateToWho.data, donate_money.moneyAmount.data,
                                 donate_money.cardInfo_Name.data,
                                 donate_money.cardInfo_Number.data, donate_money.cardInfo_CVV.data,
-                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data, now_date, now_time)
+                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data, now_date,
+                                now_time)
             # donor.set_moneyID()
             # set the money ID counter
             donoCounter = []
@@ -559,7 +560,7 @@ def donateGallery():
         if "Items" in db:
             # Item History
             donorsIID_dict = db["Items"]
-            useridsI = [*donorsIID_dict]
+            # useridsI = [*donorsIID_dict]
             donorsIID_list = []
             unnested_donorsIID_list = []
 
@@ -1121,7 +1122,8 @@ def create_staff():
         except:
             print("Error in retrieving Staff from staff.db.")
 
-        staff = Staff(create_staff_form.staff_username.data, create_staff_form.staff_email.data, create_staff_form.staff_gender.data,
+        staff = Staff(create_staff_form.staff_username.data, create_staff_form.staff_email.data,
+                      create_staff_form.staff_gender.data,
                       create_staff_form.staff_password.data, create_staff_form.staff_confirm_password.data)
         staff.set_date_time(staff.get_date_time())
         staff_dict[staff.get_staff_id()] = staff
@@ -1452,11 +1454,31 @@ def create_staff_forum_post():
 @app.route("/dashboard")
 def dashboard():
     # Analytics Overview
+    now = datetime.datetime.now()
     dbMC = shelve.open("donorChoices", "r")
     try:
         donor_moneychoices = dbMC["Money"]
     except:
         print("Error in retrieving Donors MC from donorMoneyChoices")
+
+    donorsIID_dict = dbMC["Money"]
+    donorsIID_list = []
+    unnested_donorsIID_list = []
+
+    for key in donorsIID_dict:
+        donorinfo_list = donorsIID_dict[key]
+        donorsIID_list.append(donorinfo_list)
+
+    for x in donorsIID_list:
+        for y in x:
+            unnested_donorsIID_list.append(y)
+
+    total_month = 0
+    for i in unnested_donorsIID_list:
+        if now.month == unnested_donorsIID_list[i].get_date().month():
+            total_month += unnested_donorsIID_list[i].get_money_amount()
+
+    dbMC.close()
 
     IDA_dict = {}
     On_vs_Off_dict = {}
