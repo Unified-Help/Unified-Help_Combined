@@ -99,35 +99,7 @@ class ForumPinnedPostsCounter(ForumPost):
     def get_forum_pinned_post_id(self):
         return self.__forum_pinned_post_id
 
-    # def set_post_reply(self,post_reply):
-    #     self.__post_reply = post_reply
-    #
-    # def get_post_reply(self):
-    #     return self.__post_reply
 
-    # def set_post_reply_id(self):
-    #     try:
-    #         with shelve.open('forumdb','r') as db:
-    #             if len(db['PinnedPosts'][self.__forum_pinned_post_id][self.__post_reply_id]) == 0:
-    #                 post_reply_id = 0
-    #             else:
-    #                 a = list(db['PinnedPosts'][self.__forum_pinned_post_id].keys())
-    #                 post_reply_id = int(a[-1])
-    #                 print(post_reply_id)
-                    # a = list(db['PinnedPosts'][self.__forum_pinned_post_id].keys()[-1])
-                    # post_reply_id = db['PinnedPosts'][self.__forum_pinned_post_id][a]
-                    # print(post_reply_id)
-                    # a = list(db["1"].keys())[-1]
-                    # print(db["1"][a])
-    #     except:
-    #         post_reply_id = 0
-    #
-    #     post_reply_id += 1
-    #     print(post_reply_id)
-    #     self.__post_reply_id = post_reply_id
-    #
-    # def get_post_reply_id(self):
-    #     return self.__post_reply_id
 
 
 class ForumAnnoucementsPostCounter(ForumPost):

@@ -674,6 +674,7 @@ def forum_pinned_posts():
     pinned_posts_dict = db['PinnedPosts']
     db.close()
 
+
     pinned_posts_list = []
     for key in pinned_posts_dict:
         post = pinned_posts_dict.get(key)
@@ -694,6 +695,9 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     pinned_posts_list = []
     user_list = []
 
+    print(pinned_posts_dict)
+
+
     post = pinned_posts_dict.get(forum_pinned_posts_id)
     session['forum_pinned_post_id'] = forum_pinned_posts_id
     pinned_posts_list.append(post)
@@ -702,25 +706,38 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
         user_list.append(user)
     userdb.close()
 
-    # Reply form
-    # {pinned_post_id:{post_reply_id:[datetime,username,reply_message]}
-    #                  ,{post_reply_id:[datetime,username,reply_message]}
-    # }}
-    # reply_form = ForumPostReply(request.form)
-    # if request.method == 'POST':
-    #     ppPost = ForumPinnedPostsCounter()
-    #     ppPost.set_post_reply_id()
-    #     pinned_posts_dict[post.get_forum_pinned_post_id()] = ppPost
-    # pinned_post_reply_list = []
-    # pinned_post_reply_list.append(session['username'])
-    # pinned_post_reply_list.append(reply_form.reply_message.data)
-    # pinned_post_reply_dict = {}
-    # pinned_post_reply_dict[datetime.datetime.now()] = pinned_post_reply_list
-    # db[session['forum_pinned_post_id']] = pinned_post_reply_dict
+    # Create forum post reply
+    reply_post_form = ForumPostReply(request.form)
+    if request.method == 'POST':
+
+
+        try:
+            post_reply_dict = db['PostReply']
+        except:
+            print("Error in retrieving data from forumdb.")
+
+        # try:
+        #     post_reply_dict[str(forum_pinned_posts_id)]
+        # except:
+        #     post_reply_dict = {}
+        #     post_reply_dict[str(forum_pinned_posts_id)] = {"1" : [datetime.datetime.now().strftime("%d %b %Y, %H:%M"),session['username'],reply_post_form.reply_message.data]}
+        # else:
+        #     if len(post_reply_dict[str(forum_pinned_posts_id)]) > 0:
+        #         print('bye')
+        #         i = int(list(post_reply_dict[str(forum_pinned_posts_id)].keys())[-1]) + 1
+        #         print(list(post_reply_dict[str(forum_pinned_posts_id)].keys()))
+        #         print(i)
+        #         post_reply_dict[str(forum_pinned_posts_id)][str(i)] = [datetime.datetime.now().strftime("%d %b %Y, %H:%M"),session['username'],reply_post_form.reply_message.data]
+        #         print(list(post_reply_dict[str(forum_pinned_posts_id)].keys()))
+
+        # [datetime.datetime.now().strftime("%d %b %Y, %H:%M"),session['username'],reply_post_form.reply_message.data]
+
+        db['ReplyPost'] = post_reply_dict
+        print(db['ReplyPost'])
     db.close()
 
     return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list,
-                           user_list=user_list)
+                           user_list=user_list, form=reply_post_form)
 
 
 @app.route("/forum/pinned_posts/update/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
