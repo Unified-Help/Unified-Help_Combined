@@ -3,13 +3,10 @@ import shelve
 
 # Monetary Donations
 class DonateMoney:
-    # donatemoneyid_counter = 0
 
     def __init__(self, donate_who, money_amount, cardInfo_Name, cardInfo_Number, cardInfo_CVV, cardInfo_DateExpiry,
-                 cardInfo_YearExpiry):
+                 cardInfo_YearExpiry, now_date, now_time):
         # Money Donation ID
-        # DonateMoney.donatemoneyid_counter += 1
-        # self.__moneyID = "M" + str(DonateMoney.donatemoneyid_counter)
         self.__moneyID = 0
 
         # money donations
@@ -24,6 +21,10 @@ class DonateMoney:
 
         # Donation Status
         self.__status = ""
+
+        # Created Time
+        self.__now_date = now_date
+        self.__now_time = now_time
 
     # Accessors
     def get_moneyID(self):
@@ -56,23 +57,15 @@ class DonateMoney:
     def get_status(self):
         return self.__status
 
+    def get_now_date(self):
+        return self.__now_date
+
+    def get_now_time(self):
+        return self.__now_time
+
     # Mutators
     def set_moneyID(self, moneyID):
         self.__moneyID = moneyID
-
-    # def set_moneyID(self):
-    #     try:
-    #         with shelve.open('donorChoices', 'r') as db:
-    #             if len(db['Money']) == 0:
-    #                 donatemoneyid_counter = 0
-    #             else:
-    #                 donatemoneyid_counter = int(list(db['Money'].keys())[-1].split('M')[-1])
-    #     except:
-    #         donatemoneyid_counter = 0
-    #
-    #     donatemoneyid_counter += 1
-    #     self.__moneyID = "M" + str(donatemoneyid_counter)
-    #     # self.__moneyID = moneyID
 
     def set_donate_type(self, donate_type):
         self.__donate_type = donate_type
@@ -101,17 +94,20 @@ class DonateMoney:
     def set_status(self, status):
         self.__status = status
 
+    def set_now_date(self, now_date):
+        self.__now_date = now_date
+
+    def set_now_time(self, now_time):
+        self.__now_time = now_time
+
 
 # Item Donations
 class DonateItem:
-    # donateitemID_counter = 0
 
     def __init__(self, donate_who, item_type, item_name, item_weight, item_height, item_length, item_width
-                 , collection_type, date, month, time, address1, address2, address3, postal_code):
+                 , collection_type, date, month, time, address1, address2, address3, postal_code, now_date , now_time):
         # Item Donation IDs
         self.__itemID = 0
-        # DonateItem.donateitemID_counter += 1
-        # self.__itemID = "I" + str(DonateItem.donateitemID_counter)
 
         # Item Details
         self.__donate_type = "Item Donation"
@@ -139,6 +135,10 @@ class DonateItem:
         # Donation Status
         self.__status = ""
         self.__collection_status = ""
+
+        # Created Time
+        self.__now_date = now_date
+        self.__now_time = now_time
 
     # Accessors
     def get_itemID(self):
@@ -201,6 +201,12 @@ class DonateItem:
     def get_collection_status(self):
         return self.__collection_status
 
+    def get_now_date(self):
+        return self.__now_date
+
+    def get_now_time(self):
+        return self.__now_time
+
     # Mutators
     def set_itemID(self, itemID):
         self.__itemID = itemID
@@ -261,3 +267,9 @@ class DonateItem:
 
     def set_collection_status(self, collection_status):
         self.__collection_status = collection_status
+
+    def set_now_date(self, now_date):
+        self.__now_date = now_date
+
+    def set_now_time(self, now_time):
+        self.__now_time = now_time

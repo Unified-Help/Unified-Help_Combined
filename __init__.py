@@ -230,10 +230,14 @@ def donate_Money():
             except:
                 print("Error in retrieving Donors MC from donorMoneyChoices")
 
+            now = datetime.datetime.now()
+            now_time = now.strftime("%X")
+            now_date = now.strftime("%x")
+
             donor = DonateMoney(donate_money.donateToWho.data, donate_money.moneyAmount.data,
                                 donate_money.cardInfo_Name.data,
                                 donate_money.cardInfo_Number.data, donate_money.cardInfo_CVV.data,
-                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data)
+                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data, now_date, now_time)
             # donor.set_moneyID()
             # set the money ID counter
             donoCounter = []
@@ -259,6 +263,8 @@ def donate_Money():
                 donor.set_status("Pending")
             if request.form.get('Confirm') == 'Confirm':
                 donor.set_status("Confirmed")
+                donate_amount = donor.get_money_amount()
+                dbMC['TotalMAmount'] = donate_amount
             # print(donor.get_status())
 
             # {donor ID: [donation info1, donation info2]}
@@ -330,13 +336,17 @@ def donate_Item():
             except:
                 print("Error in retrieving Donors IM from donorChoices")
 
+            now = datetime.datetime.now()
+            now_time = now.strftime("%X")
+            now_date = now.strftime("%x")
+
             donor = DonateItem(donate_item.donateToWho.data, donate_item.itemType.data, donate_item.itemName.data,
                                donate_item.itemWeight.data, donate_item.itemHeight.data, donate_item.itemLength.data,
                                donate_item.itemWidth.data, donate_item.collectionType.data,
                                donate_item.collectionDate.data,
                                donate_item.collectionMonth.data, donate_item.collectionTime.data,
                                donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
-                               donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data)
+                               donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data, now_date, now_time)
 
             # Setting Item Donation ID
             donoCounter = []
@@ -1424,6 +1434,13 @@ def create_staff_forum_post():
 
 @app.route("/dashboard")
 def dashboard():
+    # Analytics Overview
+    dbMC = shelve.open("donorChoices", "r")
+    try:
+        donor_moneychoices = dbMC["Money"]
+    except:
+        print("Error in retrieving Donors MC from donorMoneyChoices")
+
     IDA_dict = {}
     On_vs_Off_dict = {}
     expenses_dict = {}
@@ -1891,12 +1908,12 @@ def file_upload():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        if file.filename != '':
-            file_ext = os.path.splitext(file.filename)[1]
-            if file_ext not in app.config['ALLOWED_EXTENSIONS']:
-                abort(400)
+        # if file.filename != '':
+        #     file_ext = os.path.splitext(file.filename)[1]
+        #     if file_ext not in app.config['ALLOWED_EXTENSIONS']:
+        #         abort(400)
         if file and allowed_file(file.filename):
-            file.save(os.path.join("Staff_RG_costs"))
+            file.save(os.path.join("Staff_RG_costs.csv"))
             return redirect(url_for('cost_analysis'))
     return render_template("staff/RG/file_uploadForm.html")
 
