@@ -18,6 +18,7 @@ class ForumPost:
         self.__edited = False
         self.__datetime = datetime.now()
 
+
     # Mutator
     def set_username(self, username):
         self.__username = username
