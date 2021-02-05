@@ -11,7 +11,6 @@ class ForumPost:
         self.__post_subject = ''
         self.__category = ''
         self.__post_message = ''
-        self.__post_reply = {}
         self.__reply_message = ''
         self.__upvotes = 0
         self.__downvotes = 0
@@ -100,6 +99,18 @@ class ForumPinnedPostsCounter(ForumPost):
     def get_forum_pinned_post_id(self):
         return self.__forum_pinned_post_id
 
+    def set_forum_pinned_post_reply_id(self):
+        try:
+            with shelve.open('forumdb','r') as db:
+                if len(db['PinnedPosts']) == 0:
+                    forum_pinned_post_id = 0
+                else:
+                    forum_pinned_post_id = list(db['PinnedPosts'].keys())[-1]
+        except:
+            forum_pinned_post_id = 0
+
+        forum_pinned_post_id += 1
+        self.__forum_pinned_post_id = forum_pinned_post_id
 
 
 
