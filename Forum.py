@@ -79,11 +79,11 @@ class ForumPinnedPostsCounter(ForumPost):
     def __init__(self):
         super().__init__()
         self.__forum_pinned_post_id = ''
-        self.__post_reply_id = ''
+        self.__reply_id = ''
 
 
     def set_forum_pinned_post_id(self):
-        # # Use with -> Don't need to close db
+        # Use with -> Don't need to close db
         try:
             with shelve.open('forumdb','r') as db:
                 if len(db['PinnedPosts']) == 0:
@@ -99,20 +99,24 @@ class ForumPinnedPostsCounter(ForumPost):
     def get_forum_pinned_post_id(self):
         return self.__forum_pinned_post_id
 
-    def set_forum_pinned_post_reply_id(self):
-        try:
-            with shelve.open('forumdb','r') as db:
-                if len(db['PinnedPosts']) == 0:
-                    forum_pinned_post_id = 0
-                else:
-                    forum_pinned_post_id = list(db['PinnedPosts'].keys())[-1]
-        except:
-            forum_pinned_post_id = 0
-
-        forum_pinned_post_id += 1
-        self.__forum_pinned_post_id = forum_pinned_post_id
-
-
+    # Post Reply ID
+    # def set_forum_pinned_post_reply_id(self):
+    #     with shelve.open('forumdb','r') as db:
+    #         if len(db['PostReply'][self.__forum_pinned_post_id].keys()) == 0:
+    #             reply_id = 0
+    #             print('if')
+    #         else:
+    #             reply_id = list(db['PostReply'][self.__forum_pinned_post_id].keys())[-1]
+    #             print('else')
+    #     reply_id = 0
+    #     print('excepted')
+    #     print(type(reply_id))
+    #     reply_id += 1
+    #     print(reply_id)
+    #     self.__reply_id = reply_id
+    #
+    # def get_forum_pinned_post_reply_id(self):
+    #     return self.__reply_id
 
 class ForumAnnoucementsPostCounter(ForumPost):
     def __init__(self):
@@ -150,3 +154,9 @@ class ForumUHCPostCounter(ForumPost):
 
     def get_forum_uhc_post_id(self):
         return self.__forum_uhc_post_id
+
+if __name__ == "__main__":
+    ForumPinnedPostsCounter = ForumPinnedPostsCounter()
+    ForumPinnedPostsCounter.set_forum_pinned_post_reply_id()
+    ForumPinnedPostsCounter.set_forum_pinned_post_reply_id()
+    ForumPinnedPostsCounter.set_forum_pinned_post_reply_id()

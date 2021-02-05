@@ -687,7 +687,6 @@ def forum_pinned_posts():
 # Specific Forum Post ID - Pinned Posts
 @app.route("/forum/pinned_posts/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post(forum_pinned_posts_id):
-    global last_id
     pinned_posts_dict = {}
     user_dict = {}
     db = shelve.open('forumdb', 'c')
@@ -708,34 +707,21 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     userdb.close()
 
     # Create forum post reply
+    # db["PostReply"] : {
+    # post_id: [{reply_id: [replyobject]},
+    #           {reply_id: [replyobject]},
+    #              {reply_id: [replyobject]}
+    # ]},
+    # post_id: [{reply_id: [replyobject]},
+    #           {reply_id: [replyobject]},
+    #           {reply_id: [replyobject]}
+    # ]}
     reply_post_form = ForumPostReply(request.form)
     if request.method == 'POST':
-        post_reply_dict = {}
         try:
             post_reply_dict = db['PostReply']
         except:
             print("Error in retrieving data from forumdb.")
-        replies_dict = {}
-        replies_list = []
-        if "PostReply" not in db:
-            db['PostReply'] = post_reply_dict
-            print('db updated')
-        if forum_pinned_posts_id in post_reply_dict:
-            replies_dict = post_reply_dict[forum_pinned_posts_id]#{post_id:id_dict}
-            reply_details = ForumPost()
-            replies_list = [reply_details.set_date_time(datetime.datetime.now().strftime("%d %b %Y, %H:%M")),reply_details.set_username(session['username']),reply_details.set_reply_message(reply_post_form.reply_message.data)]
-            for key in replies_dict:
-                print(key)
-            # reply_id = key + 1
-            # print(reply_id)
-            replies_dict[reply_id] = replies_list
-
-
-        # for reply_id in replies_dict:
-        #     last_id = reply_id
-        # reply_id = last_id + 1
-        # print(reply_id)
-        # post_reply_dict[forum_pinned_posts_id] = replies_dict
 
     db.close()
 
