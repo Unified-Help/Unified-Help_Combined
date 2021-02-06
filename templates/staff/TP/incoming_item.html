@@ -20,6 +20,7 @@
                     <th>Collection Information<br>(Pick-Up or Drop-off)</th>
                     <th>Address Information</th>
                     <th>Contact Information</th>
+                    <th>Created On</th>
                     <th>Confirmation Status</th>
                 </tr>
             </thead>
@@ -51,6 +52,9 @@
 
                     <!-- Contact Information -->
                     <td>--</td>
+
+                    <!-- Created On -->
+                    <td>{{ donorIID.get_now_date() }} <br> {{ donorIID.get_now_time() }}</td>
 
                     <!-- Collection Confirmation -->
                     {% if donorIID.get_collection_status() == "Confirmed"  and donorIID.get_status() == "Confirmed" %}
