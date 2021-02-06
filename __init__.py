@@ -937,8 +937,6 @@ def forum_uhc_post_delete(forum_uhc_post_id):
 
 @app.route('/createUser', methods=['GET', 'POST'])
 def create_user():
-    if "username" in session:
-        return redirect(url_for('home'))
     create_user_form = CreateUserForm(request.form)
     if request.method == "POST" and create_user_form.validate():
         users_dict = {}
@@ -979,8 +977,6 @@ def create_user():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if "username" in session:
-        return redirect(url_for('home'))
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
     db = shelve.open('account.db', 'r')
@@ -1098,8 +1094,6 @@ def staff_home():
 
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
-    if "username" in session:
-        return redirect(url_for('staff_home'))
     create_staff_form = CreateStaffForm(request.form)
     if request.method == 'POST' and create_staff_form.validate():
         staff_dict = {}
@@ -1111,9 +1105,23 @@ def create_staff():
             print("Error in retrieving Staff from staff.db.")
 
         staff = Staff(create_staff_form.staff_username.data, create_staff_form.staff_email.data,
-                      create_staff_form.staff_gender.data,
-                      create_staff_form.staff_password.data, create_staff_form.staff_confirm_password.data)
+                      create_staff_form.staff_gender.data, create_staff_form.staff_password.data, create_staff_form.staff_confirm_password.data)
         staff.set_date_time(staff.get_date_time())
+
+        # staffCount = []
+        # if "StaffCount" not in db:
+        #     db["StaffCount"] = staffCount
+        #
+        # staffCount = db["StaffCount"]
+        # if len(staffCount) == 0:
+        #     staffID = 1
+        # else:
+        #     staffid_count = staffCount[-1]
+        #     staffid_count += 1
+        # staffCount.append(staffid_count)
+        # db["StaffCount"] = staffCount
+        # staff.set_staff_id(staffid_count)
+
         staff_dict[staff.get_staff_id()] = staff
         db['Staff'] = staff_dict
 
@@ -1124,56 +1132,35 @@ def create_staff():
         return redirect(url_for('staff_profile'))
     return render_template('staff/AM/CreateStaffAccount.html', form=create_staff_form)
 
-
-@app.route("/staff_profile")
-def staff_profile():
-    if "username" in session:
-        username1 = session["username"]
-        return render_template('staff/AM/staff_profile.html', username1=username1)
-    update_staff_form = CreateUserForm(request.form)
-    if request.method == 'POST' and update_staff_form.validate():
-        staff_dict = {}
-        db = shelve.open('staff.db', 'c')
-        staff_dict = db['Staff']
-
-        staff = staff_dict.get(id)
-        staff.set_username(update_staff_form.staff_username.data)
-        staff.set_email(update_staff_form.staff_email.data)
-        staff.set_gender(update_staff_form.staff_gender.data)
-        staff.set_password(update_staff_form.staff_password.data)
-
-        db['Staff'] = staff_dict
-        db.close()
-
-        session['staff_updated'] = staff.get_username()
-
-        # return redirect(url_for('retrieve'))
-    else:
-        return redirect(url_for('staff_login'))
-
-
-@app.route("/staff_login", methods=['GET', 'POST'])
+@app.route('/staff_login', methods=['GET', 'POST'])
 def staff_login():
-    if "username" in session:
-        return redirect(url_for('staff_home'))
-    create_stafflogin_form = CreateStaffForm(request.form)
+    create_stafflog_form = CreateStaffForm(request.form)
     staff_dict = {}
     db = shelve.open('staff.db', 'r')
     staff_dict = db['Staff']
     db.close()
 
-    staff_list = []
+    staffs_list = []
     for key in staff_dict:
-        a = staff_dict[key]
-        if a.get_username() == create_stafflogin_form.staff_username.data and a.get_password() == create_stafflogin_form.staff_password.data:
-            session["username"] = a.get_username()
+        b = staff_dict[key]
+        if b.get_username() == create_stafflog_form.staff_username.data and b.get_password() == create_stafflog_form.staff_password.data:
+            session["username"] = b.get_username()
+            session["email"] = b.get_email()
+            session["gender"] = b.get_gender()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
-            print(a.get_date_time())
+            print(b.get_date_time())
             return redirect(url_for('staff_profile'))
 
     return render_template('staff/AM/stafflogin.html')
 
+@app.route("/staffprofile")
+def staff_profile():
+    if "username" in session:
+        username = session["username"]
+        return render_template('staff/AM/staff_profile.html', username=username)
+    else:
+        return redirect(url_for('staff_login'))
 
 @app.route('/logout')
 def staff_logout():
@@ -1194,11 +1181,11 @@ def retrieve_staff():
     db.close()
 
     staffs_list = []
-    for key1 in staff_dict:
-        staff = staff_dict.get(key1)
+    for key in staff_dict:
+        staff = staff_dict.get(key)
         staffs_list.append(staff)
 
-    return render_template('staff/AM/unlock_delete_acc.html', count1=len(staffs_list), staffs_list=staffs_list)
+    return render_template('staff/AM/retrievestaff.html', count=len(staffs_list), staffs_list=staffs_list)
 
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
@@ -1220,7 +1207,7 @@ def update_staff(id):
 
         session['staff_updated'] = staff.get_username()
 
-        return redirect(url_for('retrieve'))
+        return redirect(url_for('retrieve_staff'))
     else:
         staff_dict = {}
         db = shelve.open('staff.db', 'r')
@@ -1234,7 +1221,7 @@ def update_staff(id):
         update_staff_form.staff_password.data = staff.get_password()
         update_staff_form.staff_confirm_password.data = staff.get_confirm_password()
 
-        return render_template('staff/AM/updateAccount.html', form=update_staff_form)
+        return render_template('staff/AM/updateStaff.html', form=update_staff_form)
 
 
 @app.route('/delete_staff/<int:id>', methods=['POST'])
