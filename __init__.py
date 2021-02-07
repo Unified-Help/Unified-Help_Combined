@@ -1035,7 +1035,7 @@ def create_user():
         except:
             print("Error in retrieving Users from account.db.")
 
-        user = User(create_user_form.username.data, create_user_form.email.data, create_user_form.gender.data,
+        user = User(create_user_form.username.data, create_user_form.email.data, create_user_form.contact.data, create_user_form.gender.data,
                     create_user_form.password.data, create_user_form.confirm_password.data)
         user.set_date_time(user.get_date_time())
 
@@ -1045,7 +1045,7 @@ def create_user():
 
         userCounter = db["UserCounter"]
         if len(userCounter) == 0:
-            userID = 1
+            userid_counter = 1
         else:
             userid_counter = userCounter[-1]
             userid_counter += 1
@@ -1130,6 +1130,7 @@ def update_user(id):
         user = users_dict.get(id)
         user.set_username(update_user_form.username.data)
         user.set_email(update_user_form.email.data)
+        user.set_contact(update_user_form.contact.data)
         user.set_gender(update_user_form.gender.data)
         user.set_password(update_user_form.password.data)
 
@@ -1148,6 +1149,7 @@ def update_user(id):
         user = users_dict.get(id)
         update_user_form.username.data = user.get_username()
         update_user_form.email.data = user.get_email()
+        update_user_form.contact.data = user.get_contact()
         update_user_form.gender.data = user.get_gender()
         update_user_form.password.data = user.get_password()
         update_user_form.confirm_password.data = user.get_confirm_password()
