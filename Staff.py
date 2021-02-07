@@ -17,7 +17,7 @@ class Staff:
     def get_staff_id(self):
         return self.__staff_id
 
-    def get_username(self):
+    def get_staff_username(self):
         return self.__username
 
     def get_email(self):
@@ -26,7 +26,7 @@ class Staff:
     def get_gender(self):
         return self.__gender
 
-    def get_password(self):
+    def get_staff_password(self):
         return self.__password
 
     def get_confirm_password(self):
@@ -41,7 +41,7 @@ class Staff:
     def set_staff_id(self, staff_id):
         self.__staff_id = staff_id
 
-    def set_username(self, staff_username):
+    def set_staff_username(self, staff_username):
         self.__username = staff_username
 
     def set_email(self, staff_email):
@@ -50,7 +50,7 @@ class Staff:
     def set_gender(self, staff_gender):
         self.__gender = staff_gender
 
-    def set_password(self, staff_password):
+    def set_staff_password(self, staff_password):
         self.__password = staff_password
 
     def set_confirm_password(self, staff_confirm_password):

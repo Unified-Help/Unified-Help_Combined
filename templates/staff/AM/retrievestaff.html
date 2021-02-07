@@ -53,15 +53,15 @@
     {% for staff in staffs_list %}
       <tr>
         <td>{{ staff.get_staff_id() }}</td>
-        <td>{{ staff.get_username() }}</td>
+        <td>{{ staff.get_staff_username() }}</td>
         <td>{{ staff.get_email() }}</td>
         <td>{{ staff.get_gender() }}</td>
-        <td>{{ staff.get_password() }}</td>
+        <td>{{ staff.get_staff_password() }}</td>
         <td>{{ staff.get_date_time() }}</td>
         <td><a href="/updateStaff/{{staff.get_staff_id()}}" class="btn btn-warning">Update</a></td>
         <td>
           <form action="{{url_for('delete_staff', id=staff.get_staff_id())}}" method="POST">
-            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{staff.get_username()}} {{staff.get_email()}}?');"-->
+            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{staff.get_staff_username()}} {{staff.get_email()}}?');"-->
             <!-- Button to Open the Modal -->
             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{staff.get_staff_id()}}"> Delete
     </button>
@@ -79,7 +79,7 @@
 
           <!-- Modal body -->
           <div class="modal-body">
-            Are you sure you want to delete {{staff.get_username()}} {{staff.get_email()}}?
+            Are you sure you want to delete {{staff.get_staff_username()}} {{staff.get_email()}}?
           </div>
 
           <!-- Modal footer -->
