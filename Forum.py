@@ -45,7 +45,7 @@ class ForumPost:
 
     def set_date_time(self, datetime):
         self.__datetime = datetime
-        self.__datetime = self.__datetime.strftime("%d %b %Y, %H:%M")
+        self.__datetime = self.__datetime.strftime("%d %b %Y, %X")
 
     # Accessor
     def get_username(self):
@@ -76,10 +76,12 @@ class ForumPost:
         return self.__datetime
 
 class ForumPinnedPostsCounter(ForumPost):
+    forum_pinned_post_reply_id = 0
     def __init__(self):
         super().__init__()
         self.__forum_pinned_post_id = ''
-        self.__reply_id = ''
+        ForumPinnedPostsCounter.forum_pinned_post_reply_id += 1
+        self.__forum_pinned_post_reply_id = ForumPinnedPostsCounter.forum_pinned_post_reply_id
 
 
     def set_forum_pinned_post_id(self):
@@ -98,6 +100,14 @@ class ForumPinnedPostsCounter(ForumPost):
 
     def get_forum_pinned_post_id(self):
         return self.__forum_pinned_post_id
+
+    def set_forum_pinned_post_reply_id(self, forum_pinned_post_reply_id):
+        self.__forum_pinned_post_reply_id = forum_pinned_post_reply_id
+
+    def get_forum_pinned_post_reply_id(self):
+        return self.__forum_pinned_post_reply_id
+
+
 
     # Post Reply ID
     # def set_forum_pinned_post_reply_id(self):

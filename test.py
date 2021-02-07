@@ -17,3 +17,10 @@ import shelve
 # db = shelve.open('forumdb', 'c')
 # db['PostReply'] = {}
 # db.close()
+
+
+# db = shelve.open('forumdb','c')
+# postReplyDict = db['PostReply']
+# print(postReplyDict.get_username())
+# print(db['PostReply'])
+# db.close
