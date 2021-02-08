@@ -11,7 +11,7 @@ import os
 
 # Customer Support Imports
 from ForumForm import createForumPost, updateForumPost, staff_createForumPost, ForumPostReply
-from Forum import ForumPost, ForumPinnedPostsCounter, ForumAnnoucementsPostCounter, ForumUHCPostCounter
+from Forum import ForumPost, ForumPinnedPostsCounter, ForumUHCPostCounter
 
 # Account Management Imports
 from Forms import CreateUserForm, CreateStaffForm
