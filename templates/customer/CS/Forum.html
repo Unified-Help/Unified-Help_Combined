@@ -50,42 +50,6 @@
             </tbody>
           </table>
 
-        <!-- Announcement Forum -->
-        <h2 class="h4 text-white mb-0 p-4 rounded-top forum-cat-color"><a href="{{url_for('forum_announcements_posts')}}" style="text-decoration: none; color:#ffffff">Announcements</a></h2>
-        <table class="table table-bordered table-responsive">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col" style="width: 620px;text-align: center; padding-bottom:10px;padding-top:10px;">Topics</th>
-              <th scope="col" style="width: 200px;text-align: center; padding-bottom:10px;padding-top:10px;">Created</th>
-              <th scope="col" style="width: 100px;text-align: center; padding-bottom:10px;padding-top:10px;">Replies</th>
-              <th scope="col" style="width: 200px;text-align: center; padding-bottom:10px;padding-top:10px;">Last Post</th>
-            </tr>
-          </thead>
-          <tbody>
-          {% for post in announcements_list|reverse %}
-          {% set user_name = post.get_username() %}
-          {% set username = user_name %}
-          {%- if loop.index > 3 %}{% break %}{% endif %}
-          <tr>
-            <td>
-              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_announcements_posts_post', forum_announcements_post_id = post.get_forum_announcements_post_id() ) }}">{{ post.get_post_subject() }} #{{ post.get_forum_announcements_post_id() }}</a></h3>
-            </td>
-            <td>
-              <p style="margin:auto;padding:10px 0px 10px 5px;">by {{ username }}
-                <br/> {{post.get_date_time() }}
-              </p>
-            </td>
-            <td>
-              <p> </p>
-            </td>
-            <td>
-              <p style="margin:auto;padding:10px 0px 10px 5px;">by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
-            </td>
-          </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-
         <!-- Unified Help Community Forum -->
         <h2 class="h4 text-white mb-0 p-4 rounded-top forum-cat-color"><a href="{{url_for('forum_uhc_posts')}}" style="text-decoration: none; color:#ffffff">Unified Help Community</a></h2>
         <table class="table table-bordered table-responsive">

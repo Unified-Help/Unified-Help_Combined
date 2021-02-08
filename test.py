@@ -18,6 +18,13 @@ import shelve
 # db['PostReply'] = {}
 # db.close()
 
+# db = shelve.open('forumdb', 'c')
+# db['AnnouncementsPostReply'] = {}
+# db.close()
+
+# db = shelve.open('forumdb', 'c')
+# db['UHCPostReply'] = {}
+# db.close()
 
 # db = shelve.open('forumdb','c')
 # postReplyDict = db['PostReply']

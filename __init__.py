@@ -704,6 +704,7 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
         user_list.append(user)
     userdb.close()
 
+    # Retrieving Post Replies
     post_reply_retrieve_dict = db['PostReply']
     post_reply_retrieve_list = []
 
@@ -713,19 +714,18 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
             reply = reply_dict.get(tag)
             post_reply_retrieve_list.append(reply)
 
-
     # =======================Create forum post reply=======================
     # db["PostReply"] : {
-    # post_id: {reply_id: [replyobject]},
-    #           {reply_id: [replyobject]},
-    #              {reply_id: [replyobject]}
+    # post_id: {reply_id: replyobject},
+    #           {reply_id: replyobject},
+    #              {reply_id: replyobject}
     # },
-    # post_id: {reply_id: [replyobject]},
-    #           {reply_id: [replyobject]},
-    #           {reply_id: [replyobject]}
+    # post_id: {reply_id: replyobject},
+    #           {reply_id: replyobject},
+    #           {reply_id: replyobject}
     # }
     reply_post_form = ForumPostReply(request.form)
-    if request.method == 'POST':
+    if request.method == 'POST' and reply_post_form.validate():
         post_reply_dict = {}
         last_id = 0
         try:
@@ -789,33 +789,6 @@ def forum_pinned_posts_post(forum_pinned_posts_id):
     return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list,
                            user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list, post_id=post_id)
 
-# Pinned Post Reply Deletion
-@app.route("/forum/pinned_posts/delete/<int:forum_pinned_posts_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
-def delete_reply(forum_pinned_posts_id, reply_id):
-    reply_dict = {}
-    db = shelve.open('forumdb', 'c')
-    reply_dict = db['PostReply']
-
-    print(reply_dict)
-
-    id_dict = {}
-
-    if forum_pinned_posts_id in reply_dict:
-        id_dict = reply_dict[forum_pinned_posts_id]
-
-        print("id_dict", id_dict)
-
-        if reply_id in id_dict:
-            id_dict.pop(reply_id)
-
-    reply_dict[forum_pinned_posts_id] = id_dict
-
-    db['PostReply'] = reply_dict
-
-    db.close()
-    return redirect(url_for('forum_pinned_posts_post', forum_pinned_posts_id=forum_pinned_posts_id))
-
-
 @app.route("/forum/pinned_posts/update/<int:forum_pinned_posts_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post_update(forum_pinned_posts_id):
     forum_pinned_posts_form_update = createForumPost(request.form)
@@ -843,7 +816,6 @@ def forum_pinned_posts_post_update(forum_pinned_posts_id):
         return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update,
                                list=pinned_posts_list)
 
-
 @app.route('/forum/pinned_posts/delete/<int:forum_pinned_posts_id>', methods=['GET', 'POST'])
 def forum_pinned_posts_post_delete(forum_pinned_posts_id):
     pinned_posts_dict = {}
@@ -857,88 +829,25 @@ def forum_pinned_posts_post_delete(forum_pinned_posts_id):
 
     return redirect(url_for('forum_pinned_posts'))
 
-
-
-
-@app.route("/forum/announcements")
-def forum_announcements_posts():
-    announcements_dict = {}
+# Pinned Post Reply Deletion
+@app.route("/forum/pinned_posts/delete/<int:forum_pinned_posts_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
+def delete_reply(forum_pinned_posts_id, reply_id):
+    reply_dict = {}
     db = shelve.open('forumdb', 'c')
-    announcements_dict = db['Announcements']
+    reply_dict = db['PostReply']
+
+    id_dict = {}
+
+    if forum_pinned_posts_id in reply_dict:
+        id_dict = reply_dict[forum_pinned_posts_id]
+        if reply_id in id_dict:
+            id_dict.pop(reply_id)
+
+    reply_dict[forum_pinned_posts_id] = id_dict
+    db['PostReply'] = reply_dict
     db.close()
 
-    announcements_list = []
-    for key in announcements_dict:
-        post = announcements_dict.get(key)
-        announcements_list.append(post)
-    category = announcements_list[0].get_category()
-    return render_template('customer/CS/overview-forum-category.html', list=announcements_list, category=category)
-
-
-# Specific Forum Post ID - Announcements
-@app.route("/forum/announcements/<int:forum_announcements_post_id>")
-def forum_announcements_posts_post(forum_announcements_post_id):
-    announcements_dict = {}
-    user_dict = {}
-    db = shelve.open('forumdb', 'c')
-    announcements_dict = db['Announcements']
-    userdb = shelve.open('account.db', 'r')
-    user_dict = userdb['Users']
-    announcements_list = []
-    user_list = []
-
-    post = announcements_dict.get(forum_announcements_post_id)
-    session['forum_announcements_post_id'] = forum_announcements_post_id
-    announcements_list.append(post)
-    for key in user_dict:
-        user = user_dict.get(key)
-        user_list.append(user)
-    userdb.close()
-    db.close()
-    return render_template('customer/CS/forum-post.html', post_list=announcements_list, user_list=user_list)
-
-
-@app.route("/forum/announcements/update/<int:forum_announcements_post_id>", methods=['GET', 'POST'])
-def forum_announcements_posts_post_update(forum_announcements_post_id):
-    forum_announcements_form_update = createForumPost(request.form)
-    if request.method == 'POST':
-        announcements_dict = {}
-        db = shelve.open('forumdb', 'w')
-        announcements_dict = db['Announcements']
-
-        post = announcements_dict.get(forum_announcements_post_id)
-        post.set_post_message(forum_announcements_form_update.post_message.data)
-        post.set_edited()
-        db['Announcements'] = announcements_dict
-        db.close()
-        return redirect(url_for('forum_announcements_posts_post',
-                                forum_announcements_post_id=post.get_forum_announcements_post_id()))
-    else:
-        announcements_dict = {}
-        announcements_list = []
-        db = shelve.open('forumdb', 'r')
-        announcements_dict = db['Announcements']
-        db.close()
-
-        post = announcements_dict.get(forum_announcements_post_id)
-        announcements_list.append(post)
-        forum_announcements_form_update.post_message.data = post.get_post_message()
-        return render_template('customer/CS/forum-post_update.html', form=forum_announcements_form_update,
-                               list=announcements_list)
-
-
-@app.route('/forum/announcements/delete/<int:forum_announcements_post_id>', methods=['GET', 'POST'])
-def forum_announcements_post_delete(forum_announcements_post_id):
-    announcements_dict = {}
-    db = shelve.open('forumdb', 'w')
-    announcements_dict = db['Announcements']
-
-    announcements_dict.pop(forum_announcements_post_id)
-
-    db['Announcements'] = announcements_dict
-    db.close()
-
-    return redirect(url_for('forum_announcements_posts'))
+    return redirect(url_for('forum_pinned_posts_post', forum_pinned_posts_id=forum_pinned_posts_id))
 
 
 @app.route("/forum/uhc")
