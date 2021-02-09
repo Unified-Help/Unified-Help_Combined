@@ -616,10 +616,12 @@ def forum():
     for key in pinned_posts_dict:
         post = pinned_posts_dict.get(key)
         pinned_posts_list.append(post)
+    lenOfPinnedPost = len(pinned_posts_list)
     for key in uhc_dict:
         post = uhc_dict.get(key)
         uhc_list.append(post)
-    return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, uhc_list=uhc_list)
+    lenOfUHCPost = len(uhc_list)
+    return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, uhc_list=uhc_list, lenOfPinnedPost=lenOfPinnedPost, lenOfUHCPost=lenOfUHCPost)
 
 @app.route("/forum/createforumpost", methods=['GET', 'POST'])
 def create_forum_post():
@@ -669,8 +671,9 @@ def forum_pinned_posts():
     for key in pinned_posts_dict:
         post = pinned_posts_dict.get(key)
         pinned_posts_list.append(post)
+    lenOfPinnedPost = len(pinned_posts_list)
     category = pinned_posts_list[0].get_category()
-    return render_template('customer/CS/overview-forum-category.html', list=pinned_posts_list, category=category)
+    return render_template('customer/CS/overview-forum-category.html', list=pinned_posts_list, category=category, lenOfPinnedPost=lenOfPinnedPost)
 
 
 # Specific Forum Post ID - Pinned Posts
@@ -845,8 +848,9 @@ def forum_uhc_posts():
     for key in uhc_dict:
         post = uhc_dict.get(key)
         uhc_list.append(post)
+    lenOfUHCPost = len(uhc_list)
     category = uhc_list[0].get_category()
-    return render_template('customer/CS/overview-forum-category.html', list=uhc_list, category=category)
+    return render_template('customer/CS/overview-forum-category.html', list=uhc_list, category=category, lenOfUHCPost=lenOfUHCPost)
 
 
 # Specific Forum Post ID - UHC

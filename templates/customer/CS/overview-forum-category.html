@@ -43,7 +43,11 @@
                 <p>by {{ post.get_username() }}</p>
               </td>
               <td>
-                <p> </p>
+                {% if category == 'Pinned Posts' %}
+                <p style="padding-left: 30px">{{lenOfPinnedPost}}</p>
+                {% elif category == 'Unified Help Community' %}
+                <p style="padding-left: 30px">{{lenOfUHCPost}}</p>
+                {% endif %}
               </td>
               <td>
                 <p>by {{ post.get_username() }}</p>
