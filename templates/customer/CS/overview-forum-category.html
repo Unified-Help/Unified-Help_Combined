@@ -34,9 +34,9 @@
             <tr>
               <td>
                 {% if category == 'Pinned Posts' %}
-                <h3 class="h5"><a href="{{ url_for('forum_pinned_posts_post', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
+                <h3 class="h5"><a href="{{ url_for('forum_pinned_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
                 {% elif category == 'Unified Help Community' %}
-                <h3 class="h5"><a href="{{ url_for('forum_uhc_posts_post', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
+                <h3 class="h5"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
                 {% endif %}
               </td>
               <td>

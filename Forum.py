@@ -12,6 +12,7 @@ class ForumPost:
         self.__category = ''
         self.__post_message = ''
         self.__reply_message = ''
+        self.__reply_category = ''
         self.__upvotes = 0
         self.__downvotes = 0
         self.__edited = False
@@ -32,6 +33,9 @@ class ForumPost:
 
     def set_reply_message(self, reply_message):
         self.__reply_message = reply_message
+
+    def set_reply_category(self,reply_category):
+        self.__reply_category = reply_category
 
     def set_upvotes(self, upvotes):
         self.__upvotes = upvotes
@@ -62,6 +66,9 @@ class ForumPost:
     def get_reply_message(self):
         return self.__reply_message
 
+    def get_reply_category(self):
+        return self.__reply_category
+
     def get_upvotes(self):
         return self.__upvotes
 
@@ -77,53 +84,52 @@ class ForumPost:
 class ForumPinnedPostsCounter(ForumPost):
     def __init__(self):
         super().__init__()
-        self.__forum_pinned_post_id = ''
+        self.__post_id = ''
 
-
-    def set_forum_pinned_post_id(self):
+    def set_post_id(self):
         # Use with -> Don't need to close db
         try:
             with shelve.open('forumdb','r') as db:
                 if len(db['PinnedPosts']) == 0:
-                    forum_pinned_post_id = 0
+                    post_id = 0
                 else:
-                    forum_pinned_post_id = list(db['PinnedPosts'].keys())[-1]
+                    post_id = list(db['PinnedPosts'].keys())[-1]
         except:
-            forum_pinned_post_id = 0
+            post_id = 0
 
-        forum_pinned_post_id += 1
-        self.__forum_pinned_post_id = forum_pinned_post_id
+        post_id += 1
+        self.__post_id = post_id
 
-    def get_forum_pinned_post_id(self):
-        return self.__forum_pinned_post_id
+    def get_post_id(self):
+        return self.__post_id
 
-    def set_forum_pinned_post_reply_id(self, forum_pinned_post_reply_id):
-        self.__forum_pinned_post_reply_id = forum_pinned_post_reply_id
+    def set_post_reply_id(self, post_reply_id):
+        self.__post_reply_id = post_reply_id
 
-    def get_forum_pinned_post_reply_id(self):
-        return self.__forum_pinned_post_reply_id
+    def get_post_reply_id(self):
+        return self.__post_reply_id
 
 
 class ForumUHCPostCounter(ForumPost):
     def __init__(self):
         super().__init__()
-        self.__forum_uhc_post_id = ''
+        self.__post_id = ''
 
-    def set_forum_uhc_post_id(self):
+    def set_post_id(self):
         with shelve.open('forumdb','r') as db:
             if len(db['UHC']) == 0:
-                forum_uhc_post_id = 0
+                post_id = 0
             else:
-                forum_uhc_post_id = list(db['UHC'].keys())[-1]
+                post_id = list(db['UHC'].keys())[-1]
 
-        forum_uhc_post_id += 1
-        self.__forum_uhc_post_id = forum_uhc_post_id
+        post_id += 1
+        self.__post_id = post_id
 
-    def get_forum_uhc_post_id(self):
-        return self.__forum_uhc_post_id
+    def get_post_id(self):
+        return self.__post_id
 
-    def set_forum_uhc_post_reply_id(self, forum_uhc_post_reply_id):
-        self.__forum_uhc_post_reply_id = forum_uhc_post_reply_id
+    def set_post_reply_id(self, post_reply_id):
+        self.__post_reply_id = post_reply_id
 
-    def get_forum_uhc_post_reply_id(self):
-        return self.__forum_uhc_post_reply_id
+    def get_post_reply_id(self):
+        return self.__post_reply_id

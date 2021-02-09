@@ -61,13 +61,13 @@
               </tr>
               <tr>
                 <td colspan="2" style="background-color:#ffffff">
-                  {% if post.get_category() == 'Pinned Posts' %}
+
                   {% if session['username'] == post.get_username() %}
-                  <a href="{{ url_for('forum_pinned_posts_post_update', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px"></i></a>
-                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_pinned_post_id()}}" style="padding-left:30px;"></i>
+                  <a href="{{ url_for('forum_pinned_posts_post_update', post_id = post.get_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px"></i></a>
+                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_post_id()}}" style="padding-left:30px;"></i>
                   {% endif %}
                   <!-- The Modal -->
-                    <div class="modal" id="myModal_{{post.get_forum_pinned_post_id()}}">
+                    <div class="modal" id="myModal_{{post.get_post_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content">
 
@@ -79,46 +79,26 @@
 
                           <!-- Modal body -->
                           <div class="modal-body">
-                            Are you sure you want to delete {{post.get_post_subject()}}?
+                            Are you sure you want to delete "{{post.get_post_subject()}}"?
                           </div>
-
+                          {% if post.get_category() == 'Pinned Posts' %}
                           <!-- Modal footer -->
                           <div class="modal-footer">
-                            <a href="{{ url_for('forum_pinned_posts_post_delete', forum_pinned_posts_id = post.get_forum_pinned_post_id() ) }}" class="btn btn-danger">Delete</a>
+                            <a href="{{ url_for('forum_pinned_posts_post_delete', post_id = post.get_post_id() ) }}" class="btn btn-danger">Delete</a>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                           </div>
+                          {% elif post.get_category() == 'Unified Help Community' %}
+                          <div class="modal-footer">
+                            <a href="{{ url_for('forum_uhc_post_delete', post_id = post.get_post_id() ) }}" class="btn btn-danger">Delete</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+                          {% endif %}
                         </div>
                       </div>
                     </div>
-                  {% elif post.get_category() == 'Unified Help Community' %}
                   {% if session['username'] == post.get_username %}
-                  <a href="{{ url_for('forum_uhc_post_update', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px;"></i></a>
-                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_forum_uhc_post_id()}}" style="padding-left:30px;"></i>
-                  {% endif %}
-                  <!-- The Modal -->
-                    <div class="modal" id="myModal_{{post.get_forum_uhc_post_id()}}">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-
-                          <!-- Modal Header -->
-                          <div class="modal-header">
-                            <h4 class="modal-title">Delete Confirmation</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                          </div>
-
-                          <!-- Modal body -->
-                          <div class="modal-body">
-                            Are you sure you want to delete {{post.get_post_subject()}}?
-                          </div>
-
-                          <!-- Modal footer -->
-                          <div class="modal-footer">
-                            <a href="{{ url_for('forum_uhc_post_delete', forum_uhc_post_id = post.get_forum_uhc_post_id() ) }}" class="btn btn-danger">Delete</a>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <a href="{{ url_for('forum_uhc_post_update', post_id = post.get_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px;"></i></a>
+                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_post_id()}}" style="padding-left:30px;"></i>
                   {% endif %}
                   <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
                   <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
@@ -131,7 +111,7 @@
             <tbody>
               <tr>
                 <td style="width: 200px">
-                  <div>by {{ reply.get_username() }} - ID: {{ reply.get_forum_pinned_post_reply_id() }}</div>
+                  <div>by {{ reply.get_username() }}</div>
                 </td>
                 <td class="justify-content-lg-between" style="width: 800px">
                   <div class="float-right"><span class="font-weight-bold">Posted:</span> {{ reply.get_date_time() }}</div>
@@ -152,27 +132,30 @@
               <tr>
                 <td colspan="2" style="background-color:#ffffff">
                   {% if session['username'] == reply.get_username() %}
-                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{reply.get_forum_pinned_post_reply_id()}}"></i>
+                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{reply.get_post_reply_id()}}"></i>
+                  <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
+                  <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
                   {% endif %}
-                  <!-- The Modal -->
-                    <div class="modal" id="myModal_{{reply.get_forum_pinned_post_reply_id()}}">
+                  {% if reply.get_reply_category() == 'Pinned Posts' %}
+                  <!-- Post Reply Modal -->
+                    <div class="modal" id="myModal_{{reply.get_post_reply_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content">
 
-                          <!-- Modal Header -->
+                          <!-- Post Reply Modal Header -->
                           <div class="modal-header">
                             <h4 class="modal-title">Delete Confirmation</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                           </div>
 
-                          <!-- Modal body -->
+                          <!-- Post Reply Modal body -->
                           <div class="modal-body">
-                            Are you sure you want to delete your reply?
+                            Are you sure you want to delete reply?
                           </div>
 
-                          <!-- Modal footer -->
+                          <!-- Post Reply Modal footer -->
                           <div class="modal-footer">
-                            <form action="/forum/pinned_posts/delete/{{post_id}}/delete_reply/{{ reply.get_forum_pinned_post_reply_id()}}" method="POST">
+                            <form action="/forum/pinned_posts/delete/{{post_id}}/delete_reply/{{ reply.get_post_reply_id()}}" method="POST">
                               <input class="btn btn-danger" type="submit" value="Delete">
                             </form>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -180,6 +163,7 @@
                         </div>
                       </div>
                     </div>
+                  {% endif %}
                 </td>
               </tr>
             </tbody>
