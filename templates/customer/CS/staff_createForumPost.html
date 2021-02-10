@@ -1,5 +1,5 @@
 {% extends "customer/base.html" %}
-{% block title %}Create Forum Post{% endblock %}
+{% block title %}Staff_Create Forum Post{% endblock %}
 {% block head %}
   <link href="{{url_for('static', filename = 'customer/css/style-forum.css')}}" rel="stylesheet">
 {% endblock %}
@@ -18,11 +18,6 @@
     <div class="container my-3">
       <nav class="breadcrumb">
         <a href="{{url_for('forum')}}" class="breadcrumb-item" style="text-decoration: none">Unified Help Forum</a>
-<!--        {% if category == 'Pinned Posts' %}-->
-<!--        <a href="{{ url_for('forum_pinned_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>-->
-<!--        {% elif category == 'Unified Help Community' %}-->
-<!--        <a href="{{ url_for('forum_uhc_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>-->
-<!--        {% endif %}-->
         <span class="breadcrumb-item active">Create new topic</span>
       </nav>
 
@@ -30,7 +25,6 @@
         <div class="col-12">
           <h2 class="h4 text-white forum-cat-color mb-3 p-4 rounded">Create new topic</h2>
           <h5>Username: {{session_username}}</h5>
-
           <h5>Category: Unified Help Community</h5>
           <form class="mb-3" method="POST" action="">
             <div class="form-group">
@@ -42,8 +36,8 @@
             <input class="btn float-right" type="submit" value="Submit" style="background-color: #008080;color: #ffffff">
             <button type="reset" class="btn btn-danger float-left" style>Reset</button>
           </form>
-
         </div>
       </div>
     </div>
+
 {% endblock %}

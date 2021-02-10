@@ -595,8 +595,11 @@ def forum_login():
         b = users_dict[key]
         if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
             session["username"] = b.get_username()
+            session["email"] = b.get_email()
+            session["gender"] = b.get_gender()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
+            print(b.get_date_time())
             return redirect(url_for('create_forum_post'))
 
     return render_template('customer/AM/login.html')
@@ -630,6 +633,20 @@ def create_forum_post():
     except:
         return redirect(url_for('forum_login'))
     else:
+        users = {}
+        usersDB = shelve.open('account.db', 'r')
+        user_cust = usersDB['Users']
+        user_staff = usersDB['Staff']
+        usersDB.close()
+
+        all_users = {}
+        for key in user_cust:
+            user = user_cust.get(key)
+            all_users.append(user)
+        for key in user_staff:
+            user = user_staff.get(key)
+            all_users.append(user)
+
         create_forum_post_form = createForumPost(request.form)
         if request.method == 'POST' and create_forum_post_form.validate():
             uhc_dict = {}
@@ -654,7 +671,40 @@ def create_forum_post():
             return redirect(url_for('forum_uhc_posts'))
 
     return render_template('customer/CS/createForumPost.html', form=create_forum_post_form,
-                           session_username=session_username)
+                           session_username=session_username, all_users_list=all_users)
+
+# @app.route("/forum/staff/createforumpost", methods=['GET', 'POST'])
+# def staff_create_forum_post():
+#     try:
+#         session_username = session["username"]
+#     except:
+#         return redirect(url_for('forum_login'))
+#     else:
+#         staff_create_forum_post_form = staff_createForumPost(request.form)
+#         if request.method == 'POST' and staff_create_forum_post_form.validate():
+#             uhc_dict = {}
+#             db = shelve.open('forumdb', 'c')
+#
+#             try:
+#                 uhc_dict = db['UHC']
+#             except:
+#                 print("Error in retrieving data from forumdb.")
+#
+#             post = ForumUHCPostCounter()
+#             post.set_post_id()
+#             post.set_username(session_username)
+#             post.set_category('Unified Help Community')
+#             post.set_post_subject(staff_create_forum_post_form.post_subject.data)
+#             post.set_post_message(staff_create_forum_post_form.post_message.data)
+#             post.set_date_time(post.get_date_time())
+#             uhc_dict[post.get_post_id()] = post
+#
+#             db['UHC'] = uhc_dict
+#             db.close()
+#             return redirect(url_for('forum_uhc_posts'))
+#
+#     return render_template('customer/CS/createForumPost.html', form=create_forum_post_form,
+#                            session_username=session_username)
 
 ROWS_PER_PAGE = 10
 
@@ -1058,7 +1108,6 @@ def login():
             return redirect(url_for('profile'))
 
     return render_template('customer/AM/login.html')
-
 
 @app.route('/profile')
 def profile():
