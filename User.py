@@ -1,18 +1,15 @@
-import datetime
+import datetime, shelve
 
 class User:
-    count_id = 0
 
     def __init__(self, username, email, contact, gender, password, confirm_password):
-        User.count_id += 1
-        self.__user_id = User.count_id
+        self.__user_id = ''
         self.__username = username
         self.__email = email
         self.__contact = contact
         self.__gender = gender
         self.__password = password
         self.__confirm_password = confirm_password
-        self.__account_status = "Customer"
         self.__datetime = datetime.datetime.now()
 
     def get_user_id(self):
@@ -36,13 +33,20 @@ class User:
     def get_confirm_password(self):
         return self.__confirm_password
 
-    def get_account_status(self):
-        return self.__account_status
+    def get_account_type(self):
+        return self.__account_type
 
     def get_date_time(self):
         return self.__datetime
 
-    def set_user_id(self, user_id):
+    def set_user_id(self):
+        with shelve.open('account','r') as db:
+            if len(db['Users']) == 0:
+                user_id = 0
+            else:
+                user_id = list(db['Users'].keys())[-1]
+
+        user_id += 1
         self.__user_id = user_id
 
     def set_username(self, username):
@@ -63,9 +67,19 @@ class User:
     def set_confirm_password(self, confirm_password):
         self.__confirm_password = confirm_password
 
-    def set_account_status(self, account_status):
-        self.__account_status = account_status
+    def set_account_type(self):
+        self.__account_type = 'Customer'
 
     def set_date_time(self, datetime):
         self.__datetime = datetime
-        self.__datetime = self.__datetime.strftime("%d %b %Y, %H:%M")
+        self.__datetime = self.__datetime.strftime("%d %b %Y, %X")
+
+class Staff(User):
+    def __init__(self, username, email, contact, gender, password, confirm_password):
+        super().__init__(username, email, contact, gender, password, confirm_password)
+
+    def get_account_type(self):
+        return self.__account_type
+
+    def set_account_type(self):
+        self.__account_type = "Staff"

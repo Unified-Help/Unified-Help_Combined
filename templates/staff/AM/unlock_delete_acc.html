@@ -47,11 +47,13 @@
         <th>Gender</th>
         <th>Password</th>
         <th>Created On</th>
+        <th>Account Type</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
     {% for user in users_list %}
+    {% if user.get_account_type() == "Customer" %}
       <tr>
         <td>{{ user.get_user_id() }}</td>
         <td>{{ user.get_username() }}</td>
@@ -60,6 +62,7 @@
         <td>{{ user.get_gender() }}</td>
         <td>{{ user.get_password() }}</td>
         <td>{{ user.get_date_time() }}</td>
+        <td>{{ user.get_account_type() }}</td>
         <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
         <td>
           <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
@@ -96,6 +99,7 @@
           </form>
         </td>
       </tr>
+    {% endif %}
     {% endfor %}
     </tbody>
   </table>

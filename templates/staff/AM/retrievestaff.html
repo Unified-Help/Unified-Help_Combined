@@ -8,66 +8,71 @@
 
 <!-- Page content in here -->
 {% block content %}
-  {% if 'staff_created' in session %}
+  {% if 'user_created' in session %}
 <div class="alert alert-success alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('staff_created', None) }} was created.
+  {{ session.pop('user_created', None) }} was created.
 </div>
-{% elif 'staff_updated' in session %}
+{% elif 'user_updated' in session %}
 <div class="alert alert-warning alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('staff_updated', None) }} was updated.
+  {{ session.pop('user_updated', None) }} was updated.
 </div>
-{% elif 'staff_deleted' in session %}
+{% elif 'user_deleted' in session %}
 <div class="alert alert-danger alert-dismissible">
   <button type="button" class="close" data-dismiss="alert">&times;</button>
-  {{ session.pop('staff_deleted', None) }} was deleted.
+  {{ session.pop('user_deleted', None) }} was deleted.
 </div>
 
 {% endif %}
 <div>
   {% if count == 0 %}
-  <p>There are no staffs.</p>
+  <p>There are no users.</p>
   {% elif count == 1 %}
-  <p>There is 1 staff.</p>
+  <p>There is 1 user.</p>
   {% else %}
-  <p>There are {{ count }} staffs.</p>
+  <p>There are {{ count }} users.</p>
   {% endif %}
 </div>
 <div>
   <br><br>
-  <h4 class="display-5">Staff Account</h4>
+  <h4 class="display-5">Customer Account</h4>
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Staff ID</th>
+        <th>User ID</th>
         <th>Username</th>
         <th>Email</th>
+        <th>Phone Number</th>
         <th>Gender</th>
         <th>Password</th>
         <th>Created On</th>
+        <th>Account Type</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
-    {% for staff in staffs_list %}
+    {% for user in users_list %}
+    {% if user.get_account_type() == "Staff" %}
       <tr>
-        <td>{{ staff.get_staff_id() }}</td>
-        <td>{{ staff.get_staff_username() }}</td>
-        <td>{{ staff.get_email() }}</td>
-        <td>{{ staff.get_gender() }}</td>
-        <td>{{ staff.get_staff_password() }}</td>
-        <td>{{ staff.get_date_time() }}</td>
-        <td><a href="/updateStaff/{{staff.get_staff_id()}}" class="btn btn-warning">Update</a></td>
+        <td>{{ user.get_user_id() }}</td>
+        <td>{{ user.get_username() }}</td>
+        <td>{{ user.get_email() }}</td>
+        <td>{{ user.get_contact() }}</td>
+        <td>{{ user.get_gender() }}</td>
+        <td>{{ user.get_password() }}</td>
+        <td>{{ user.get_date_time() }}</td>
+        <td>{{ user.get_account_type() }}</td>
+        <td><a href="/updateUser/{{user.get_user_id()}}" class="btn btn-warning">Update</a></td>
         <td>
-          <form action="{{url_for('delete_staff', id=staff.get_staff_id())}}" method="POST">
-            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{staff.get_staff_username()}} {{staff.get_email()}}?');"-->
+          <form action="{{url_for('delete_user', id=user.get_user_id())}}" method="POST">
+            <!-- input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete {{user.get_username()}} {{user.get_email()}}?');"-->
             <!-- Button to Open the Modal -->
-            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{staff.get_staff_id()}}"> Delete
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal_{{user.get_user_id()}}"> Delete
     </button>
 
     <!-- The Modal -->
-    <div class="modal" id="myModal_{{staff.get_staff_id()}}">
+    <div class="modal" id="myModal_{{user.get_user_id()}}">
       <div class="modal-dialog">
         <div class="modal-content">
 
@@ -79,7 +84,7 @@
 
           <!-- Modal body -->
           <div class="modal-body">
-            Are you sure you want to delete {{staff.get_staff_username()}} {{staff.get_email()}}?
+            Are you sure you want to delete {{user.get_username()}} {{user.get_email()}}?
           </div>
 
           <!-- Modal footer -->
@@ -94,6 +99,7 @@
           </form>
         </td>
       </tr>
+    {% endif %}
     {% endfor %}
     </tbody>
   </table>

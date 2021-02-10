@@ -11,7 +11,6 @@
   <section class="hero is-info is-fullheight" style="background-color:white">
     <div class="hero-body">
       <div class="container">
-        <a href="{{url_for('staff_login')}}"><img src="static/customer/img/staffLogo.png" align="right" style="width:300px; height:300px;"></a>
         <div class="columns is-centered">
           <div class="column is-half">
             <label class="label" style="font-size:24px;">Customer Login</label>
@@ -42,6 +41,8 @@
                   </button>
                   <br><br>
                   <button type="submit" class="button is-success"><a href="{{url_for('create_user')}}" style="text-decoration:none;">Create Account</a>
+                  </button>
+                  <button type="submit" class="button is-success"><a href="{{url_for('create_staff')}}" style="text-decoration:none;">Create Staff Account</a>
                   </button>
                 </p>
               </div>

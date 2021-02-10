@@ -29,3 +29,7 @@ import shelve
 # db = shelve.open('forumdb', 'c')
 # db['UHCPostsPostReply'] = {}
 # db.close()
+
+db = shelve.open('account', 'c')
+db['Users'] = {}
+db.close()

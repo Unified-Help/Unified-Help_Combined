@@ -14,9 +14,8 @@ from ForumForm import createForumPost, updateForumPost, staff_createForumPost, F
 from Forum import ForumPost, ForumPinnedPostsCounter, ForumUHCPostCounter
 
 # Account Management Imports
-from Forms import CreateUserForm, CreateStaffForm
-from User import User
-from Staff import Staff
+from Forms import CreateUserForm, CreateUserForm
+from User import User, Staff
 from datetime import timedelta, datetime
 
 # Report Generation Imports
@@ -46,7 +45,7 @@ def home():
 def donate_money_login():
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
-    db = shelve.open('account.db', 'r')
+    db = shelve.open('account', 'r')
     users_dict = db['Users']
     db.close()
 
@@ -66,7 +65,7 @@ def donate_money_login():
 def donate_item_login():
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
-    db = shelve.open('account.db', 'r')
+    db = shelve.open('account', 'r')
     users_dict = db['Users']
     db.close()
 
@@ -86,7 +85,7 @@ def donate_item_login():
 def donate_history_login():
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
-    db = shelve.open('account.db', 'r')
+    db = shelve.open('account', 'r')
     users_dict = db['Users']
     db.close()
 
@@ -586,7 +585,7 @@ def donateGallery():
 def forum_login():
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
-    db = shelve.open('account.db', 'r')
+    db = shelve.open('account', 'r')
     users_dict = db['Users']
     db.close()
 
@@ -634,7 +633,7 @@ def create_forum_post():
         return redirect(url_for('forum_login'))
     else:
         users = {}
-        usersDB = shelve.open('account.db', 'r')
+        usersDB = shelve.open('account', 'r')
         user_cust = usersDB['Users']
         user_staff = usersDB['Staff']
         usersDB.close()
@@ -734,7 +733,7 @@ def forum_pinned_posts_post(post_id):
     user_dict = {}
     db = shelve.open('forumdb', 'c')
     pinned_posts_dict = db['PinnedPosts']
-    userdb = shelve.open('account.db', 'r')
+    userdb = shelve.open('account', 'r')
     user_dict = userdb['Users']
     pinned_posts_list = []
     user_list = []
@@ -910,7 +909,7 @@ def forum_uhc_posts_post(post_id):
     uhc_dict = {}
     db = shelve.open('forumdb', 'c')
     uhc_dict = db['UHC']
-    userdb = shelve.open('account.db', 'r')
+    userdb = shelve.open('account', 'r')
     user_dict = userdb['Users']
     uhc_list = []
     user_list = []
@@ -1052,29 +1051,17 @@ def create_user():
     create_user_form = CreateUserForm(request.form)
     if request.method == "POST" and create_user_form.validate():
         users_dict = {}
-        db = shelve.open('account.db', 'c')
+        db = shelve.open('account', 'c')
         try:
             users_dict = db['Users']
         except:
-            print("Error in retrieving Users from account.db.")
+            print("Error in retrieving Users from account.")
 
         user = User(create_user_form.username.data, create_user_form.email.data, create_user_form.contact.data, create_user_form.gender.data,
                     create_user_form.password.data, create_user_form.confirm_password.data)
         user.set_date_time(user.get_date_time())
-
-        userCounter = []
-        if "UserCounter" not in db:
-            db["UserCounter"] = userCounter
-
-        userCounter = db["UserCounter"]
-        if len(userCounter) == 0:
-            userid_counter = 1
-        else:
-            userid_counter = userCounter[-1]
-            userid_counter += 1
-        userCounter.append(userid_counter)
-        db["UserCounter"] = userCounter
-        user.set_user_id(userid_counter)
+        user.set_user_id()
+        user.set_account_type()
 
         users_dict[user.get_user_id()] = user
         db['Users'] = users_dict
@@ -1091,7 +1078,7 @@ def create_user():
 def login():
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
-    db = shelve.open('account.db', 'r')
+    db = shelve.open('account', 'r')
     users_dict = db['Users']
     db.close()
 
@@ -1129,7 +1116,7 @@ def logout():
 @app.route('/retrieveusers')
 def retrieve_users():
     users_dict = {}
-    db = shelve.open('account.db', 'r')
+    db = shelve.open('account', 'r')
     users_dict = db['Users']
     db.close()
 
@@ -1146,7 +1133,7 @@ def update_user(id):
     update_user_form = CreateUserForm(request.form)
     if request.method == 'POST' and update_user_form.validate():
         users_dict = {}
-        db = shelve.open('account.db', 'c')
+        db = shelve.open('account', 'c')
         users_dict = db['Users']
 
         user = users_dict.get(id)
@@ -1164,7 +1151,7 @@ def update_user(id):
         return redirect(url_for('retrieve_users'))
     else:
         users_dict = {}
-        db = shelve.open('account.db', 'r')
+        db = shelve.open('account', 'r')
         users_dict = db['Users']
         db.close()
 
@@ -1182,7 +1169,7 @@ def update_user(id):
 @app.route('/deleteUser/<int:id>', methods=['POST'])
 def delete_user(id):
     users_dict = {}
-    db = shelve.open('account.db', 'w')
+    db = shelve.open('account', 'w')
     users_dict = db['Users']
 
     user = users_dict.pop(id)
@@ -1207,55 +1194,41 @@ def staff_home():
 
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
-    create_staff_form = CreateStaffForm(request.form)
-    if request.method == 'POST' and create_staff_form.validate():
-        staff_dict = {}
-        db = shelve.open('account.db', 'c')
-
+    create_user_form = CreateUserForm(request.form)
+    if request.method == "POST" and create_user_form.validate():
+        users_dict = {}
+        db = shelve.open('account', 'c')
         try:
-            staff_dict = db['Staff']
+            users_dict = db['Users']
         except:
-            print("Error in retrieving Staff from account.db.")
+            print("Error in retrieving Users from account.")
 
-        staff = Staff(create_staff_form.staff_username.data, create_staff_form.staff_email.data,
-                      create_staff_form.staff_gender.data, create_staff_form.staff_password.data,
-                      create_staff_form.staff_confirm_password.data)
-        staff.set_date_time(staff.get_date_time())
+        user = Staff(create_user_form.username.data, create_user_form.email.data, create_user_form.contact.data, create_user_form.gender.data,
+                    create_user_form.password.data, create_user_form.confirm_password.data)
+        user.set_date_time(user.get_date_time())
+        user.set_user_id()
+        user.set_account_type()
 
-        staffCounters = []
-        if "StaffCounter" not in db:
-            db["StaffCounter"] = staffCounters
-
-        staffCounters = db["StaffCounter"]
-        if len(staffCounters) == 0:
-            staff_id_count = 1
-        else:
-            staff_id_count = staffCounters[-1]
-            staff_id_count += 1
-        staffCounters.append(staff_id_count)
-        db["StaffCounter"] = staffCounters
-        staff.set_staff_id(staff_id_count)
-
-        staff_dict[staff.get_staff_id()] = staff
-        db['Staff'] = staff_dict
+        users_dict[user.get_user_id()] = user
+        db['Users'] = users_dict
 
         db.close()
 
-        session['staff_created'] = staff.get_staff_username()
+        session['user_created'] = user.get_username()
 
-        return redirect(url_for('staff_profile'))
-    return render_template('staff/AM/CreateStaffAccount.html', form=create_staff_form)
+        return redirect(url_for('profile'))
+    return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
 
 @app.route('/staff_login', methods=['GET', 'POST'])
 def staff_login():
-    create_stafflog_form = CreateStaffForm(request.form)
+    create_stafflog_form = CreateUserForm(request.form)
     staff_dict = {}
-    db = shelve.open('account.db', 'r')
+    db = shelve.open('account', 'r')
     staff_dict = db['Staff']
     db.close()
 
-    staffs_list = []
+    users_list = []
     for key in staff_dict:
         b = staff_dict[key]
         if b.get_staff_username() == create_stafflog_form.staff_username.data and b.get_staff_password() == create_stafflog_form.staff_password.data:
@@ -1293,24 +1266,24 @@ def account_management():
 @app.route("/retrievestaff")
 def retrieve_staff():
     staff_dict = {}
-    db = shelve.open('account.db', 'r')
-    staff_dict = db['Staff']
+    db = shelve.open('account', 'r')
+    staff_dict = db['Users']
     db.close()
 
-    staffs_list = []
+    users_list = []
     for key in staff_dict:
         staff = staff_dict.get(key)
-        staffs_list.append(staff)
+        users_list.append(staff)
 
-    return render_template('staff/AM/retrievestaff.html', count=len(staffs_list), staffs_list=staffs_list)
+    return render_template('staff/AM/retrievestaff.html', count=len(users_list), users_list=users_list)
 
 
 @app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
 def update_staff(id):
-    update_staff_form = CreateStaffForm(request.form)
+    update_staff_form = CreateUserForm(request.form)
     if request.method == 'POST' and update_staff_form.validate():
         staff_dict = {}
-        db = shelve.open('account.db', 'c')
+        db = shelve.open('account', 'c')
         staff_dict = db['Staff']
 
         staff = staff_dict.get(id)
@@ -1327,7 +1300,7 @@ def update_staff(id):
         return redirect(url_for('retrieve_staff'))
     else:
         staff_dict = {}
-        db = shelve.open('account.db', 'r')
+        db = shelve.open('account', 'r')
         staff_dict = db['Staff']
         db.close()
 
@@ -1344,7 +1317,7 @@ def update_staff(id):
 @app.route('/delete_staff/<int:id>', methods=['POST'])
 def delete_staff(id):
     staff_dict = {}
-    db = shelve.open('account.db', 'w')
+    db = shelve.open('account', 'w')
     staff_dict = db['Staff']
 
     staff = staff_dict.pop(id)
