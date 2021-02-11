@@ -1,32 +1,77 @@
 {% extends "staff/base.html" %}
 
-{% block title %}Unifieqd-Help Staff Profile{% endblock %}
+{% block title %}Unified-Help Staff Profile{% endblock %}
 
   {% block head %}
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
-   <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+   <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
   {% endblock %}
 
 <body>
   {% block content %}
-    <section class="hero is-success is-fullheight" style="background-color:white; text-align:center;">
-      <br><br><br>
-      <a href="{{url_for('staff_logout')}}"><button type="submit">Log Out</button></a></li>
-      <div class="hero-body">
-        <div class="container">
-          <img src="static/customer/img/customerProfile.png" style="width:300px; height:300px;">
-          <h1 class="title" style="color:black;">
-            {{username}}'s Profile
-          </h1>
-          <h1 class="title" style="color:black;">
-            Email: {{email}}
-          </h1>
-          <h1 class="title" style="color:black;">
-            Gender: {{gender}}
-          </h1>
+<div class="container emp-profile">
+            <form method="post">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-img">
+                            <img src="static/customer/img/customerProfile.png" alt="" width="300px;" height="300px;"/>
+                            <div class="file btn btn-lg">
+                                <input type="file" name="file"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h2>
+                                      {{ username }}
+                                    </h2>
+                                    <h3>
+                                        Unified Help Staff
+                                    </h3>
+                        </div>
+                      <br>
+                      <div class="col-md-6">
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Username</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{ username }}</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Gender</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{ gender }}</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Email</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{ email }}</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Phone</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{ contact }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </form>
         </div>
-      </div>
-    </section>
   {% endblock %}
 
 

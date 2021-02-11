@@ -1089,6 +1089,7 @@ def login():
             session["username"] = b.get_username()
             session["email"] = b.get_email()
             session["gender"] = b.get_gender()
+            session["contact"] = b.get_contact()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
             print(b.get_date_time())
@@ -1220,36 +1221,14 @@ def create_staff():
     return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
 
-@app.route('/staff_login', methods=['GET', 'POST'])
-def staff_login():
-    create_stafflog_form = CreateUserForm(request.form)
-    staff_dict = {}
-    db = shelve.open('account', 'r')
-    staff_dict = db['Staff']
-    db.close()
-
-    users_list = []
-    for key in staff_dict:
-        b = staff_dict[key]
-        if b.get_staff_username() == create_stafflog_form.staff_username.data and b.get_staff_password() == create_stafflog_form.staff_password.data:
-            session["username"] = b.get_staff_username()
-            session["email"] = b.get_email()
-            session["gender"] = b.get_gender()
-            session.permanent = True
-            app.permanent_session_lifetime = timedelta(hours=1)
-            print(b.get_date_time())
-            return redirect(url_for('staff_profile'))
-
-    return render_template('staff/AM/stafflogin.html')
-
-
 @app.route("/staffprofile")
 def staff_profile():
     if "username" in session:
         username = session["username"]
-        return render_template('staff/AM/staff_profile.html', username=username)
-    else:
-        return redirect(url_for('staff_login'))
+        email = session["email"]
+        gender = session["gender"]
+        contact = session["contact"]
+        return render_template('staff/AM/staff_profile.html', username=username, email=email, gender=gender, contact=contact)
 
 
 @app.route('/logout')
