@@ -1,0 +1,24 @@
+body{
+    font-family: 'Trebuchet MS',
+    'Lucida Sans Unicode', 'Lucida Grande',
+     'Lucida Sans', Arial, sans-serif;
+}
+.search-bar{
+  width: 200px;
+  margin-left: 68.5%;
+}
+.forum-cat-color{
+  background-color: #DB2C25;
+}
+table{
+  border-radius:6px;
+  table-layout: fixed;
+}
+.btn{
+  float: right;
+  margin-bottom: 10px;
+}
+.form-inline{
+  justify-content: center;
+}
+

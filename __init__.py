@@ -1200,8 +1200,11 @@ def login():
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
             print(b.get_date_time())
-            return redirect(url_for('profile'))
-
+            b.get_account_type()
+            if b.get_account_type() == "Customer":
+                return redirect(url_for('profile'))
+            else:
+                return redirect(url_for('home'))
     return render_template('customer/AM/login.html')
 
 @app.route('/profile')
