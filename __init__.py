@@ -664,6 +664,7 @@ def create_forum_post():
                 post = ForumUHCPostCounter()
                 post.set_post_id()
                 post.set_username(session_username)
+                post.set_upvote(0)
                 post.set_category('Unified Help Community')
                 post.set_post_subject(create_forum_post_form.post_subject.data)
                 post.set_post_message(create_forum_post_form.post_message.data)
@@ -676,6 +677,7 @@ def create_forum_post():
                 post = ForumPinnedPostsCounter()
                 post.set_post_id()
                 post.set_username(session_username)
+                post.set_upvote(0)
                 post.set_category("Pinned Posts")
                 post.set_post_subject(create_forum_post_form.post_subject.data)
                 post.set_post_message(create_forum_post_form.post_message.data)
@@ -763,6 +765,7 @@ def forum_pinned_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -776,6 +779,7 @@ def forum_pinned_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -788,6 +792,7 @@ def forum_pinned_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -801,6 +806,7 @@ def forum_pinned_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -948,6 +954,7 @@ def forum_uhc_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -961,6 +968,7 @@ def forum_uhc_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -973,6 +981,7 @@ def forum_uhc_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -986,6 +995,7 @@ def forum_uhc_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
+                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -1068,7 +1078,79 @@ def uhc_delete_reply(post_id, reply_id):
 
     return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
+@app.route("/upvote", methods= ['POST'])
+def upvote():
+    upvote = request.form["upvote"]
+    upvote = int(upvote)
+    category = request.form["category"]
+    if category == "1":
+        pinned_post_dict = {}
+        db = shelve.open('forumdb', 'c')
+        pinned_post_dict = db['PinnedPosts']
 
+        post_id = request.form["post_id"]
+        post_id = int(post_id)
+        for post in pinned_post_dict:
+            if post == post_id:
+                pinned_post_dict[post].set_upvote(upvote)
+        db['PinnedPosts'] = pinned_post_dict
+        db.close()
+        return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
+    elif category == "2":
+        uhc_dict = {}
+        db = shelve.open('forumdb', 'c')
+        uhc_dict = db['UHC']
+
+        post_id = request.form["post_id"]
+        post_id = int(post_id)
+        for post in uhc_dict:
+            if post == post_id:
+                uhc_dict[post].set_upvote(upvote)
+        db['UHC'] = uhc_dict
+        db.close()
+        return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
+
+@app.route("/reply_upvote", methods= ['POST'])
+def reply_upvote():
+
+    # {5: {1: <Forum.ForumPinnedPostsCounter object at 0x0000027F274C21C0>, 2: <Forum.ForumPinnedPostsCounter object at 0x0000027F283B66D0>}}
+    upvote = request.form["upvote"]
+    upvote = int(upvote)
+    category = request.form["category"]
+    if category == "1":
+        pinned_post_reply_dict = {}
+        db = shelve.open('forumdb', 'c')
+        pinned_post_reply_dict = db['PinnedPostsPostReply']
+
+        post_id = request.form["post_id"]
+        post_id = int(post_id)
+        reply_id = request.form["reply_id"]
+        reply_id = int(reply_id)
+        for post in pinned_post_reply_dict:
+            if post == post_id:
+                reply_dict = pinned_post_reply_dict[post]
+                for reply in reply_dict:
+                    if reply == reply_id:
+                        print('random')
+                        reply_dict[reply].set_upvote(upvote)
+                        print(reply_dict[reply].get_upvote())
+        db['PinnedPostsPostReply'] = pinned_post_reply_dict
+        db.close()
+        return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
+    elif category == "2":
+        uhc_dict = {}
+        db = shelve.open('forumdb', 'c')
+        uhc_dict = db['UHC']
+
+        post_id = request.form["post_id"]
+        post_id = int(post_id)
+        for post in uhc_dict:
+            if post == post_id:
+                for key in uhc_dict[post_id]:
+                    print(key)
+        db['UHC'] = uhc_dict
+        db.close()
+        return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 # Account Management
 
 @app.route('/createUser', methods=['GET', 'POST'])

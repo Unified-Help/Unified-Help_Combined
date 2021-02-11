@@ -13,8 +13,8 @@ class ForumPost:
         self.__post_message = ''
         self.__reply_message = ''
         self.__reply_category = ''
-        self.__upvotes = 0
-        self.__downvotes = 0
+        self.__upvote = 0
+        self.__downvote = 0
         self.__edited = False
         self.__datetime = datetime.now()
         self.__reply_count = 0
@@ -38,10 +38,10 @@ class ForumPost:
     def set_reply_category(self,reply_category):
         self.__reply_category = reply_category
 
-    def set_upvotes(self, upvotes):
+    def set_upvote(self, upvotes):
         self.__upvotes = upvotes
 
-    def set_downvotes(self, downvotes):
+    def set_downvote(self, downvotes):
         self.__downvotes = downvotes
 
     def set_edited(self):
@@ -73,10 +73,10 @@ class ForumPost:
     def get_reply_category(self):
         return self.__reply_category
 
-    def get_upvotes(self):
+    def get_upvote(self):
         return self.__upvotes
 
-    def get_downvotes(self):
+    def get_downvote(self):
         return self.__downvotes
 
     def get_edited(self):

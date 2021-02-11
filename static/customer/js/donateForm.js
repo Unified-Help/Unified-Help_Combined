@@ -82,3 +82,50 @@ $(document).ready(function() {
   })
 
 });
+
+
+function reply_upvote(upvote,post_id,category,reply_id) {
+            upvote += 1
+            console.log(upvote)
+              $.ajax({
+                  url: "/reply/upvote",
+                  type: "POST",
+                  data:{
+                          upvote : upvote,
+                          post_id : post_id,
+                          category : category,
+                          reply_id : reply_id
+                          } ,
+                  success: function(){
+                          update()
+                  },
+                  error: function (xhr) {
+                      alert('error');
+                  }
+              })
+              return false;
+          }
+
+          function upvote(upvote,post_id,category) {
+            upvote += 1
+              $.ajax({
+              url: "/upvote",
+              type: "POST",
+              data:{
+                      upvote : upvote,
+                      post_id : post_id,
+                      category : category
+                      } ,
+              success: function(){
+                      update()
+              },
+              error: function (xhr) {
+                  alert('error');
+              }
+          })
+          return false;
+          }
+
+          function update(){
+              $("#forum").load(location.href + " #forum");
+          }

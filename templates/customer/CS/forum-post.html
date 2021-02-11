@@ -4,14 +4,42 @@
 {% block head %}
     <link href="{{url_for('static', filename = 'customer/css/style-forum.css')}}" rel="stylesheet">
     <script src="https://kit.fontawesome.com/b1681f8635.js" crossorigin="anonymous"></script>
+
   {% endblock %}
 
 <body>
+
   {% block content %}
+  <script>
+
+          function upvote(upvote,post_id,category) {
+            upvote += 1
+              $.ajax({
+              url: "/upvote",
+              type: "POST",
+              data:{
+                      upvote : upvote,
+                      post_id : post_id,
+                      category : category
+                      } ,
+              success: function(){
+                      update()
+              },
+              error: function (xhr) {
+                  alert('error');
+              }
+          })
+          return false;
+          }
+
+          function update(){
+              $("#forum").load(location.href + " #forum");
+          }
+</script>
   {% from "customer/includes/_formHelper.html" import render_field %}
   <br/><br/><br/><br/>
   <main>
-    <div class="container my-3">
+    <div class="container my-3" id="forum">
       {% for post in post_list %}
       <nav class="breadcrumb">
         <a href="{{url_for('forum')}}" class="breadcrumb-item" style="text-decoration: none">Unified Help Forum</a>
@@ -99,10 +127,12 @@
                   {% endif %}
                   {% endif %}
                   {% endfor %}
-                  <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
-                  <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
+                  {% if post.get_category() == 'Pinned Posts' %}
+                  <button class="fas fa-arrow-up" style="width:30px;height:30px;" onclick="upvote({{post.get_upvote()}}, {{post.get_post_id()}}, 1)"></button>&nbsp;{{post.get_upvote()}}
+                  {% elif post.get_category() == 'Unified Help Community' %}
+                  <button class="fas fa-arrow-up"   style="width:30px;height:30px;" onclick="upvote({{post.get_upvote()}}, {{post.get_post_id()}}, 2)"></button>&nbsp;{{post.get_upvote()}}
+                  {% endif %}
               </tr>
-              {% endfor %}
             </tbody>
           </table>
           {% for reply in reply_list %}
@@ -130,6 +160,8 @@
               </tr>
               <tr>
                 <td colspan="2" style="background-color:#ffffff">
+                  <button class="fas fa-arrow-up" style="width:30px;height:30px;" onclick="reply_upvote({{post.get_upvote()}}, {{post.get_post_id()}}, 1, {{reply.get_post_reply_id()}})"></button>&nbsp;{{reply.get_upvote()}}
+
                   {% for user in user_list %}
                   {% if session['username'] == user.get_username() %}
                   {% if session['username'] == reply.get_username()  or user.get_account_type() == "Staff" %}
@@ -174,8 +206,10 @@
                         </div>
                       </div>
                     </div>
+
                 </td>
               </tr>
+
             </tbody>
           </table>
           {% endfor %}
@@ -191,6 +225,7 @@
             <button type="reset" class="btn btn-danger float-left" style>Reset</button>
       </form>
       {% endif %}
+      {% endfor %}
 <!--      <div class="mb-3 clearfix">-->
 <!--        <nav aria-label="Navigate post pages" class="float-lg-right">-->
 <!--          <ul class="pagination pagination-sm mb-lg-0">-->
@@ -210,6 +245,28 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>function reply_upvote(upvote,post_id,category,reply_id) {
+            upvote += 1
+            console.log(upvote)
+              $.ajax({
+                  url: "/reply_upvote",
+                  type: "POST",
+                  data:{
+                          upvote : upvote,
+                          post_id : post_id,
+                          category : category,
+                          reply_id : reply_id
+                          } ,
+                  success: function(){
+                          update()
+                  },
+                  error: function (xhr) {
+                      alert('error');
+                  }
+              })
+              return false;
+          }
+</script>
   </main>
   <!-- End #main -->
   {% endblock %}
