@@ -35,7 +35,7 @@
             {%- if loop.index > 3 %}{% break %}{% endif %}
             <tr>
               <td>
-                <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_pinned_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }} #{{ post.get_post_id() }}</a></h3>
+                <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_pinned_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
               </td>
               <td>
                 <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
@@ -59,7 +59,7 @@
             {%- if loop.index > 3 %}{% break %}{% endif %}
           <tr>
             <td>
-              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}  #{{ post.get_post_id() }}</a></h3>
+              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
             </td>
             <td>
               <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>

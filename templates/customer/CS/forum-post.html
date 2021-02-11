@@ -134,12 +134,11 @@
                   {% if session['username'] == user.get_username() %}
                   {% if session['username'] == reply.get_username()  or user.get_account_type() == "Staff" %}
                   <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_post_reply_{{reply.get_post_reply_id()}}"></i>
-                  <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
-                  <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
                   {% endif %}
                   {% endif %}
                   {% endfor %}
-
+                  <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
+                  <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
                   <!-- Post Reply Modal -->
                     <div class="modal" id="myModal_post_reply_{{reply.get_post_reply_id()}}">
                       <div class="modal-dialog">
