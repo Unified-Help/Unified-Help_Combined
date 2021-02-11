@@ -1188,7 +1188,7 @@ def delete_user(id):
 
 @app.route('/staff_home')
 def staff_home():
-    return render_template('staff/home.html', user_name="General Kenobi")
+    return render_template('staff/home.html')
 
 
 # ------------ Account Management ------------ #
@@ -1255,58 +1255,6 @@ def retrieve_staff():
         users_list.append(staff)
 
     return render_template('staff/AM/retrievestaff.html', count=len(users_list), users_list=users_list)
-
-
-@app.route('/updateStaff/<int:id>/', methods=['GET', 'POST'])
-def update_staff(id):
-    update_staff_form = CreateUserForm(request.form)
-    if request.method == 'POST' and update_staff_form.validate():
-        staff_dict = {}
-        db = shelve.open('account', 'c')
-        staff_dict = db['Staff']
-
-        staff = staff_dict.get(id)
-        staff.set_staff_username(update_staff_form.staff_username.data)
-        staff.set_email(update_staff_form.staff_email.data)
-        staff.set_gender(update_staff_form.staff_gender.data)
-        staff.set_staff_password(update_staff_form.staff_password.data)
-
-        db['Staff'] = staff_dict
-        db.close()
-
-        session['staff_updated'] = staff.get_username()
-
-        return redirect(url_for('retrieve_staff'))
-    else:
-        staff_dict = {}
-        db = shelve.open('account', 'r')
-        staff_dict = db['Staff']
-        db.close()
-
-        staff = staff_dict.get(id)
-        update_staff_form.staff_username.data = staff.get_staff_username()
-        update_staff_form.staff_email.data = staff.get_email()
-        update_staff_form.staff_gender.data = staff.get_gender()
-        update_staff_form.staff_password.data = staff.get_staff_password()
-        update_staff_form.staff_confirm_password.data = staff.get_confirm_password()
-
-        return render_template('staff/AM/updateStaff.html', form=update_staff_form)
-
-
-@app.route('/delete_staff/<int:id>', methods=['POST'])
-def delete_staff(id):
-    staff_dict = {}
-    db = shelve.open('account', 'w')
-    staff_dict = db['Staff']
-
-    staff = staff_dict.pop(id)
-
-    db['Staff'] = staff_dict
-    db.close()
-
-    session['staff_deleted'] = staff.get_staff_username()
-
-    return redirect(url_for('retrieve_staff'))
 
 
 # ------------ Transaction Processing ------------ #

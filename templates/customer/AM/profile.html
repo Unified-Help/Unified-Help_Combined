@@ -22,11 +22,14 @@
           <h1 class="title" style="color:black;">
             Gender: {{gender}}
           </h1>
-          <a href="/updateUser" class="btn btn-warning">Update</a>
+          <form method="POST" action=""><a href="updateUser" class="btn btn-warning">Update</a></form>
         </div>
       </div>
     </section>
-  {% endblock %}
+{% endblock %}
 
+<!-- Link any js files here -->
+{% block script %}
+{% endblock %}
 
 </body>
