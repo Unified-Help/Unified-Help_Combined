@@ -18,21 +18,22 @@
     <div class="container my-3">
       <nav class="breadcrumb">
         <a href="{{url_for('forum')}}" class="breadcrumb-item" style="text-decoration: none">Unified Help Forum</a>
-<!--        {% if category == 'Pinned Posts' %}-->
-<!--        <a href="{{ url_for('forum_pinned_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>-->
-<!--        {% elif category == 'Unified Help Community' %}-->
-<!--        <a href="{{ url_for('forum_uhc_posts') }}" class="breadcrumb-item" style="text-decoration: none">{{ category }} Overview</a>-->
-<!--        {% endif %}-->
         <span class="breadcrumb-item active">Create new topic</span>
       </nav>
 
       <div class="row">
         <div class="col-12">
           <h2 class="h4 text-white forum-cat-color mb-3 p-4 rounded">Create new topic</h2>
+          <br>
           <h5>Username: {{session_username}}</h5>
-
-          <h5>Category: Unified Help Community</h5>
+          <br>
           <form class="mb-3" method="POST" action="">
+            {% for user in usersList %}
+            {% if user.get_username() == session['username'] %}
+            {% if user.get_account_type() == "Customer" %}
+            <div class="form-group">
+              {{ render_field(form.category, class="form-control") }}
+            </div>
             <div class="form-group">
               {{ render_field(form.post_subject, class="form-control") }}
             </div>
@@ -41,8 +42,24 @@
             </div>
             <input class="btn float-right" type="submit" value="Submit" style="background-color: #008080;color: #ffffff">
             <button type="reset" class="btn btn-danger float-left" style>Reset</button>
-          </form>
 
+            {% elif user.get_account_type() == "Staff" %}
+            <div class="form-group">
+              {{ render_field(form.category_staff, class="form-control") }}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.post_subject, class="form-control") }}
+            </div>
+            <div class="form-group">
+              {{ render_field(form.post_message, class="form-control") }}
+            </div>
+            <input class="btn float-right" type="submit" value="Submit" style="background-color: #008080;color: #ffffff">
+            <button type="reset" class="btn btn-danger float-left" style>Reset</button>
+
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+          </form>
         </div>
       </div>
     </div>

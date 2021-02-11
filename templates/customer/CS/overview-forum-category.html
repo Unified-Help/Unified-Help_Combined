@@ -13,7 +13,15 @@
           <a href="{{url_for('forum')}}" class="breadcrumb-item" style="text-decoration: none">Unified Help Forum</a>
           <span class="breadcrumb-item active">{{ category }} Overview</span>
       </nav>
-      {% if category == 'Unified Help Community' %}
+      {% if category == "Pinned Posts" %}
+      {% for user in usersList %}
+      {% if user.get_username() == session['username'] %}
+      {% if user.get_account_type() == 'Staff' %}
+      <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+      {% elif category == "Unified Help Community" %}
       <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
       {% endif %}
       <br/><br/>
@@ -23,10 +31,8 @@
           <table class="table table-bordered table-responsive-lg">
             <thead class="thead-light">
             <tr>
-              <th scope="col" style="width: 400px;text-align: center; margin:auto;">Topics</th>
+              <th scope="col" style="width: 350px;text-align: center; margin:auto;">Topics</th>
               <th scope="col" style="width: 100px;text-align: center; margin:auto;">Created</th>
-              <th scope="col" style="width: 50px;text-align: center; margin:auto;">Replies</th>
-              <th scope="col" style="width: 100px;text-align: center; margin:auto;">Last Post</th>
             </tr>
             </thead>
             <tbody>
@@ -40,17 +46,7 @@
                 {% endif %}
               </td>
               <td>
-                <p>by {{ post.get_username() }}</p>
-              </td>
-              <td>
-                {% if category == 'Pinned Posts' %}
-                <p style="padding-left: 30px">{{lenOfPinnedPost}}</p>
-                {% elif category == 'Unified Help Community' %}
-                <p style="padding-left: 30px">{{lenOfUHCPost}}</p>
-                {% endif %}
-              </td>
-              <td>
-                <p>by {{ post.get_username() }}</p>
+                <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
               </td>
             </tr>
             {% endfor %}

@@ -26,10 +26,8 @@
           <table class="table table-bordered table-responsive">
             <thead class="thead-light">
             <tr>
-              <th scope="col" style="width: 620px;text-align: center; margin:auto;">Topics</th>
-              <th scope="col" style="width: 200px;text-align: center; margin:auto;">Created</th>
-              <th scope="col" style="width: 100px;text-align: center; margin:auto;">Replies</th>
-              <th scope="col" style="width: 200px;text-align: center; margin:auto;">Last Post</th>
+              <th scope="col" style="width: 1000px;text-align: center; margin:auto;">Topics</th>
+              <th scope="col" style="width: 250px;text-align: center; margin:auto;">Created</th>
             </tr>
             </thead>
             <tbody>
@@ -40,13 +38,7 @@
                 <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_pinned_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }} #{{ post.get_post_id() }}</a></h3>
               </td>
               <td>
-                <p>by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
-              </td>
-              <td>
-                <p style="padding-left: 30px">{{lenOfPinnedPost}}</p>
-              </td>
-              <td>
-                <p>by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
+                <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
               </td>
             </tr>
             {% endfor %}
@@ -58,10 +50,8 @@
         <table class="table table-bordered table-responsive">
           <thead class="thead-light">
             <tr>
-              <th scope="col" style="width: 620px;text-align: center; margin:auto;">Topics</th>
-              <th scope="col" style="width: 200px;text-align: center; margin:auto;">Created</th>
-              <th scope="col" style="width: 100px;text-align: center; margin:auto;">Replies</th>
-              <th scope="col" style="width: 200px;text-align: center; margin:auto;">Last Post</th>
+              <th scope="col" style="width: 1000px;text-align: center; margin:auto;">Topics</th>
+              <th scope="col" style="width: 250px;text-align: center; margin:auto;">Created</th>
             </tr>
           </thead>
           <tbody>
@@ -72,13 +62,7 @@
               <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}  #{{ post.get_post_id() }}</a></h3>
             </td>
             <td>
-              <p>by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
-            </td>
-            <td>
-              <p style="padding-left: 30px">{{lenOfUHCPost}}</p>
-            </td>
-            <td>
-              <p>by {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
+              <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
             </td>
           </tr>
           {% endfor %}

@@ -35,10 +35,10 @@
             <tbody>
               <tr>
                 <td class="author-col">
-                  <div>by {{post.get_username()}}</div>
+                  <div>by <span style="color: red;font-weight:bold">{{post.get_username()}}</span></div>
                 </td>
                 <td class="post-col d-lg-flex justify-content-lg-between">
-                  <div><span class="font-weight-bold">Post subject:</span> {{post.get_post_subject()}}</div>
+                  <div><span class="font-weight-bold">Post subject:</span> <span style="color: red;font-weight:bold">{{post.get_post_subject()}}</span></div>
                   <div class="float-right"><span class="font-weight-bold">Posted:</span> {{post.get_date_time()}}</div>
                 </td>
               </tr>
@@ -46,6 +46,7 @@
                 <td>
                   {% for user in user_list %}
                   {% if user.get_username() == post.get_username() %}
+                  <p>Account Type: <span style="color: red;font-weight:bold">{{ user.get_account_type() }}</span></p>
                   <div><span class="font-weight-bold">Joined:</span><br>{{user.get_date_time()}}</div>
                   {% endif %}
                   {% endfor %}
@@ -61,22 +62,21 @@
               </tr>
               <tr>
                 <td colspan="2" style="background-color:#ffffff">
-
-                  {% if session['username'] == post.get_username() %}
+                  {% for user in user_list %}
+                  {% if session['username'] == user.get_username() %}
+                  {% if session['username'] == post.get_username()  or user.get_account_type() == "Staff" %}
                   <a href="{{ url_for('forum_pinned_posts_post_update', post_id = post.get_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px"></i></a>
                   <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_post_id()}}" style="padding-left:30px;"></i>
-                  {% endif %}
+
                   <!-- The Modal -->
                     <div class="modal" id="myModal_{{post.get_post_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content">
-
                           <!-- Modal Header -->
                           <div class="modal-header">
                             <h4 class="modal-title">Delete Confirmation</h4>
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                           </div>
-
                           <!-- Modal body -->
                           <div class="modal-body">
                             Are you sure you want to delete "{{post.get_post_subject()}}"?
@@ -96,14 +96,13 @@
                         </div>
                       </div>
                     </div>
-                  {% if session['username'] == post.get_username %}
-                  <a href="{{ url_for('forum_uhc_post_update', post_id = post.get_post_id() ) }}"><i class="far fa-edit fa-lg float-left" style="padding-left: 5px;"></i></a>
-                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{post.get_post_id()}}" style="padding-left:30px;"></i>
                   {% endif %}
+                  {% endif %}
+                  {% endfor %}
                   <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
                   <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
               </tr>
-            {% endfor %}
+              {% endfor %}
             </tbody>
           </table>
           {% for reply in reply_list %}
@@ -111,7 +110,7 @@
             <tbody>
               <tr>
                 <td style="width: 200px">
-                  <div>by {{ reply.get_username() }}</div>
+                  <div>by <span style="color: red;font-weight:bold">{{ reply.get_username() }}</span></div>
                 </td>
                 <td class="justify-content-lg-between" style="width: 800px">
                   <div class="float-right"><span class="font-weight-bold">Posted:</span> {{ reply.get_date_time() }}</div>
@@ -126,19 +125,23 @@
                   {% endfor %}
                 </td>
                 <td>
-                  <p>{{ reply.get_reply_message() }}</p>
+                  <p>{{ ('\n' ~ reply.get_reply_message()) | wordwrap(118) }}</p>
                 </td>
               </tr>
               <tr>
                 <td colspan="2" style="background-color:#ffffff">
-                  {% if session['username'] == reply.get_username() %}
-                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_{{reply.get_post_reply_id()}}"></i>
+                  {% for user in user_list %}
+                  {% if session['username'] == user.get_username() %}
+                  {% if session['username'] == reply.get_username()  or user.get_account_type() == "Staff" %}
+                  <i class="border-0 bg-white float-left far fa-trash-alt fa-lg" aria-hidden="true" data-toggle="modal" data-target="#myModal_post_reply_{{reply.get_post_reply_id()}}"></i>
                   <i class="fas fa-arrow-alt-circle-down float-right fa-lg"></i>
                   <i class="fas fa-arrow-alt-circle-up float-right fa-lg">&nbsp&nbsp&nbsp&nbsp</i></td>
                   {% endif %}
-                  {% if reply.get_reply_category() == 'Pinned Posts' %}
+                  {% endif %}
+                  {% endfor %}
+
                   <!-- Post Reply Modal -->
-                    <div class="modal" id="myModal_{{reply.get_post_reply_id()}}">
+                    <div class="modal" id="myModal_post_reply_{{reply.get_post_reply_id()}}">
                       <div class="modal-dialog">
                         <div class="modal-content">
 
@@ -153,6 +156,7 @@
                             Are you sure you want to delete reply?
                           </div>
 
+                          {% if reply.get_reply_category() == 'Pinned Posts' %}
                           <!-- Post Reply Modal footer -->
                           <div class="modal-footer">
                             <form action="/forum/pinned_posts/delete/{{post_id}}/delete_reply/{{ reply.get_post_reply_id()}}" method="POST">
@@ -160,10 +164,17 @@
                             </form>
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                           </div>
+                          {% elif reply.get_reply_category() == 'Unified Help Community' %}
+                          <div class="modal-footer">
+                            <form action="/forum/uhc/delete/{{post_id}}/delete_reply/{{ reply.get_post_reply_id()}}" method="POST">
+                              <input class="btn btn-danger" type="submit" value="Delete">
+                            </form>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          </div>
+                          {% endif %}
                         </div>
                       </div>
                     </div>
-                  {% endif %}
                 </td>
               </tr>
             </tbody>
