@@ -1537,7 +1537,7 @@ def dashboard():
 
     now = datetime.datetime.now()
 
-    return render_template('staff/RG/dashboard.html')
+    return render_template('staff/RG/dashboard.html', total_month=total_month)
 
 
 @app.route("/cost_analysis")
@@ -1770,7 +1770,7 @@ def cost_analysis():
             data = [cc.get_month(), int(cc.get_water()), int(cc.get_electricity()), int(cc.get_total())]
             uc_chart_data_5.append(data)
 
-    return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
+    return render_template('staff/RG/cost_analysis.html',cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
                            cc_data2=cc_chart_data_3,
                            isc_data=isc_chart_data_1, isc_data1=isc_chart_data_2, isc_data2=isc_chart_data_3,
                            cap_data=cap_chart_data_1, cap_data1=cap_chart_data_2, cap_data2=cap_chart_data_3,
