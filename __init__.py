@@ -1147,6 +1147,7 @@ def reply_upvote():
         db['UHC'] = uhc_dict
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
+
 # Account Management
 
 @app.route('/createUser', methods=['GET', 'POST'])
@@ -1250,6 +1251,8 @@ def update_profile():
         user.set_username(update_profile_form.username.data)
         user.set_email(update_profile_form.email.data)
         user.set_contact(update_profile_form.contact.data)
+        user.set_password(update_profile_form.password.data)
+        user.set_confirm_password(update_profile_form.confirm_password.data)
 
         db['Users'] = users_dict
         db.close()
@@ -1361,9 +1364,10 @@ def staff_profile():
     if "username" in session:
         username = session["username"]
         email = session["email"]
-        gender = session["gender"]
         contact = session["contact"]
-        return render_template('staff/AM/staff_profile.html', username=username, email=email, gender=gender, contact=contact)
+        return render_template('staff/AM/staff_profile.html', username=username, email=email, contact=contact)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/logout')

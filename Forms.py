@@ -10,13 +10,6 @@ class CreateUserForm(Form):
     password = PasswordField('Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
 
-class CreateStaffForm(Form):
-    staff_username = StringField('Username', validators=[DataRequired(), Length(min=2, max=25)])
-    staff_email = StringField('Email', validators=[DataRequired(), Email()])
-    staff_gender = SelectField('Gender', [validators.DataRequired()], choices=[('', 'Select'), ('F', 'Female'), ('M', 'Male')], default='')
-    staff_password = PasswordField('Password', validators=[DataRequired()])
-    staff_confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('staff_password')])
-
 class LoginForm(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
