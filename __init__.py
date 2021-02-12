@@ -335,7 +335,6 @@ def donate_Item():
 
             now = datetime.datetime.now()
 
-
             donor = DonateItem(donate_item.donateToWho.data, donate_item.itemType.data, donate_item.itemName.data,
                                donate_item.itemWeight.data, donate_item.itemHeight.data, donate_item.itemLength.data,
                                donate_item.itemWidth.data, donate_item.collectionType.data,
@@ -626,7 +625,9 @@ def forum():
         post = users_dict.get(key)
         usersList.append(post)
     usersDB.close()
-    return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, uhc_list=uhc_list, usersList=usersList)
+    return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, uhc_list=uhc_list,
+                           usersList=usersList)
+
 
 @app.route("/forum/createforumpost", methods=['GET', 'POST'])
 def create_forum_post():
@@ -684,7 +685,8 @@ def create_forum_post():
                 return redirect(url_for('forum_pinned_posts'))
 
     return render_template('customer/CS/createForumPost.html', form=create_forum_post_form,
-                           session_username=session_username,usersList=usersList)
+                           session_username=session_username, usersList=usersList)
+
 
 ROWS_PER_PAGE = 10
 
@@ -710,7 +712,8 @@ def forum_pinned_posts():
     for key in users_dict:
         post = users_dict.get(key)
         usersList.append(post)
-    return render_template('customer/CS/overview-forum-category.html', list=pinned_posts_list, usersList=usersList, category=category, lenOfPinnedPost=lenOfPinnedPost)
+    return render_template('customer/CS/overview-forum-category.html', list=pinned_posts_list, usersList=usersList,
+                           category=category, lenOfPinnedPost=lenOfPinnedPost)
 
 
 # Specific Forum Post ID - UHC
@@ -743,7 +746,6 @@ def forum_pinned_posts_post(post_id):
         for tag in reply_dict:
             reply = reply_dict.get(tag)
             post_reply_retrieve_list.append(reply)
-
 
     reply_post_form = ForumPostReply(request.form)
     if request.method == 'POST' and reply_post_form.validate():
@@ -815,7 +817,9 @@ def forum_pinned_posts_post(post_id):
 
     post_id = post_id
     return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list,
-                           user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list, post_id=post_id)
+                           user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list,
+                           post_id=post_id)
+
 
 @app.route("/forum/pinned_posts/update/<int:post_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post_update(post_id):
@@ -844,6 +848,7 @@ def forum_pinned_posts_post_update(post_id):
         return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update,
                                list=pinned_posts_list)
 
+
 @app.route('/forum/pinned_posts/delete/<int:post_id>', methods=['GET', 'POST'])
 def forum_pinned_posts_post_delete(post_id):
     pinned_posts_dict = {}
@@ -863,6 +868,7 @@ def forum_pinned_posts_post_delete(post_id):
 
     return redirect(url_for('forum_pinned_posts'))
 
+
 # Pinned Post Reply Deletion
 @app.route("/forum/pinned_posts/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
 def pinned_post_delete_reply(post_id, reply_id):
@@ -879,7 +885,6 @@ def pinned_post_delete_reply(post_id, reply_id):
 
     reply_dict[post_id] = id_dict
     db['PinnedPostsPostReply'] = reply_dict
-
 
     db.close()
 
@@ -899,7 +904,8 @@ def forum_uhc_posts():
         uhc_list.append(post)
     lenOfUHCPost = len(uhc_list)
     category = uhc_list[0].get_category()
-    return render_template('customer/CS/overview-forum-category.html', list=uhc_list, category=category, lenOfUHCPost=lenOfUHCPost)
+    return render_template('customer/CS/overview-forum-category.html', list=uhc_list, category=category,
+                           lenOfUHCPost=lenOfUHCPost)
 
 
 # Specific Forum Post ID - UHC
@@ -914,7 +920,6 @@ def forum_uhc_posts_post(post_id):
     user_dict = userdb['Users']
     uhc_list = []
     user_list = []
-
 
     post = uhc_dict.get(post_id)
     uhc_list.append(post)
@@ -932,7 +937,6 @@ def forum_uhc_posts_post(post_id):
         for tag in reply_dict:
             reply = reply_dict.get(tag)
             post_reply_retrieve_list.append(reply)
-
 
     reply_post_form = ForumPostReply(request.form)
     if request.method == 'POST' and reply_post_form.validate():
@@ -1004,7 +1008,9 @@ def forum_uhc_posts_post(post_id):
 
     post_id = post_id
     return render_template('customer/CS/forum-post.html', post_list=uhc_list,
-                           user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list, post_id=post_id)
+                           user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list,
+                           post_id=post_id)
+
 
 @app.route("/forum/uhc/update/<int:post_id>", methods=['GET', 'POST'])
 def forum_uhc_post_update(post_id):
@@ -1041,11 +1047,9 @@ def forum_uhc_post_delete(post_id):
     db = shelve.open('forumdb', 'w')
     uhc_dict = db['UHC']
 
-
     uhc_dict.pop(post_id)
 
     db['UHC'] = uhc_dict
-
 
     reply_dict = db['UHCPostsPostReply']
     if post_id in reply_dict:
@@ -1053,6 +1057,7 @@ def forum_uhc_post_delete(post_id):
         db['UHCPostsPostReply'] = reply_dict
     db.close()
     return redirect(url_for('forum_uhc_posts'))
+
 
 # Pinned Post Reply Deletion
 @app.route("/forum/uhc/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
@@ -1074,7 +1079,8 @@ def uhc_delete_reply(post_id, reply_id):
 
     return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
-@app.route("/upvote", methods= ['POST'])
+
+@app.route("/upvote", methods=['POST'])
 def upvote():
     upvote = request.form["upvote"]
     upvote = int(upvote)
@@ -1106,9 +1112,9 @@ def upvote():
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
-@app.route("/reply_upvote", methods= ['POST'])
-def reply_upvote():
 
+@app.route("/reply_upvote", methods=['POST'])
+def reply_upvote():
     # {5: {1: <Forum.ForumPinnedPostsCounter object at 0x0000027F274C21C0>, 2: <Forum.ForumPinnedPostsCounter object at 0x0000027F283B66D0>}}
     upvote = request.form["upvote"]
     upvote = int(upvote)
@@ -1148,6 +1154,7 @@ def reply_upvote():
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
+
 # Account Management
 
 @app.route('/createUser', methods=['GET', 'POST'])
@@ -1161,7 +1168,8 @@ def create_user():
         except:
             print("Error in retrieving Users from account.")
 
-        user = User(create_user_form.username.data, create_user_form.email.data, create_user_form.contact.data, create_user_form.gender.data,
+        user = User(create_user_form.username.data, create_user_form.email.data, create_user_form.contact.data,
+                    create_user_form.gender.data,
                     create_user_form.password.data, create_user_form.confirm_password.data)
         user.set_date_time(user.get_date_time())
         user.set_user_id()
@@ -1205,6 +1213,7 @@ def login():
                 return redirect(url_for('staff_home'))
     return render_template('customer/AM/login.html')
 
+
 @app.route('/profile')
 def profile():
     if "username" in session:
@@ -1212,7 +1221,8 @@ def profile():
         email = session["email"]
         contact = session["contact"]
         password = session["password"]
-        return render_template('customer/AM/profile.html', username=username, email=email, contact=contact, password=password)
+        return render_template('customer/AM/profile.html', username=username, email=email, contact=contact,
+                               password=password)
     else:
         return redirect(url_for('login'))
 
@@ -1237,6 +1247,7 @@ def retrieve_users():
 
     return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
 
+
 @app.route('/updateProfile', methods=['GET', 'POST'])
 def update_profile():
     update_profile_form = CreateUserForm(request.form)
@@ -1260,7 +1271,6 @@ def update_profile():
         session["email"] = update_profile_form.email.data
         session["contact"] = update_profile_form.contact.data
         session.permanent = True
-
 
         session['user_updated'] = user.get_username()
         return redirect(url_for('profile'))
@@ -1342,8 +1352,9 @@ def create_staff():
         except:
             print("Error in retrieving Users from account.")
 
-        user = Staff(create_user_form.username.data, create_user_form.email.data, create_user_form.contact.data, create_user_form.gender.data,
-                    create_user_form.password.data, create_user_form.confirm_password.data)
+        user = Staff(create_user_form.username.data, create_user_form.email.data, create_user_form.contact.data,
+                     create_user_form.gender.data,
+                     create_user_form.password.data, create_user_form.confirm_password.data)
         user.set_date_time(user.get_date_time())
         user.set_user_id()
         user.set_account_type()
@@ -1770,7 +1781,7 @@ def cost_analysis():
             data = [cc.get_month(), int(cc.get_water()), int(cc.get_electricity()), int(cc.get_total())]
             uc_chart_data_5.append(data)
 
-    return render_template('staff/RG/cost_analysis.html',cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
+    return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
                            cc_data2=cc_chart_data_3,
                            isc_data=isc_chart_data_1, isc_data1=isc_chart_data_2, isc_data2=isc_chart_data_3,
                            cap_data=cap_chart_data_1, cap_data1=cap_chart_data_2, cap_data2=cap_chart_data_3,

@@ -2,6 +2,7 @@
 {% block title %}Donation Gallery{% endblock %}
 
 {% block head %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.css">
 {% endblock %}
 
 {% set active_page = "donate" %}
@@ -9,34 +10,63 @@
 {% block content %}
 {% from "customer/includes/_formHelper.html" import render_field %}
 
-<br /><br /><br />
+<br /><br /><br /><br />
 <h2 class="col-lg-12">Donation Gallery</h2>
+<p class="col-lg-12">Ready to be collected for anyone in need!</p>
+<p class="col-lg-12">Call our contact number to get more information on how to collect.</p>
+<br />
+
+<div class="col-lg-12">
+<table id="table_id" class="table table-hover" style="">
+    <thead class="">
+        <tr>
+            <th>Item ID</th>
+            <th>Item Image</th>
+            <th>Item Type</th>
+            <th>Item Name</th>
+            <th>Item Specifications</th>
+        </tr>
+    </thead>
 
 {% for donorIID in donorsIID_list %}
     {% if donorIID.get_collection_status() == "Confirmed" %}
-    <div class="container card">
-        <div class="col-12">
-            <div class="align-self-center">
-                <article class="col-12 col-md-6 tm-post" style="text-align: center;">
-                    <hr class="tm-hr-primary">
-                    <div class="tm-post-link-inner">
-                        <img src="/static/customer/img/Idonation/{{ donorIID.get_item_image() }}" style="width: 50%;" alt="{{ donorIID.get_item_name() }}">
-                    </div>
-                    <p class="tm-pt-30">
-                        {{ donorIID.get_donate_type() }}: <br> {{ donorIID.get_item_name() }}
-                    </p>
-                    <div class="">
-                        <span class="tm-color-primary">{{ donorIID.get_itemID() }}</span>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </div>
+        <tr>
+            <!-- Item ID -->
+            <td>{{ donorIID.get_itemID() }}</td>
+
+            <!-- Item Image -->
+            <td><img src="/static/customer/img/Idonation/{{ donorIID.get_item_image() }}" class="img-responsive"
+                     style="width: 130px; height: 130px;" alt="{{ donorIID.get_item_name() }}"></td>
+
+            <!-- Item Type -->
+            <td>
+                {{ donorIID.get_item_type() }}
+            </td>
+
+            <!-- Item Name -->
+            <td>
+                {{ donorIID.get_item_name() }}
+            </td>
+
+            <!-- Item Description -->
+            <td>
+                Weight: {{ donorIID.get_item_weight() }}kg <br>
+                Size: {{ donorIID.get_item_height() }}m x {{ donorIID.get_item_length() }}m x {{ donorIID.get_item_width() }}m
+            </td>
+        </tr>
+
     {% endif %}
 {% endfor %}
-
+</table>
+</div>
 
 {% endblock %}
 
 {% block scripts %}
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.js"></script>
+<script>
+    $(document).ready( function () {
+    $('#table_id').DataTable();
+    } );
+</script>
 {% endblock %}

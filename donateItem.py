@@ -39,13 +39,13 @@ class donateItem(Form):
                                           ('31', '31')])
 
     collectionMonth = SelectField("Pick Collection Month*", [validators.DataRequired()],
-                                  choices=[('01', 'January'), ('02', 'Feburary'), ('03', 'March'), ('04', 'April'),
+                                  choices=[('01', 'January'), ('02', 'February'), ('03', 'March'), ('04', 'April'),
                                            ('05', 'May'), ('06', 'June'), ('07', 'July'), ('08', 'August'),
                                            ('09', 'September'), ('10', 'October'), ('11', 'November'),
                                            ('12', 'December')])
 
-    collectionTime = IntegerField("Pick a Time*", [validators.NumberRange(min=0, max=2359),
-                                                  validators.DataRequired()])
+    collectionTime = StringField("Pick a Time*", [validators.Length(min=4, max=4), validators.DataRequired()])
+
     collectionType = RadioField('Type of Collection*', choices=[('Drop Off', 'Drop Off'), ('We Pick Up', 'We Pick Up')],
                                 default='Drop Off')
 
