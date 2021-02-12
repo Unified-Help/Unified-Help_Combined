@@ -1,5 +1,3 @@
-'ItemCounter', (0, 53)
-'Items', (7168, 2386)
-'MoneyCounter', (3072, 26)
-'TotalMAmount', (3584, 5)
-'Money', (4096, 882)
+'MoneyCounter', (0, 26)
+'TotalMAmount', (512, 5)
+'Money', (1024, 929)

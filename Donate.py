@@ -5,7 +5,7 @@ import shelve
 class DonateMoney:
 
     def __init__(self, donate_who, money_amount, cardInfo_Name, cardInfo_Number, cardInfo_CVV, cardInfo_DateExpiry,
-                 cardInfo_YearExpiry, now_date, now_time):
+                 cardInfo_YearExpiry, time):
         # Money Donation ID
         self.__moneyID = 0
 
@@ -23,8 +23,10 @@ class DonateMoney:
         self.__status = ""
 
         # Created Time
-        self.__now_date = now_date
-        self.__now_time = now_time
+        self.__now_date = time.strftime("%x")
+        self.__now_time = time.strftime("%X")
+        self.__month = time.strftime("%b").upper()
+        self.__year = time.strftime("%Y")
 
     # Accessors
     def get_moneyID(self):
@@ -62,6 +64,12 @@ class DonateMoney:
 
     def get_now_time(self):
         return self.__now_time
+
+    def get_year(self):
+        return self.__year
+
+    def get_month(self):
+        return self.__month
 
     # Mutators
     def set_moneyID(self, moneyID):
@@ -105,7 +113,7 @@ class DonateMoney:
 class DonateItem:
 
     def __init__(self, donate_who, item_type, item_name, item_weight, item_height, item_length, item_width
-                 , collection_type, date, month, time, address1, address2, address3, postal_code, now_date , now_time):
+                 , collection_type, date, month, time, address1, address2, address3, postal_code, create_time):
         # Item Donation IDs
         self.__itemID = 0
 
@@ -137,8 +145,10 @@ class DonateItem:
         self.__collection_status = ""
 
         # Created Time
-        self.__now_date = now_date
-        self.__now_time = now_time
+        self.__now_date = create_time.strftime("%x")
+        self.__now_time = create_time.strftime("%X")
+        self.__create_month = create_time.strftime("%b").upper()
+        self.__create_year = create_time.strftime("%Y")
 
     # Accessors
     def get_itemID(self):
@@ -206,6 +216,12 @@ class DonateItem:
 
     def get_now_time(self):
         return self.__now_time
+
+    def get_create_year(self):
+        return self.__year
+
+    def get_create_month(self):
+        return self.__month
 
     # Mutators
     def set_itemID(self, itemID):

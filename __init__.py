@@ -230,14 +230,11 @@ def donate_Money():
                 print("Error in retrieving Donors MC from donorMoneyChoices")
 
             now = datetime.datetime.now()
-            now_time = now.strftime("%X")
-            now_date = now.strftime("%x")
 
             donor = DonateMoney(donate_money.donateToWho.data, donate_money.moneyAmount.data,
                                 donate_money.cardInfo_Name.data,
                                 donate_money.cardInfo_Number.data, donate_money.cardInfo_CVV.data,
-                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data, now_date,
-                                now_time)
+                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data, now)
             # donor.set_moneyID()
             # set the money ID counter
             donoCounter = []
@@ -337,8 +334,7 @@ def donate_Item():
                 print("Error in retrieving Donors IM from donorChoices")
 
             now = datetime.datetime.now()
-            now_time = now.strftime("%X")
-            now_date = now.strftime("%x")
+
 
             donor = DonateItem(donate_item.donateToWho.data, donate_item.itemType.data, donate_item.itemName.data,
                                donate_item.itemWeight.data, donate_item.itemHeight.data, donate_item.itemLength.data,
@@ -346,7 +342,7 @@ def donate_Item():
                                donate_item.collectionDate.data,
                                donate_item.collectionMonth.data, donate_item.collectionTime.data,
                                donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
-                               donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data, now_date, now_time)
+                               donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data, now)
 
             # Setting Item Donation ID
             donoCounter = []
@@ -1495,12 +1491,11 @@ def dashboard():
     except:
         print("Error in retrieving Donors MC from donorMoneyChoices")
 
-    donorsIID_dict = dbMC["Money"]
     donorsIID_list = []
     unnested_donorsIID_list = []
 
-    for key in donorsIID_dict:
-        donorinfo_list = donorsIID_dict[key]
+    for key in donor_moneychoices:
+        donorinfo_list = donor_moneychoices[key]
         donorsIID_list.append(donorinfo_list)
 
     for x in donorsIID_list:
@@ -1509,8 +1504,11 @@ def dashboard():
 
     total_month = 0
     for i in unnested_donorsIID_list:
-        if now.month == unnested_donorsIID_list[i].get_date().month():
-            total_month += unnested_donorsIID_list[i].get_money_amount()
+        print(i)
+        x = isinstance(i, DonateMoney)
+        print(x)
+        if now.month == i.get_month():
+            total_month += i.get_money_amount()
 
     dbMC.close()
 
@@ -1534,8 +1532,6 @@ def dashboard():
     ac_dict = costs_db['AC Costs']
     uc_dict = costs_db['UC Costs']
     costs_db.close()
-
-    now = datetime.datetime.now()
 
     return render_template('staff/RG/dashboard.html', total_month=total_month)
 
