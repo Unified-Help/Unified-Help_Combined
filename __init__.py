@@ -598,6 +598,28 @@ def forum_login():
 
     return render_template('customer/AM/login.html')
 
+@app.route('/forum/login/redirect_to_post/<int:post_id>', methods=['GET', 'POST'])
+def forum_login_redirect_to_post(post_id):
+    create_login_form = CreateUserForm(request.form)
+    users_dict = {}
+    db = shelve.open('account', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        b = users_dict[key]
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session["email"] = b.get_email()
+            session["gender"] = b.get_gender()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            print(b.get_date_time())
+            return redirect(url_for('forum_pinned_posts_post',post_id=post_id))
+
+    return render_template('customer/AM/login.html')
+
 
 @app.route("/forum")
 def forum():
@@ -1112,11 +1134,9 @@ def upvote():
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
-
-@app.route("/reply_upvote", methods=['POST'])
+@app.route("/reply_upvote", methods= ['POST'])
 def reply_upvote():
-    # {5: {1: <Forum.ForumPinnedPostsCounter object at 0x0000027F274C21C0>, 2: <Forum.ForumPinnedPostsCounter object at 0x0000027F283B66D0>}}
-    upvote = request.form["upvote"]
+    upvote = request.form["reply_upvote"]
     upvote = int(upvote)
     category = request.form["category"]
     if category == "1":
@@ -1140,17 +1160,23 @@ def reply_upvote():
         db.close()
         return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
     elif category == "2":
-        uhc_dict = {}
+        uhc_post_reply_dict = {}
         db = shelve.open('forumdb', 'c')
-        uhc_dict = db['UHC']
+        uhc_post_reply_dict = db['UHCPostsPostReply']
 
         post_id = request.form["post_id"]
         post_id = int(post_id)
-        for post in uhc_dict:
+        reply_id = request.form["reply_id"]
+        reply_id = int(reply_id)
+        for post in uhc_post_reply_dict:
             if post == post_id:
-                for key in uhc_dict[post_id]:
-                    print(key)
-        db['UHC'] = uhc_dict
+                reply_dict = uhc_post_reply_dict[post]
+                for reply in reply_dict:
+                    if reply == reply_id:
+                        print('random')
+                        reply_dict[reply].set_upvote(upvote)
+                        print(reply_dict[reply].get_upvote())
+        db['PinnedPostsPostReply'] = uhc_post_reply_dict
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
