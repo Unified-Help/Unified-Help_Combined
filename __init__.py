@@ -14,7 +14,7 @@ from ForumForm import createForumPost, updateForumPost, staff_createForumPost, F
 from Forum import ForumPost, ForumPinnedPostsCounter, ForumUHCPostCounter
 
 # Account Management Imports
-from Forms import CreateUserForm, CreateUserForm
+from Forms import CreateUserForm, CreateEditForm
 from User import User, Staff
 from datetime import timedelta, datetime
 
@@ -1193,10 +1193,11 @@ def login():
     for key in users_dict:
         b = users_dict[key]
         if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["userid"] = b.get_user_id()
             session["username"] = b.get_username()
             session["email"] = b.get_email()
-            session["gender"] = b.get_gender()
             session["contact"] = b.get_contact()
+            session["password"] = b.get_password()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
             print(b.get_date_time())
@@ -1204,7 +1205,7 @@ def login():
             if b.get_account_type() == "Customer":
                 return redirect(url_for('profile'))
             else:
-                return redirect(url_for('home'))
+                return redirect(url_for('staff_home'))
     return render_template('customer/AM/login.html')
 
 @app.route('/profile')
@@ -1212,8 +1213,9 @@ def profile():
     if "username" in session:
         username = session["username"]
         email = session["email"]
-        gender = session["gender"]
-        return render_template('customer/AM/profile.html', username=username, email=email, gender=gender)
+        contact = session["contact"]
+        password = session["password"]
+        return render_template('customer/AM/profile.html', username=username, email=email, contact=contact, password=password)
     else:
         return redirect(url_for('login'))
 
@@ -1237,6 +1239,33 @@ def retrieve_users():
         users_list.append(user)
 
     return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
+
+@app.route('/updateProfile', methods=['GET', 'POST'])
+def update_profile():
+    update_profile_form = CreateUserForm(request.form)
+    if request.method == "POST":
+        users_dict = {}
+        db = shelve.open('account', 'c')
+        users_dict = db['Users']
+        print(users_dict)
+        print(users_dict.keys())
+
+        user = users_dict.get(session["userid"])
+        user.set_username(update_profile_form.username.data)
+        user.set_email(update_profile_form.email.data)
+        user.set_contact(update_profile_form.contact.data)
+
+        db['Users'] = users_dict
+        db.close()
+        session["username"] = update_profile_form.username.data
+        session["email"] = update_profile_form.email.data
+        session["contact"] = update_profile_form.contact.data
+        session.permanent = True
+
+
+        session['user_updated'] = user.get_username()
+        return redirect(url_for('profile'))
+    return render_template('customer/AM/EditAccount.html', form=update_profile_form)
 
 
 @app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
