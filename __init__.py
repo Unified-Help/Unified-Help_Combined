@@ -1576,10 +1576,6 @@ def dashboard():
     uc_dict = costs_db['UC Costs']
     costs_db.close()
 
-    for key in cc_dict:
-        cc = cc_dict.get(key)
-        if now.year == int(cc.get_year()):
-            data = [int(cc.get_total())]
 
     return render_template('staff/RG/dashboard.html', total_month_donations=total_month_donations,
                            total_year_donations=total_year_donations + 20000,
