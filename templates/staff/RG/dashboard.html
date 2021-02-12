@@ -18,21 +18,21 @@
     <!--____________Time period toggle_____________-->
     <div class="p-2">
       <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-        <label class="btn btn-sm btn-dark btn-simple" id="1">
+        <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="this_month()">
           <input type="radio" class="d-none d-sm-none" name="options">
           <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Month</span>
           <span class="d-block d-sm-none">
             <i class="tim-icons icon-gift-2"></i>
           </span>
         </label>
-        <label class="btn btn-sm btn-dark btn-simple" id="2">
+        <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="this_year()">
           <input type="radio" class="d-none" name="options">
           <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
           <span class="d-block d-sm-none">
             <i class="tim-icons icon-tap-02"></i>
           </span>
         </label>
-        <label class="btn btn-sm btn-dark btn-simple" id="3">
+        <label class="btn btn-sm btn-dark btn-simple" id="3" onclick="overall()">
           <input type="radio" class="d-none" name="options">
           <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Overall</span>
           <span class="d-block d-sm-none">
@@ -47,7 +47,7 @@
     <div class="card card-header">
       <div class="card-body text-center">
         <i class="fas fa-hand-holding-usd" style="font-size:36px;"></i>
-        <p class="card-text"><strong>${{ total_month }}</strong></p>
+        <p class="card-text" id="total_money_donations"><strong>${{ total_month_donations }}</strong></p>
         <p class="card-text desc">Total Monetary Donations</p>
       </div>
     </div>
@@ -55,7 +55,7 @@
     <div class="card card-header">
       <div class="card-body text-center">
         <i class="fas fa-couch" style="font-size:36px;"></i>
-        <p class="card-text"><strong>215</strong></p>
+        <p class="card-text" id="total_item_donations"><strong>{{ total_month_items }}</strong></p>
         <p class="card-text desc">Total Item Donations</p>
       </div>
     </div>
@@ -71,7 +71,7 @@
     <div class="card card-header">
       <div class="card-body text-center">
         <i class="fas fa-dollar-sign" style="font-size:36px;"></i>
-        <p class="card-text"><strong>$4000</strong></p>
+        <p class="card-text" id="total_month_expenses"><strong>$4000</strong></p>
         <p class="card-text desc">Total Expenses Incurred</p>
       </div>
     </div>
@@ -224,6 +224,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
 <script src="https://cdn.anychart.com/releases/8.9.0/js/anychart-base.min.js"></script>
 <script>
+//--------------- Overview ---------------//
+function this_month() {
+  var header1 = document.getElementById("total_money_donations");
+  header1.childNodes[0].textContent = {{ total_month_donations }};
+
+  var header2 = document.getElementById("total_item_donations");
+  header2.childNodes[0].textContent = {{ total_month_items }};
+
+  var header3 = document.getElementById("total_month_expenses");
+  header3.childNodes[0].textContent = 1000{{ total_month_expenses }};
+};
+
+function this_year() {
+  var header1 = document.getElementById("total_money_donations");
+  header1.childNodes[0].textContent = {{ total_year_donations }};
+
+  var header2 = document.getElementById("total_item_donations");
+  header2.childNodes[0].textContent = {{ total_year_items }};
+
+  var header3 = document.getElementById("total_month_expenses");
+  header3.childNodes[0].textContent = 1000{{ total_year_expenses }};
+};
+
+function overall() {
+  var header1 = document.getElementById("total_money_donations");
+  header1.childNodes[0].textContent = {{ overall_donations }};
+
+  var header2 = document.getElementById("total_item_donations");
+  header2.childNodes[0].textContent = {{ overall_items }};
+
+  var header3 = document.getElementById("total_month_expenses");
+  header3.childNodes[0].textContent = 1000{{ overall_expenses }};
+};
+
+
 //--------------- Incoming Donation Analysis Area Chart ---------------//
   anychart.onDocumentReady(function () {
 

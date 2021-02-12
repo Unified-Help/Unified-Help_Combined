@@ -218,10 +218,10 @@ class DonateItem:
         return self.__now_time
 
     def get_create_year(self):
-        return self.__year
+        return self.__create_year
 
     def get_create_month(self):
-        return self.__month
+        return self.__create_month
 
     # Mutators
     def set_itemID(self, itemID):

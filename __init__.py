@@ -598,6 +598,28 @@ def forum_login():
 
     return render_template('customer/AM/login.html')
 
+@app.route('/forum/login/redirect_to_post/<int:post_id>', methods=['GET', 'POST'])
+def forum_login_redirect_to_post(post_id):
+    create_login_form = CreateUserForm(request.form)
+    users_dict = {}
+    db = shelve.open('account', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        b = users_dict[key]
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session["email"] = b.get_email()
+            session["gender"] = b.get_gender()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            print(b.get_date_time())
+            return redirect(url_for('forum_pinned_posts_post',post_id=post_id))
+
+    return render_template('customer/AM/login.html')
+
 
 @app.route("/forum")
 def forum():
@@ -1112,11 +1134,17 @@ def upvote():
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
+<<<<<<< HEAD
 
 @app.route("/reply_upvote", methods=['POST'])
 def reply_upvote():
     # {5: {1: <Forum.ForumPinnedPostsCounter object at 0x0000027F274C21C0>, 2: <Forum.ForumPinnedPostsCounter object at 0x0000027F283B66D0>}}
     upvote = request.form["upvote"]
+=======
+@app.route("/reply_upvote", methods= ['POST'])
+def reply_upvote():
+    upvote = request.form["reply_upvote"]
+>>>>>>> 148d2058e34b1455ee22e25e40b16c4d20fb5c1e
     upvote = int(upvote)
     category = request.form["category"]
     if category == "1":
@@ -1140,17 +1168,23 @@ def reply_upvote():
         db.close()
         return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
     elif category == "2":
-        uhc_dict = {}
+        uhc_post_reply_dict = {}
         db = shelve.open('forumdb', 'c')
-        uhc_dict = db['UHC']
+        uhc_post_reply_dict = db['UHCPostsPostReply']
 
         post_id = request.form["post_id"]
         post_id = int(post_id)
-        for post in uhc_dict:
+        reply_id = request.form["reply_id"]
+        reply_id = int(reply_id)
+        for post in uhc_post_reply_dict:
             if post == post_id:
-                for key in uhc_dict[post_id]:
-                    print(key)
-        db['UHC'] = uhc_dict
+                reply_dict = uhc_post_reply_dict[post]
+                for reply in reply_dict:
+                    if reply == reply_id:
+                        print('random')
+                        reply_dict[reply].set_upvote(upvote)
+                        print(reply_dict[reply].get_upvote())
+        db['PinnedPostsPostReply'] = uhc_post_reply_dict
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
@@ -1517,13 +1551,41 @@ def dashboard():
         for y in x:
             unnested_donorsIID_list.append(y)
 
-    total_month = 0
+    overall_donations = 0
+    total_year_donations = 0
+    total_month_donations = 0
     for i in unnested_donorsIID_list:
-        print(i)
-        x = isinstance(i, DonateMoney)
-        print(x)
-        if now.month == i.get_month():
-            total_month += i.get_money_amount()
+        overall_donations += i.get_money_amount()
+        if now.strftime("%Y") == i.get_year():
+            total_year_donations += i.get_money_amount()
+            if now.strftime("%b").upper() == i.get_month():
+                total_month_donations += i.get_money_amount()
+
+    try:
+        donor_itemchoices = dbMC["Items"]
+    except:
+        print("Error in retrieving Donors MC from donorMoneyChoices")
+
+    donor_item_list = []
+    unnested_item_list = []
+
+    for key in donor_itemchoices:
+        donorinfo_list = donor_itemchoices[key]
+        donor_item_list.append(donorinfo_list)
+
+    for x in donor_item_list:
+        for y in x:
+            unnested_item_list.append(y)
+
+    overall_items = 0
+    total_year_items = 0
+    total_month_items = 0
+    for i in unnested_item_list:
+        overall_items += 1
+        if now.strftime("%Y") == i.get_create_year():
+            total_year_items += 1
+        if now.strftime("%b").upper() == i.get_create_month():
+            total_month_items += 1
 
     dbMC.close()
 
@@ -1548,7 +1610,11 @@ def dashboard():
     uc_dict = costs_db['UC Costs']
     costs_db.close()
 
-    return render_template('staff/RG/dashboard.html', total_month=total_month)
+
+    return render_template('staff/RG/dashboard.html', total_month_donations=total_month_donations,
+                           total_year_donations=total_year_donations + 20000,
+                           overall_donations=overall_donations + 50000, total_month_items=total_month_items,
+                           total_year_items=total_year_items + 100, overall_items=overall_items + 230)
 
 
 @app.route("/cost_analysis")
@@ -1625,8 +1691,6 @@ def cost_analysis():
     costs_db.close()
 
     now = datetime.datetime.now()
-    # For dashboard
-    IDA_data = {}
 
     cc_chart_data_1 = []
     cc_chart_data_2 = []
