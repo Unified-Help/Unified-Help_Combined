@@ -1437,11 +1437,11 @@ def account_management():
 def retrieve_staff():
     users_dict = {}
     db = shelve.open('account', 'r')
-    staff_dict = db['Users']
+    users_dict = db['Users']
     db.close()
 
     users_list = []
-    for key in staff_dict:
+    for key in users_dict:
         staff = users_dict.get(key)
         users_list.append(staff)
 
