@@ -227,7 +227,7 @@
 //--------------- Overview ---------------//
 function this_month() {
   var header1 = document.getElementById("total_money_donations");
-  header1.childNodes[0].textContent = {{ total_month_donations }};
+  header1.childNodes[0].textContent = "$" + {{ total_month_donations }};
 
   var header2 = document.getElementById("total_item_donations");
   header2.childNodes[0].textContent = {{ total_month_items }};
@@ -238,7 +238,7 @@ function this_month() {
 
 function this_year() {
   var header1 = document.getElementById("total_money_donations");
-  header1.childNodes[0].textContent = {{ total_year_donations }};
+  header1.childNodes[0].textContent = "$" + {{ total_year_donations }};
 
   var header2 = document.getElementById("total_item_donations");
   header2.childNodes[0].textContent = {{ total_year_items }};
@@ -249,7 +249,7 @@ function this_year() {
 
 function overall() {
   var header1 = document.getElementById("total_money_donations");
-  header1.childNodes[0].textContent = {{ overall_donations }};
+  header1.childNodes[0].textContent = "$" + {{ overall_donations }};
 
   var header2 = document.getElementById("total_item_donations");
   header2.childNodes[0].textContent = {{ overall_items }};

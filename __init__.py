@@ -598,6 +598,7 @@ def forum_login():
 
     return render_template('customer/AM/login.html')
 
+
 @app.route('/forum/login/redirect_to_post/<int:post_id>', methods=['GET', 'POST'])
 def forum_login_redirect_to_post(post_id):
     create_login_form = CreateUserForm(request.form)
@@ -616,7 +617,7 @@ def forum_login_redirect_to_post(post_id):
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
             print(b.get_date_time())
-            return redirect(url_for('forum_pinned_posts_post',post_id=post_id))
+            return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
 
     return render_template('customer/AM/login.html')
 
@@ -1135,6 +1136,7 @@ def upvote():
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
 
+<<<<<<< Updated upstream
 # @app.route("/reply_upvote", methods=['POST'])
 # def reply_upvote():
 #     pass
@@ -1143,6 +1145,9 @@ def upvote():
 
 
 @app.route("/reply_upvote", methods= ['POST'])
+=======
+@app.route("/reply_upvote", methods=['POST'])
+>>>>>>> Stashed changes
 def reply_upvote():
     upvote = request.form["reply_upvote"]
     upvote = int(upvote)
@@ -1532,7 +1537,7 @@ def incoming_item_archive(id):
 
 @app.route("/dashboard")
 def dashboard():
-    # Analytics Overview
+    # ----------------Analytics Overview-------------------
     now = datetime.datetime.now()
     dbMC = shelve.open("donorChoices", "r")
     try:
@@ -1589,27 +1594,28 @@ def dashboard():
 
     dbMC.close()
 
-    IDA_dict = {}
-    On_vs_Off_dict = {}
-    expenses_dict = {}
-    db = shelve.open("dashboard.db", "c")
+    # ----------------------------Charts-------------------------
 
     try:
-        IDA_dict = db['IDA']
-        On_vs_off_dict = db['on_vs_off']
-
+        costs_db = shelve.open('costs.db', 'r')
     except:
-        print("Error retrieving values from shelve")
+        print("Error retrieving data from costs shelve.")
 
-    costs_db = shelve.open('costs.db', 'r')
     cc_dict = costs_db['Campaign Costs']
     cap_dict = costs_db['CAP Costs']
     fre_dict = costs_db['FRE Costs']
     isc_dict = costs_db['ISC Costs']
     ac_dict = costs_db['AC Costs']
     uc_dict = costs_db['UC Costs']
+
     costs_db.close()
 
+    IDA_this_year = []
+    for key in cc_dict:
+        cc = cc_dict.get(key)
+        if now.year == int(cc.get_year()):
+            data = [cc.get_month(), int(cc.get_total())]
+            IDA_this_year.append(data)
 
     return render_template('staff/RG/dashboard.html', total_month_donations=total_month_donations,
                            total_year_donations=total_year_donations + 20000,
