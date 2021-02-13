@@ -1638,8 +1638,10 @@ def dashboard():
     isc_dict = costs_db['ISC Costs']
     ac_dict = costs_db['AC Costs']
     uc_dict = costs_db['UC Costs']
-
+    totals = costs_db["overall"]
     costs_db.close()
+
+    print(totals)
 
     IDA_this_year = []
     for key in cc_dict:
@@ -1718,17 +1720,25 @@ def cost_analysis():
     costs_db.close()
 
     # Retrieve Costs from shelve and store in dictionary
-    costs_db = shelve.open('costs.db', 'r')
-    cc_dict = costs_db['Campaign Costs']
-    cap_dict = costs_db['CAP Costs']
-    fre_dict = costs_db['FRE Costs']
-    isc_dict = costs_db['ISC Costs']
-    ac_dict = costs_db['AC Costs']
-    uc_dict = costs_db['UC Costs']
+    try:
+        costs_db = shelve.open('costs.db', 'r')
+        cc_dict = costs_db['Campaign Costs']
+        cap_dict = costs_db['CAP Costs']
+        fre_dict = costs_db['FRE Costs']
+        isc_dict = costs_db['ISC Costs']
+        ac_dict = costs_db['AC Costs']
+        uc_dict = costs_db['UC Costs']
+    except FileNotFoundError:
+        print("Costs.db cannot be found.")
+    except:
+        print("Error retrieving data from costs.db")
     costs_db.close()
 
     now = datetime.datetime.now()
 
+    totals = {}
+    totals_overall = {}
+    # --------------------- Retrieving and visualizing costs ------------------
     cc_chart_data_1 = []
     cc_chart_data_2 = []
     cc_chart_data_3 = []
@@ -1737,21 +1747,46 @@ def cost_analysis():
     for key in cc_dict:
         cc = cc_dict.get(key)
         if now.year == int(cc.get_year()):
+            # To display costs on cost analysis page
             data = [cc.get_month(), int(cc.get_online_costs()), int(cc.get_offline_costs()), int(cc.get_total())]
             cc_chart_data_1.append(data)
+            # To display this year data on  dashboard
+            totals_list = [cc.get_total()]
+            totals[cc.get_month()] = totals_list
+            # To display overall data on dashboard
+            if cc.get_year() not in totals_overall.keys():
+                totals_overall[cc.get_year()] = [cc.get_total()]
+            else:
+                totals_overall[cc.get_year()][0] += cc.get_total()
         elif now.year - 1 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_online_costs()), int(cc.get_offline_costs()), int(cc.get_total())]
             cc_chart_data_2.append(data)
+            if cc.get_year() not in totals_overall.keys():
+                totals_overall[cc.get_year()] = [cc.get_total()]
+            else:
+                totals_overall[cc.get_year()][0] += cc.get_total()
         elif now.year - 2 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_online_costs()), int(cc.get_offline_costs()), int(cc.get_total())]
             cc_chart_data_3.append(data)
+            if cc.get_year() not in totals_overall.keys():
+                totals_overall[cc.get_year()] = [cc.get_total()]
+            else:
+                totals_overall[cc.get_year()][0] += cc.get_total()
         elif now.year - 3 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_online_costs()), int(cc.get_offline_costs()), int(cc.get_total())]
             cc_chart_data_4.append(data)
+            if cc.get_year() not in totals_overall.keys():
+                totals_overall[cc.get_year()] = [cc.get_total()]
+            else:
+                totals_overall[cc.get_year()][0] += cc.get_total()
         elif now.year - 4 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_online_costs()), int(cc.get_offline_costs()), int(cc.get_total())]
             cc_chart_data_5.append(data)
-
+            if cc.get_year() not in totals_overall.keys():
+                totals_overall[cc.get_year()] = [cc.get_total()]
+            else:
+                totals_overall[cc.get_year()][0] += cc.get_total()
+    print(totals_overall)
     isc_chart_data_1 = []
     isc_chart_data_2 = []
     isc_chart_data_3 = []
@@ -1760,21 +1795,45 @@ def cost_analysis():
     for key in isc_dict:
         cc = isc_dict.get(key)
         if now.year == int(cc.get_year()):
+            # To display costs on cost analysis page
             data = [cc.get_month(), int(cc.get_isc())]
             isc_chart_data_1.append(data)
+            # To display this year data on  dashboard
+            totals[cc.get_month()].append(cc.get_isc())
+            # To display overall data on dashboard
+            if len(totals_overall[cc.get_year()]) < 2:
+                totals_overall[cc.get_year()].append(cc.get_isc())
+            else:
+                totals_overall[cc.get_year()][1] += int(cc.get_isc())
         elif now.year - 1 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_isc())]
             isc_chart_data_2.append(data)
+            if len(totals_overall[cc.get_year()]) < 2:
+                totals_overall[cc.get_year()].append(cc.get_isc())
+            else:
+                totals_overall[cc.get_year()][1] += int(cc.get_isc())
         elif now.year - 2 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_isc())]
             isc_chart_data_3.append(data)
+            if len(totals_overall[cc.get_year()]) < 2:
+                totals_overall[cc.get_year()].append(cc.get_isc())
+            else:
+                totals_overall[cc.get_year()][1] += int(cc.get_isc())
         elif now.year - 3 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_isc())]
             isc_chart_data_4.append(data)
+            if len(totals_overall[cc.get_year()]) < 2:
+                totals_overall[cc.get_year()].append(cc.get_isc())
+            else:
+                totals_overall[cc.get_year()][1] += int(cc.get_isc())
         elif now.year - 4 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_isc())]
             isc_chart_data_5.append(data)
-
+            if len(totals_overall[cc.get_year()]) < 2:
+                totals_overall[cc.get_year()].append(cc.get_isc())
+            else:
+                totals_overall[cc.get_year()][1] += int(cc.get_isc())
+    print(totals_overall)
     cap_chart_data_1 = []
     cap_chart_data_2 = []
     cap_chart_data_3 = []
@@ -1786,6 +1845,7 @@ def cost_analysis():
             data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()),
                     int(cc.get_total())]
             cap_chart_data_1.append(data)
+            totals[cc.get_month()].append(cc.get_total())
         elif now.year - 1 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_supplies()), int(cc.get_manpower()), int(cc.get_vr()),
                     int(cc.get_total())]
@@ -1814,6 +1874,7 @@ def cost_analysis():
             data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()),
                     int(cc.get_total())]
             fre_chart_data_1.append(data)
+            totals[cc.get_month()].append(cc.get_total())
         elif now.year - 1 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_catering()), int(cc.get_vr()), int(cc.get_marketing()),
                     int(cc.get_total())]
@@ -1842,6 +1903,7 @@ def cost_analysis():
             data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()),
                     int(cc.get_legal_fees()), int(cc.get_total())]
             ac_chart_data_1.append(data)
+            totals[cc.get_month()].append(cc.get_total())
         elif now.year - 1 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_emp_salary()), int(cc.get_emp_training()), int(cc.get_office_supplies()),
                     int(cc.get_legal_fees()), int(cc.get_total())]
@@ -1869,6 +1931,7 @@ def cost_analysis():
         if now.year == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_water()), int(cc.get_electricity()), int(cc.get_total())]
             uc_chart_data_1.append(data)
+            totals[cc.get_month()].append(cc.get_total())
         elif now.year - 1 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_water()), int(cc.get_electricity()), int(cc.get_total())]
             uc_chart_data_2.append(data)
@@ -1881,6 +1944,10 @@ def cost_analysis():
         elif now.year - 4 == int(cc.get_year()):
             data = [cc.get_month(), int(cc.get_water()), int(cc.get_electricity()), int(cc.get_total())]
             uc_chart_data_5.append(data)
+
+    costs_db = shelve.open('costs.db', 'c')
+    costs_db["overall"] = totals
+    costs_db.close()
 
     return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
                            cc_data2=cc_chart_data_3,
@@ -2030,7 +2097,7 @@ def manual_insertForm():
                     break
             db["UC Costs"] = cost_dict
         changes = History(field, cc.get_month(), cc.get_year(), old_value, manual_upload_form.data_value.data,
-                          now_date, now_time, "Kenobi")
+                          now_date, now_time, session["username"])
         db.close()
 
         changes_dict = {}
