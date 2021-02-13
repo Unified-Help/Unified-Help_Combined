@@ -26,7 +26,7 @@
             </thead>
             <tbody>
             {% for donorIID in donorsIID_list %}
-                {% if donorIID.get_status() == "Confirmed" or donorIID.get_collection_status() == "Pending" %}
+                {% if donorIID.get_status() == "Confirmed" and donorIID.get_collection_status() != "Archive" %}
                 <tr>
                     <!-- Donation ID -->
                     <td>{{ donorIID.get_itemID() }}</td>
