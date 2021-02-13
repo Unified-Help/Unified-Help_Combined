@@ -609,8 +609,8 @@ def forum_login():
     return render_template('customer/AM/login.html')
 
 
-@app.route('/forum/login/redirect_to_post/<int:post_id>', methods=['GET', 'POST'])
-def forum_login_redirect_to_post(post_id):
+@app.route('/forum/login/redirect_to_pinned_post/<int:post_id>', methods=['GET', 'POST'])
+def forum_login_redirect_to_pinned_post(post_id):
     create_login_form = CreateUserForm(request.form)
     users_dict = {}
     db = shelve.open('account', 'r')
@@ -628,6 +628,28 @@ def forum_login_redirect_to_post(post_id):
             app.permanent_session_lifetime = timedelta(hours=1)
             print(b.get_date_time())
             return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
+
+    return render_template('customer/AM/login.html')
+
+@app.route('/forum/login/redirect_to_uhc_post/<int:post_id>', methods=['GET', 'POST'])
+def forum_login_redirect_to_uhc_post(post_id):
+    create_login_form = CreateUserForm(request.form)
+    users_dict = {}
+    db = shelve.open('account', 'r')
+    users_dict = db['Users']
+    db.close()
+
+    users_list = []
+    for key in users_dict:
+        b = users_dict[key]
+        if b.get_username() == create_login_form.username.data and b.get_password() == create_login_form.password.data:
+            session["username"] = b.get_username()
+            session["email"] = b.get_email()
+            session["gender"] = b.get_gender()
+            session.permanent = True
+            app.permanent_session_lifetime = timedelta(hours=1)
+            print(b.get_date_time())
+            return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
     return render_template('customer/AM/login.html')
 
@@ -719,9 +741,6 @@ def create_forum_post():
 
     return render_template('customer/CS/createForumPost.html', form=create_forum_post_form,
                            session_username=session_username, usersList=usersList)
-
-
-ROWS_PER_PAGE = 10
 
 
 @app.route("/forum/pinned_posts")
@@ -1112,7 +1131,6 @@ def uhc_delete_reply(post_id, reply_id):
 
     return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
-
 @app.route("/upvote", methods=['POST'])
 def upvote():
     upvote = request.form["upvote"]
@@ -1144,8 +1162,6 @@ def upvote():
         db['UHC'] = uhc_dict
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
-
-
 
 @app.route("/reply_upvote", methods=['POST'])
 def reply_upvote():
@@ -1189,10 +1205,9 @@ def reply_upvote():
                         print('random')
                         reply_dict[reply].set_upvote(upvote)
                         print(reply_dict[reply].get_upvote())
-        db['PinnedPostsPostReply'] = uhc_post_reply_dict
+        db['UHCPostsPostReply'] = uhc_post_reply_dict
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
-
 
 # Account Management
 
