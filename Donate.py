@@ -116,6 +116,9 @@ class DonateItem:
                  , collection_type, date, month, time, address1, address2, address3, postal_code, create_time):
         # Item Donation IDs
         self.__itemID = 0
+        self.__username = ""
+        self.__email = ""
+        self.__phonenumber = ""
 
         # Item Details
         self.__donate_type = "Item Donation"
@@ -153,6 +156,15 @@ class DonateItem:
     # Accessors
     def get_itemID(self):
         return self.__itemID
+
+    def get_username(self):
+        return self.__username
+
+    def get_email(self):
+        return self.__email
+
+    def get_phonenumber(self):
+        return self.__phonenumber
 
     def get_donate_type(self):
         return self.__donate_type
@@ -226,6 +238,15 @@ class DonateItem:
     # Mutators
     def set_itemID(self, itemID):
         self.__itemID = itemID
+
+    def set_username(self, username):
+        self.__username = username
+
+    def set_email(self, email):
+        self.__email = email
+
+    def set_phonenumber(self, phonenumber):
+        self.__phonenumber = phonenumber
 
     def set_donate_type(self, donate_type):
         self.__donate_type = donate_type
