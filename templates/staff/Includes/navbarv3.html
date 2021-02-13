@@ -136,7 +136,6 @@
      </div>
      <h4 style="margin-bottom: 1.0em;" class="dropdown-header">Add-Ons</h4>
      <!--________Extra links here________-->
-     <a class = "accord-card main-link" href="/">Unified Help: Customer</a>
      <a class = "accord-card main-link" href="/staff_home">Home</a>
    </div>
   </div>
@@ -145,14 +144,14 @@
       <div class="p-2">
         <button class="btn-theme" id="sidebarToggle"><i class="fas fa-bars"></i>&nbsp;&nbsp;Toggle Sidebar</button>
       </div>
-      <a class="p-2 logo" style="text-decoration:none;" href="/">Unified Help - Staff</a>
+      <a class="p-2 logo" style="text-decoration:none;" href="/staff_home">Unified Help - Staff</a>
       <div class="p-2">
         <div class="dropdown">
           <!--________Place holder for staff user name over here (for top-right dropdown)________-->
           <button class="btn-theme dropdown-toggle" data-toggle="dropdown">Hello There, {{ session["username"] }}</button>
           <div class="dropdown-menu">
             <!--________Dropdown Menu links here________-->
-            <a class="dropdown-item" href="/staff_profile">View Profile</a>
+            <a class="dropdown-item" href="/staffprofile">View Profile</a>
             <hr>
             <a class="dropdown-item" href="/logout">Logout</a>
           </div>

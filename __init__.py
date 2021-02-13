@@ -1303,6 +1303,18 @@ def update_profile():
 
         session['user_updated'] = user.get_username()
         return redirect(url_for('profile'))
+    else:
+        users_dict = {}
+        db = shelve.open('account', 'r')
+        users_dict = db['Users']
+        db.close()
+
+        user = users_dict.get(session["userid"])
+        update_profile_form.username.data = user.get_username()
+        update_profile_form.email.data = user.get_email()
+        update_profile_form.contact.data = user.get_contact()
+        update_profile_form.password.data = user.get_password()
+        update_profile_form.confirm_password.data = user.get_confirm_password()
     return render_template('customer/AM/EditAccount.html', form=update_profile_form)
 
 
@@ -1423,14 +1435,14 @@ def account_management():
 
 @app.route("/retrievestaff")
 def retrieve_staff():
-    staff_dict = {}
+    users_dict = {}
     db = shelve.open('account', 'r')
     staff_dict = db['Users']
     db.close()
 
     users_list = []
     for key in staff_dict:
-        staff = staff_dict.get(key)
+        staff = users_dict.get(key)
         users_list.append(staff)
 
     return render_template('staff/AM/retrievestaff.html', count=len(users_list), users_list=users_list)
