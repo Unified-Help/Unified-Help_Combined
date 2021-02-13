@@ -189,6 +189,8 @@ def donateHistory():
         except:
             return render_template('customer/TP/donationHistoryEmpty.html')
 
+    return render_template('customer/TP/donationHistoryEmpty.html')
+
 
 @app.route("/donate/details")
 def donateDetails():
@@ -553,9 +555,6 @@ def donate_ItemUpdate(id):
 
 @app.route("/donate/gallery")
 def donateGallery():
-    # TypeError: The view function did not return a valid response. The function either returned None or ended
-    # without a return statement.
-
     # Displaying Donation History
     donorsIID_dict = {}
     try:
@@ -1482,16 +1481,6 @@ def incoming_item():
 
         db.close()
 
-        # staff_dict = {}
-        # userdb = shelve.open('account', 'r')
-        # staff_dict = userdb['Users']
-        # userdb.close()
-        #
-        # users_list = []
-        # for key in staff_dict:
-        #     staff = staff_dict.get(key)
-        #     users_list.append(staff)
-
         return render_template('staff/TP/incoming_item.html', donorsIID_list=unnested_donorsIID_list)
     except:
         return render_template('staff/TP/incoming_item.html')
@@ -1499,18 +1488,29 @@ def incoming_item():
 
 @app.route("/incoming_items/confirmation/<string:id>", methods=['GET', 'POST'])
 def incoming_item_confirmation(id):
-    SID = session["username"]
+    # SID = session["username"]
     if request.method == 'POST':
         donorsI_dict = {}
         db = shelve.open('donorChoices', 'w')
 
         donorsI_dict = db['Items']
-        donoinfoList = donorsI_dict[SID]
+        # donoinfoList = donorsI_dict[SID]
+        donorsIID_list = []
+        unnested_donorsIID_list = []
+
+        for key in donorsI_dict:
+            donorinfo_list = donorsI_dict[key]
+            donorsIID_list.append(donorinfo_list)
+
+        for x in donorsIID_list:
+            for y in x:
+                unnested_donorsIID_list.append(y)
+
         updatedonoinfo = ""
 
-        for i in range(len(donoinfoList)):
-            if donoinfoList[i].get_itemID() == id:
-                updatedonoinfo = donoinfoList[i]
+        for i in range(len(unnested_donorsIID_list)):
+            if unnested_donorsIID_list[i].get_itemID() == id:
+                updatedonoinfo = unnested_donorsIID_list[i]
 
         donor = updatedonoinfo
 
@@ -1532,19 +1532,30 @@ def incoming_item_archive(id):
         db = shelve.open('donorChoices', 'w')
 
         donorsI_dict = db['Items']
-        donoinfoList = donorsI_dict[SID]
+        # donoinfoList = donorsI_dict[SID]
+        donorsIID_list = []
+        unnested_donorsIID_list = []
+
+        for key in donorsI_dict:
+            donorinfo_list = donorsI_dict[key]
+            donorsIID_list.append(donorinfo_list)
+
+        for x in donorsIID_list:
+            for y in x:
+                unnested_donorsIID_list.append(y)
+
         updatedonoinfo = ""
 
-        for i in range(len(donoinfoList)):
-            if donoinfoList[i].get_itemID() == id:
-                updatedonoinfo = donoinfoList[i]
+        for i in range(len(unnested_donorsIID_list)):
+            if unnested_donorsIID_list[i].get_itemID() == id:
+                updatedonoinfo = unnested_donorsIID_list[i]
 
         donor = updatedonoinfo
 
         if request.form.get('Archive') == 'Archive':
             donor.set_collection_status("Archive")
 
-        print(donor.get_collection_status())
+        # print(donor.get_collection_status())
 
         db['Items'] = donorsI_dict
 
