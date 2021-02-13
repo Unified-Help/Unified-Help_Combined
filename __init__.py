@@ -1136,18 +1136,8 @@ def upvote():
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
 
-<<<<<<< Updated upstream
-# @app.route("/reply_upvote", methods=['POST'])
-# def reply_upvote():
-#     pass
-#     {5: {1: <Forum.ForumPinnedPostsCounter object at 0x0000027F274C21C0>, 2: <Forum.ForumPinnedPostsCounter object at 0x0000027F283B66D0>}}
-#     upvote = request.form["upvote"]
 
-
-@app.route("/reply_upvote", methods= ['POST'])
-=======
 @app.route("/reply_upvote", methods=['POST'])
->>>>>>> Stashed changes
 def reply_upvote():
     upvote = request.form["reply_upvote"]
     upvote = int(upvote)
