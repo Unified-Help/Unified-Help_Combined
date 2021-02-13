@@ -51,7 +51,11 @@
                     {% endif %}
 
                     <!-- Contact Information -->
-                    <td>--</td>
+                    <td>
+                        Username: {{ donorIID.get_username() }}<br>
+                        Email: {{ donorIID.get_email() }}<br>
+                        Contact Number: {{ donorIID.get_phonenumber() }}
+                    </td>
 
                     <!-- Created On -->
                     <td>{{ donorIID.get_now_date() }} <br> {{ donorIID.get_now_time() }}</td>

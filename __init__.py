@@ -378,6 +378,17 @@ def donate_Item():
                 image.save(os.path.join(app.config["Item_Donations"], image.filename))
                 # return redirect(request.url)
 
+            # Set Username to object
+            donor.set_username(SID)
+
+            # Set Email to object
+            useremail = session["email"]
+            donor.set_email(useremail)
+
+            # Set Phone Number to object
+            userphonenumber = session["contact"]
+            donor.set_phonenumber(userphonenumber)
+
             # Setting the collection status (for staff side)
             donor.set_collection_status("Pending")
 
@@ -1457,11 +1468,18 @@ def incoming_item():
             for y in x:
                 unnested_donorsIID_list.append(y)
 
-        # if SID in useridsI:
-        #     donorsList = donorsIID_dict[SID]
-        #     for i in range(len(donorsList)):
-        #         donorIID = donorsList[i]
-        #         donorsIID_list.append(donorIID)
+        db.close()
+
+        # staff_dict = {}
+        # userdb = shelve.open('account', 'r')
+        # staff_dict = userdb['Users']
+        # userdb.close()
+        #
+        # users_list = []
+        # for key in staff_dict:
+        #     staff = staff_dict.get(key)
+        #     users_list.append(staff)
+
         return render_template('staff/TP/incoming_item.html', donorsIID_list=unnested_donorsIID_list)
     except:
         return render_template('staff/TP/incoming_item.html')
