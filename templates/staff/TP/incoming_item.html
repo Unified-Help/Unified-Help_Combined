@@ -11,7 +11,7 @@
 {% block content %}
 <div class="col-lg-12" style="">
     <h2 class="col-lg-12">Incoming Item Transactions</h2>
-    <div class="col-lg-12">
+    <div class="col-lg-12 table-responsive">
         <table id="table_id" class="table table-striped table-hover" style="">
             <thead class="thead-dark">
                 <tr>
@@ -27,117 +27,116 @@
             <tbody>
             {% for donorIID in donorsIID_list %}
                 {% if donorIID.get_status() == "Confirmed" and donorIID.get_collection_status() != "Archive" %}
-                <tr>
-                    <!-- Donation ID -->
-                    <td>{{ donorIID.get_itemID() }}</td>
+                       <tr class="">
+                            <!-- Donation ID -->
+                            <td>{{ donorIID.get_itemID() }}</td>
 
-                    <!-- Donation Description -->
-                    <td>
-                        {{ donorIID.get_item_type() }}: <br> {{ donorIID.get_item_name() }} <br>
-                        Weight: {{ donorIID.get_item_weight() }}kg <br>
-                        Size: {{ donorIID.get_item_height() }}m x {{ donorIID.get_item_length() }}m x {{ donorIID.get_item_width() }}m
-                    </td>
+                            <!-- Donation Description -->
+                            <td>
+                                {{ donorIID.get_item_type() }}: <br> {{ donorIID.get_item_name() }} <br>
+                                Weight: {{ donorIID.get_item_weight() }}kg <br>
+                                Size: {{ donorIID.get_item_height() }}m x {{ donorIID.get_item_length() }}m x {{ donorIID.get_item_width() }}m
+                            </td>
 
-                    <!-- Collection Information -->
-                    <td>{{ donorIID.get_collection_type() }} <br> Date: {{ donorIID.get_date() }}/{{ donorIID.get_month() }}/21 <br>
-                    Time: {{ donorIID.get_time() }}</td>
+                            <!-- Collection Information -->
+                            <td>{{ donorIID.get_collection_type() }} <br> Date: {{ donorIID.get_date() }}/{{ donorIID.get_month() }}/21 <br>
+                            Time: {{ donorIID.get_time() }}</td>
 
-                    <!-- Address Information, If We Pick Up -->
-                    {% if donorIID.get_collection_type() == "We Pick Up" %}
-                    <td>{{ donorIID.get_address1() }} <br> {{ donorIID.get_address2() }} <br> {{ donorIID.get_address3() }} <br>
-                    {{ donorIID.get_postal_code() }}</td>
-                    {% elif donorIID.get_collection_type() == "Drop Off" %}
-                    <td>--</td>
-                    {% endif %}
+                            <!-- Address Information, If We Pick Up -->
+                            {% if donorIID.get_collection_type() == "We Pick Up" %}
+                            <td>{{ donorIID.get_address1() }} <br> {{ donorIID.get_address2() }} <br> {{ donorIID.get_address3() }} <br>
+                            {{ donorIID.get_postal_code() }}</td>
+                            {% elif donorIID.get_collection_type() == "Drop Off" %}
+                            <td>--</td>
+                            {% endif %}
 
-                    <!-- Contact Information -->
-                    <td>
-                        Username: {{ donorIID.get_username() }}<br>
-                        Email: {{ donorIID.get_email() }}<br>
-                        Contact Number: {{ donorIID.get_phonenumber() }}
-                    </td>
+                            <!-- Contact Information -->
+                            <td>
+                                Username: {{ donorIID.get_username() }}<br>
+                                Email: {{ donorIID.get_email() }}<br>
+                                Contact Number: {{ donorIID.get_phonenumber() }}
+                            </td>
 
-                    <!-- Created On -->
-                    <td>{{ donorIID.get_now_date() }} <br> {{ donorIID.get_now_time() }}</td>
+                            <!-- Created On -->
+                            <td>{{ donorIID.get_now_date() }} <br> {{ donorIID.get_now_time() }}</td>
 
-                    <!-- Collection Confirmation -->
-                    {% if donorIID.get_collection_status() == "Confirmed" and donorIID.get_status() == "Confirmed" %}
-                    <td>
-                        <form action="{{url_for('incoming_item_archive', id=donorIID.get_itemID())}}" method="POST">
+                            <!-- Collection Confirmation -->
+                            {% if donorIID.get_collection_status() == "Confirmed" and donorIID.get_status() == "Confirmed" %}
+                            <td>
+                                <form action="{{url_for('incoming_item_archive', id=donorIID.get_itemID())}}" method="POST">
 
-                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Archive_{{donorIID.get_itemID()}}">
-                                {{ donorIID.get_collection_status() }}</a>
+                                    <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Archive_{{donorIID.get_itemID()}}">
+                                        {{ donorIID.get_collection_status() }}</a>
 
-                            <!-- The Modal -->
-                            <div class="modal" id="Archive_{{donorIID.get_itemID()}}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
+                                    <!-- The Modal -->
+                                    <div class="modal" id="Archive_{{donorIID.get_itemID()}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
 
-                                        <!-- Modal Header -->
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Remove</h4>
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Remove</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    Archive item donation?
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <input type="submit" name="Archive" value="Archive" class="btn btn-success">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                </div>
+
+                                            </div>
                                         </div>
-
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                            Archive item donation?
-                                        </div>
-
-                                        <!-- Modal footer -->
-                                        <div class="modal-footer">
-                                            <input type="submit" name="Archive" value="Archive" class="btn btn-success">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        </div>
-
                                     </div>
-                                </div>
-                            </div>
 
-                        </form>
+                                </form>
 
-                    </td>
-                    {% elif donorIID.get_collection_status() == "Pending" and donorIID.get_status() == "Confirmed" %}
-                    <td>
-                        <form action="{{url_for('incoming_item_confirmation', id=donorIID.get_itemID())}}" method="POST">
+                            </td>
+                            {% elif donorIID.get_collection_status() == "Pending" and donorIID.get_status() == "Confirmed" %}
+                            <td class="">
+                                <form action="{{url_for('incoming_item_confirmation', id=donorIID.get_itemID())}}" method="POST">
 
-                            <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Confirmation_{{donorIID.get_itemID()}}">
-                                {{ donorIID.get_collection_status() }}</a>
+                                    <a href="#" style="color:#eb5d1e;" data-toggle="modal" data-target="#Confirmation_{{donorIID.get_itemID()}}">
+                                        {{ donorIID.get_collection_status() }}</a>
 
-                            <!-- The Modal -->
-                            <div class="modal" id="Confirmation_{{donorIID.get_itemID()}}">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
+                                    <!-- The Modal -->
+                                    <div class="modal" id="Confirmation_{{donorIID.get_itemID()}}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
 
-                                        <!-- Modal Header -->
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">Confirmation</h4>
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <!-- Modal Header -->
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title">Confirmation</h4>
+                                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                </div>
+
+                                                <!-- Modal body -->
+                                                <div class="modal-body">
+                                                    Confirm collection of item donation?
+                                                </div>
+
+                                                <!-- Modal footer -->
+                                                <div class="modal-footer">
+                                                    <input type="submit" name="Confirm" value="Confirm" class="btn btn-success">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                </div>
+
+                                            </div>
                                         </div>
-
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                            Confirm collection of item donation?
-                                        </div>
-
-                                        <!-- Modal footer -->
-                                        <div class="modal-footer">
-                                            <input type="submit" name="Confirm" value="Confirm" class="btn btn-success">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                        </div>
-
                                     </div>
-                                </div>
-                            </div>
 
-                        </form>
-                    </td>
-                    {% else %}
-                    <td> </td>
-                    {% endif %}
+                                </form>
+                                </td>
+                                {% else %}
+                                <td> </td>
+                                {% endif %}
 
-                </tr>
-
+                            </tr>
                 {% endif %}
 
             {% endfor %}
