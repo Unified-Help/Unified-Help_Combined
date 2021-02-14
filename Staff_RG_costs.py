@@ -1,3 +1,5 @@
+import random
+
 class Data:
     count_id = 0
 
@@ -193,3 +195,27 @@ class UtilitiesCosts(Data):
 
     def set_electricity(self, electricity):
         self.__electricity = electricity
+
+
+class Donations(Data):
+    def __init__(self, year, month, online, offline):
+        super().__init__(year, month)
+        self.__online = random.randint(100000, 150000) + online
+        self.__offline = offline
+
+    # Accessor Methods
+    def get_online(self):
+        return self.__online
+
+    def get_offline(self):
+        return int(self.__offline)
+
+    def get_total(self):
+        return self.__online + int(self.__offline)
+
+    # Mutator Methods
+    def set_online(self, online):
+        self.__online = online
+
+    def set_offline(self, offline):
+        self.__offline = offline

@@ -71,34 +71,46 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="cc_thisYear()">
-                  <input type="radio" name="options" checked="">
+                <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active">
+                <label class="btn btn-sm btn-dark btn-simple active">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="cc_previousYear()">
-                  <input type="radio" class="d-none d-sm-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="1">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="cc_last5Years()">
-                  <input type="radio" class="d-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators" data-slide-to="2">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-tap-02"></i>
                   </span>
                 </label>
+                </li>
               </div>
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <div id="CC_container"></div>
+            <div id="carouselExampleIndicators" class="carousel slide" data-interval="false" style="height:100%;width:100%;">
+              <div class="carousel-inner" style="height:100%;width:100%;">
+                <div class="carousel-item active" style="height:100%;width:100%;">
+                    <div id="CC_container"></div>
+                </div>
+                <div class="carousel-item " style="height:100%;width:100%;">
+                  <div id="CC_container1"  style="height:100%;width:100%;"></div>
+                </div>
+                <div class="carousel-item" style="height:100%;width:100%;">
+                  <div id="CC_container2"  style="height:100%;width:100%;"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -153,34 +165,46 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="CAP_thisYear()">
-                  <input type="radio" name="options" checked="">
+                <li data-target="#carouselExampleIndicators1" data-slide-to="0" class="active">
+                <label class="btn btn-sm btn-dark btn-simple active">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="CAP_previousYear()">
-                  <input type="radio" class="d-none d-sm-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators1" data-slide-to="1">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="CAP_last5Years()">
-                  <input type="radio" class="d-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators1" data-slide-to="2">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-tap-02"></i>
                   </span>
                 </label>
+                </li>
               </div>
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <div id="CAP_container"></div>
+            <div id="carouselExampleIndicators1" class="carousel slide" data-interval="false" style="height:100%;width:100%;">
+              <div class="carousel-inner" style="height:100%;width:100%;">
+                <div class="carousel-item active" style="height:100%;width:100%;">
+                    <div id="CAP_container"></div>
+                </div>
+                <div class="carousel-item " style="height:100%;width:100%;">
+                  <div id="CAP_container1"  style="height:100%;width:100%;"></div>
+                </div>
+                <div class="carousel-item" style="height:100%;width:100%;">
+                  <div id="CAP_container2"  style="height:100%;width:100%;"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -193,34 +217,46 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="fre_thisYear()">
-                  <input type="radio" name="options" checked="">
+                <li data-target="#carouselExampleIndicators2" data-slide-to="0" class="active">
+                <label class="btn btn-sm btn-dark btn-simple active">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="fre_previousYear()">
-                  <input type="radio" class="d-none d-sm-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators2" data-slide-to="1">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="fre_last5Years()">
-                  <input type="radio" class="d-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators2" data-slide-to="2">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-tap-02"></i>
                   </span>
                 </label>
+                </li>
               </div>
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <div id="FRE_container"></div>
+            <div id="carouselExampleIndicators2" class="carousel slide" data-interval="false" style="height:100%;width:100%;">
+              <div class="carousel-inner" style="height:100%;width:100%;">
+                <div class="carousel-item active" style="height:100%;width:100%;">
+                    <div id="FRE_container"></div>
+                </div>
+                <div class="carousel-item " style="height:100%;width:100%;">
+                  <div id="FRE_container1"  style="height:100%;width:100%;"></div>
+                </div>
+                <div class="carousel-item" style="height:100%;width:100%;">
+                  <div id="FRE_container2"  style="height:100%;width:100%;"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -237,34 +273,46 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="ac_thisYear()">
-                  <input type="radio" name="options" checked="">
+                <li data-target="#carouselExampleIndicators3" data-slide-to="0" class="active">
+                <label class="btn btn-sm btn-dark btn-simple active">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="AC1" onclick="ac_previousYear()">
-                  <input type="radio" class="d-none d-sm-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators3" data-slide-to="1">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="ac_last5Years()">
-                  <input type="radio" class="d-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators3" data-slide-to="2">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-tap-02"></i>
                   </span>
                 </label>
+                </li>
               </div>
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <div id="AC_container"></div>
+            <div id="carouselExampleIndicators3" class="carousel slide" data-interval="false" style="height:100%;width:100%;">
+              <div class="carousel-inner" style="height:100%;width:100%;">
+                <div class="carousel-item active" style="height:100%;width:100%;">
+                    <div id="AC_container"></div>
+                </div>
+                <div class="carousel-item " style="height:100%;width:100%;">
+                  <div id="AC_container1"  style="height:100%;width:100%;"></div>
+                </div>
+                <div class="carousel-item" style="height:100%;width:100%;">
+                  <div id="AC_container2"  style="height:100%;width:100%;"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -279,34 +327,46 @@
             </div>
             <div class="p-2">
               <div class="btn-group btn-group-toggle float-right" data-toggle="buttons">
-                <label class="btn btn-sm btn-dark btn-simple active" id="0" onclick="uc_thisYear()">
-                  <input type="radio" name="options" checked="">
+                <li data-target="#carouselExampleIndicators4" data-slide-to="0" class="active">
+                <label class="btn btn-sm btn-dark btn-simple active">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">This Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-single-02"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="1" onclick="uc_previousYear()">
-                  <input type="radio" class="d-none d-sm-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators4" data-slide-to="1">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Previous Year</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-gift-2"></i>
                   </span>
                 </label>
-                <label class="btn btn-sm btn-dark btn-simple" id="2" onclick="uc_last5Years()">
-                  <input type="radio" class="d-none" name="options">
+                </li>
+                <li data-target="#carouselExampleIndicators4" data-slide-to="2">
+                <label class="btn btn-sm btn-dark btn-simple">
                   <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Last 5 Years</span>
                   <span class="d-block d-sm-none">
-                    <i class="tim-icons icon-tap-02"></i>
                   </span>
                 </label>
+                </li>
               </div>
             </div>
           </div>
         </div>
         <div class="card-body">
           <div class="chart-area">
-            <div id="UC_container"></div>
+            <div id="carouselExampleIndicators4" class="carousel slide" data-interval="false" style="height:100%;width:100%;">
+              <div class="carousel-inner" style="height:100%;width:100%;">
+                <div class="carousel-item active" style="height:100%;width:100%;">
+                    <div id="UC_container"></div>
+                </div>
+                <div class="carousel-item " style="height:100%;width:100%;">
+                  <div id="UC_container1"  style="height:100%;width:100%;"></div>
+                </div>
+                <div class="carousel-item" style="height:100%;width:100%;">
+                  <div id="UC_container2"  style="height:100%;width:100%;"></div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -326,9 +386,6 @@
 anychart.onDocumentReady(function () {
   cc_data = anychart.data.set({{ cc_data|safe }});
 
-  cc_data1 = anychart.data.set({{ cc_data1|safe }});
-
-  cc_data2 = anychart.data.set({{ cc_data2|safe }});
 
 //Mapping each sub category to a line series
 var cc_seriesData_1 = cc_data.mapAs({x: 0, value: 1});
@@ -370,19 +427,80 @@ cc_chart.yScale(customScale);
   cc_chart.container('CC_container').draw();
 });
 
-// load initial data on button click
-function cc_thisYear(){
-  cc_chart.getSeries(0).data(cc_data);
+// Setting the data
+anychart.onDocumentReady(function () {
 
-}
+  cc_data = anychart.data.set({{ cc_data1|safe }});
 
-function cc_previousYear() {
-  cc_chart.getSeries(0).data(cc_data1);
-}
 
-function cc_last5Years(){
-  cc_chart.getSeries(0).data(cc_data2);
-}
+//Mapping each sub category to a line series
+var cc_seriesData_1 = cc_data.mapAs({x: 0, value: 1});
+var cc_seriesData_2 = cc_data.mapAs({x: 0, value: 2});
+var cc_seriesData_3 = cc_data.mapAs({x: 0, value: 3});
+
+  // create line chart
+cc_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var cc_series1 = cc_chart.line(cc_seriesData_1);
+  cc_series1.name("Online Costs")
+var cc_series2 = cc_chart.line(cc_seriesData_2);
+  cc_series2.name("Offline Costs")
+var cc_series3 = cc_chart.line(cc_seriesData_3);
+  cc_series3.name("Total")
+
+// Animation, legend and axis titles
+cc_chart.animation(true);
+cc_chart.legend(true);
+cc_chart.xAxis().title("Month")
+cc_chart.yAxis().title("Costs")
+//horizontal grid lines
+cc_chart.yGrid().enabled(true);
+// y axis uniform scaling
+var customScale = anychart.scales.linear();
+customScale.minimum(0);
+customScale.maximum(10000);
+var customTicks = customScale.ticks();
+customTicks.interval(1000);
+cc_chart.yScale(customScale);
+
+  {% raw %}
+  // configure axis labels
+  cc_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+  {% endraw %}
+
+  // set container id and display chart
+  cc_chart.container('CC_container1').draw();
+});
+
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = {{ cc_data2|safe }};
+
+    // create a chart
+    var chart = anychart.column();
+
+    // create a column series and set the data
+    var series = chart.column(data);
+    series.name("Total Cost")
+
+    // Animation, legend and axis titles
+    chart.animation(true);
+
+    // set the chart title
+    chart.title("Total Cost per year for the last 5 years");
+
+    // set the titles of the axes
+    chart.xAxis().title("Year");
+    chart.yAxis().title("Costs, $");
+
+    // set the container id
+    chart.container("CC_container2");
+
+    // initiate drawing the chart
+    chart.draw();
+});
 
 //---------------- Inventory Storage Costs Line Chart ---------------//
 
@@ -391,8 +509,6 @@ anychart.onDocumentReady(function () {
    isc_data = anychart.data.set({{ isc_data|safe }});
 
   isc_data1 = anychart.data.set({{ isc_data1|safe }});
-
-  isc_data2 = anychart.data.set({{ isc_data2|safe }});
 
 
 //Mapping each sub category to a line series
@@ -428,6 +544,35 @@ var isc_series1 = isc_chart.line(isc_seriesData_1);
   isc_chart.container('ISC_container').draw();
 });
 
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = {{ isc_data2|safe }};
+
+    // create a chart
+    var chart = anychart.column();
+
+    // create a column series and set the data
+    var series = chart.column(data);
+    series.name("Total Cost")
+
+    // Animation, legend and axis titles
+    chart.animation(true);
+
+    // set the chart title
+    chart.title("Total Cost per year for the last 5 years");
+
+    // set the titles of the axes
+    chart.xAxis().title("Year");
+    chart.yAxis().title("Costs, $");
+
+    // set the container id
+    chart.container("ISC_container2");
+
+    // initiate drawing the chart
+    chart.draw();
+});
+
 function autoRedraw() {
     // Enable chart redrawing.
     isc_chart.autoRedraw(true);
@@ -442,9 +587,6 @@ function isc_previousYear() {
   isc_chart.getSeries(0).data(isc_data1);
 }
 
-function isc_last5Years(){
-  isc_chart.getSeries(0).data(isc_data2);
-}
 
 //--------------- Charitable activities expenses Line Chart ---------------//
 
@@ -452,9 +594,6 @@ function isc_last5Years(){
 anychart.onDocumentReady(function () {
    cap_data = anychart.data.set({{ cap_data|safe }});
 
-  cap_data1 = anychart.data.set({{ cap_data1|safe }});
-
-  cap_data2 = anychart.data.set({{ cap_data2|safe }});
 
 //Mapping each sub category to a line series
 var cap_seriesData_1 = cap_data.mapAs({x: 0, value: 1});
@@ -499,28 +638,88 @@ var cap_series4 = cap_chart.line(cap_seriesData_4);
   cap_chart.container('CAP_container').draw();
 });
 
-// load initial data on button click
-function CAP_thisYear(){
-  cap_chart.getSeries(0).data(cap_data);
-}
+// Setting the data
+anychart.onDocumentReady(function () {
+   cap_data = anychart.data.set({{ cap_data1|safe }});
 
-function CAP_previousYear() {
-  cap_chart.getSeries(0).data(cap_data1);
-}
 
-function CAP_last5Years(){
-  cap_chart.getSeries(0).data(cap_data2);
-}
+//Mapping each sub category to a line series
+var cap_seriesData_1 = cap_data.mapAs({x: 0, value: 1});
+var cap_seriesData_2 = cap_data.mapAs({x: 0, value: 2});
+var cap_seriesData_3 = cap_data.mapAs({x: 0, value: 3});
+var cap_seriesData_4 = cap_data.mapAs({x: 0, value: 4});
+
+  // create line chart
+cap_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var cap_series1 = cap_chart.line(cap_seriesData_1);
+  cap_series1.name("Supplies")
+var cap_series2 = cap_chart.line(cap_seriesData_2);
+  cap_series2.name("Manpower")
+var cap_series3 = cap_chart.line(cap_seriesData_3);
+  cap_series3.name("Venue Rental")
+var cap_series4 = cap_chart.line(cap_seriesData_4);
+  cap_series4.name("Total")
+
+  // Animation, legend and axis titles
+  cap_chart.animation(true);
+  cap_chart.legend(true);
+  cap_chart.xAxis().title("Month")
+  cap_chart.yAxis().title("Costs")
+  //horizontal grid lines
+  cap_chart.yGrid().enabled(true);
+  // y axis uniform scaling
+  var customScale = anychart.scales.linear();
+  customScale.minimum(0);
+  customScale.maximum(5000);
+  var customTicks = customScale.ticks();
+  customTicks.interval(1000);
+  cap_chart.yScale(customScale);
+
+    {% raw %}
+    // configure axis labels
+    cap_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+    {% endraw %}
+
+  // set container id and display chart
+  cap_chart.container('CAP_container1').draw();
+});
+
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = {{ cap_data2|safe }};
+
+    // create a chart
+    var chart = anychart.column();
+
+    // create a column series and set the data
+    var series = chart.column(data);
+    series.name("Total Cost")
+
+    // Animation, legend and axis titles
+    chart.animation(true);
+
+    // set the chart title
+    chart.title("Total Cost per year for the last 5 years");
+
+    // set the titles of the axes
+    chart.xAxis().title("Year");
+    chart.yAxis().title("Costs, $");
+
+    // set the container id
+    chart.container("CAP_container2");
+
+    // initiate drawing the chart
+    chart.draw();
+});
 
 //--------------- Fund Raising Expenses Line Chart ---------------//
 
 // Setting the data
 anychart.onDocumentReady(function () {
    fre_data = anychart.data.set({{ fre_data|safe }});
-
-  fre_data1 = anychart.data.set({{ fre_data1|safe }});
-
-  fre_data2 = anychart.data.set({{ fre_data2|safe }});
 
 //Mapping each sub category to a line series
 var fre_seriesData_1 = fre_data.mapAs({x: 0, value: 1});
@@ -565,28 +764,89 @@ var fre_series3 = fre_chart.line(fre_seriesData_4);
   fre_chart.container('FRE_container').draw();
 });
 
-// load initial data on button click
-function fre_thisYear(){
-  fre_chart.getSeries(0).data(fre_data);
-}
+// Setting the data
+anychart.onDocumentReady(function () {
+   fre_data = anychart.data.set({{ fre_data1|safe }});
 
-function fre_previousYear() {
-  fre_chart.getSeries(0).data(fre_data1);
-}
+//Mapping each sub category to a line series
+var fre_seriesData_1 = fre_data.mapAs({x: 0, value: 1});
+var fre_seriesData_2 = fre_data.mapAs({x: 0, value: 2});
+var fre_seriesData_3 = fre_data.mapAs({x: 0, value: 3});
+var fre_seriesData_4 = fre_data.mapAs({x: 0, value: 4});
 
-function fre_last5Years(){
-  fre_chart.getSeries(0).data(fre_data2);
-}
+  // create line chart
+fre_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var fre_series1 = fre_chart.line(fre_seriesData_1);
+  fre_series1.name("Catering")
+var fre_series2 = fre_chart.line(fre_seriesData_2);
+  fre_series2.name("Venue Rental")
+var fre_series3 = fre_chart.line(fre_seriesData_3);
+  fre_series3.name("marketing")
+var fre_series3 = fre_chart.line(fre_seriesData_4);
+  fre_series3.name("Total")
+
+  // Animation, legend and axis titles
+  fre_chart.animation(true);
+  fre_chart.legend(true);
+  fre_chart.xAxis().title("Month")
+  fre_chart.yAxis().title("Costs")
+  //horizontal grid lines
+  fre_chart.yGrid().enabled(true);
+  // y axis uniform scaling
+  var customScale = anychart.scales.linear();
+  customScale.minimum(0);
+  customScale.maximum(2000);
+  var customTicks = customScale.ticks();
+  customTicks.interval(200);
+  fre_chart.yScale(customScale);
+
+    {% raw %}
+    // configure axis labels
+    fre_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+    {% endraw %}
+
+  // set container id and display chart
+  fre_chart.container('FRE_container1').draw();
+});
+
+// Setting the data
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = {{ fre_data2|safe }};
+
+    // create a chart
+    var chart = anychart.column();
+
+    // create a column series and set the data
+    var series = chart.column(data);
+    series.name("Total Cost")
+
+    // Animation, legend and axis titles
+    chart.animation(true);
+
+    // set the chart title
+    chart.title("Total Cost per year for the last 5 years");
+
+    // set the titles of the axes
+    chart.xAxis().title("Year");
+    chart.yAxis().title("Costs, $");
+
+    // set the container id
+    chart.container("FRE_container2");
+
+    // initiate drawing the chart
+    chart.draw();
+});
+
 
 //--------------- Administration Costs Line Chart ---------------//
 
 // Setting the data
 anychart.onDocumentReady(function () {
    ac_data = anychart.data.set({{ ac_data|safe }});
-
-  ac_data1 = anychart.data.set({{ ac_data1|safe }});
-
-  ac_data2 = anychart.data.set({{ ac_data2|safe }});
 
 //Mapping each sub category to a line series
 var ac_seriesData_1 = ac_data.mapAs({x: 0, value: 1});
@@ -634,28 +894,90 @@ var ac_series5 = ac_chart.line(ac_seriesData_5);
   ac_chart.container('AC_container').draw();
 });
 
-// load initial data on button click
-function ac_thisYear(){
-  ac_chart.getSeries(0).data(ac_data);
-}
+// Setting the data
+anychart.onDocumentReady(function () {
+   ac_data = anychart.data.set({{ ac_data1|safe }});
 
-function ac_previousYear() {
-  ac_chart.getSeries(0).data(ac_data1);
-}
+//Mapping each sub category to a line series
+var ac_seriesData_1 = ac_data.mapAs({x: 0, value: 1});
+var ac_seriesData_2 = ac_data.mapAs({x: 0, value: 2});
+var ac_seriesData_3 = ac_data.mapAs({x: 0, value: 3});
+var ac_seriesData_4 = ac_data.mapAs({x: 0, value: 4});
+var ac_seriesData_5 = ac_data.mapAs({x: 0, value: 5});
 
-function ac_last5Years(){
-  ac_chart.getSeries(0).data(ac_data2);
-}
+  // create line chart
+ac_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var ac_series1 = ac_chart.line(ac_seriesData_1);
+  ac_series1.name("Employee Salary")
+var ac_series2 = ac_chart.line(ac_seriesData_2);
+  ac_series2.name("Employee Training")
+var ac_series3 = ac_chart.line(ac_seriesData_3);
+  ac_series3.name("Office Supplies")
+var ac_series4 = ac_chart.line(ac_seriesData_4);
+ac_series4.name("Legal Fees")
+var ac_series5 = ac_chart.line(ac_seriesData_5);
+  ac_series5.name("Total")
+
+  // Animation, legend and axis titles
+  ac_chart.animation(true);
+  ac_chart.legend(true);
+  ac_chart.xAxis().title("Month")
+  ac_chart.yAxis().title("Costs")
+  //horizontal grid lines
+  ac_chart.yGrid().enabled(true);
+  // y axis uniform scaling
+  var customScale = anychart.scales.linear();
+  customScale.minimum(0);
+  customScale.maximum(30000);
+  var customTicks = customScale.ticks();
+  customTicks.interval(5000);
+  ac_chart.yScale(customScale);
+
+    {% raw %}
+    // configure axis labels
+    ac_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+    {% endraw %}
+
+  // set container id and display chart
+  ac_chart.container('AC_container1').draw();
+});
+
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = {{ ac_data2|safe }};
+
+    // create a chart
+    var chart = anychart.column();
+
+    // create a column series and set the data
+    var series = chart.column(data);
+    series.name("Total Cost")
+
+    // Animation, legend and axis titles
+    chart.animation(true);
+
+    // set the chart title
+    chart.title("Total Cost per year for the last 5 years");
+
+    // set the titles of the axes
+    chart.xAxis().title("Year");
+    chart.yAxis().title("Costs, $");
+
+    // set the container id
+    chart.container("AC_container2");
+
+    // initiate drawing the chart
+    chart.draw();
+});
 
 //--------------- Utilities Costs Line Chart ---------------//
 
 // Setting the data
 anychart.onDocumentReady(function () {
    uc_data = anychart.data.set({{ uc_data|safe }});
-
-  uc_data1 = anychart.data.set({{ uc_data1|safe }});
-
-  uc_data2 = anychart.data.set({{ uc_data2|safe }});
 
 //Mapping each sub category to a line series
 var uc_seriesData_1 = uc_data.mapAs({x: 0, value: 1});
@@ -697,17 +1019,77 @@ var uc_series3 = uc_chart.line(uc_seriesData_3);
   uc_chart.container('UC_container').draw();
 });
 
-// load initial data on button click
-function uc_thisYear(){
-  uc_chart.getSeries(0).data(uc_data);
-}
+// Setting the data
+anychart.onDocumentReady(function () {
+   uc_data = anychart.data.set({{ uc_data1|safe }});
 
-function uc_previousYear() {
-  uc_chart.getSeries(0).data(uc_data1);
-}
+//Mapping each sub category to a line series
+var uc_seriesData_1 = uc_data.mapAs({x: 0, value: 1});
+var uc_seriesData_2 = uc_data.mapAs({x: 0, value: 2});
+var uc_seriesData_3 = uc_data.mapAs({x: 0, value: 3});
 
-function uc_last5Years(){
-  uc_chart.getSeries(0).data(uc_data2);
-}
+  // create line chart
+uc_chart = anychart.line();
+
+//plotting each series line and setting each series name
+var uc_series1 = uc_chart.line(uc_seriesData_1);
+  uc_series1.name("Water")
+var uc_series2 = uc_chart.line(uc_seriesData_2);
+  uc_series2.name("Electricity")
+var uc_series3 = uc_chart.line(uc_seriesData_3);
+  uc_series3.name("Total")
+
+  // Animation, legend and axis titles
+  uc_chart.animation(true);
+  uc_chart.legend(true);
+  uc_chart.xAxis().title("Month")
+  uc_chart.yAxis().title("Costs")
+  //horizontal grid lines
+  uc_chart.yGrid().enabled(true);
+  // y axis uniform scaling
+  var customScale = anychart.scales.linear();
+  customScale.minimum(0);
+  customScale.maximum(500);
+  var customTicks = customScale.ticks();
+  customTicks.interval(50);
+  uc_chart.yScale(customScale);
+
+    {% raw %}
+    // configure axis labels
+    uc_chart.yAxis().labels().format('${%value}{scale:(1000)(1000)|(k)(m)}');
+    {% endraw %}
+
+  // set container id and display chart
+  uc_chart.container('UC_container1').draw();
+});
+
+anychart.onDocumentReady(function () {
+
+    // create data
+    var data = {{ uc_data2|safe }};
+
+    // create a chart
+    var chart = anychart.column();
+
+    // create a column series and set the data
+    var series = chart.column(data);
+    series.name("Total Cost")
+
+    // Animation, legend and axis titles
+    chart.animation(true);
+
+    // set the chart title
+    chart.title("Total Cost per year for the last 5 years");
+
+    // set the titles of the axes
+    chart.xAxis().title("Year");
+    chart.yAxis().title("Costs, $");
+
+    // set the container id
+    chart.container("UC_container2");
+
+    // initiate drawing the chart
+    chart.draw();
+});
 </script>
 {% endblock %}
