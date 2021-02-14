@@ -1362,8 +1362,11 @@ def update_user(id):
         db.close()
 
         session['user_updated'] = user.get_username()
-
-        return redirect(url_for('retrieve_users'))
+        user.get_account_type()
+        if user.get_account_type() == "Customer":
+            return redirect(url_for('retrieve_users'))
+        else:
+            return redirect(url_for('retrieve_staff'))
     else:
         users_dict = {}
         db = shelve.open('account', 'r')
