@@ -1408,7 +1408,7 @@ def delete_user(id):
 # ================================================== Staff Side ================================================== #
 
 
-@app.route('/staff_home')
+@app.route('/staff_home', methods=['GET', 'POST'])
 def staff_home():
     return render_template('staff/home.html')
 
