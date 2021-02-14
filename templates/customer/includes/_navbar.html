@@ -8,7 +8,7 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul id = "navLinks">
           <!-- Staff link -->
-          {% if "username" in session%}
+          {% if "username" in session %}
             <li class="navLinks"><a href="{{url_for('staff_home')}}">Staff</a></li>
           {% endif %}
 
