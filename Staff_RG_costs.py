@@ -60,7 +60,7 @@ class ISC(Data):
 
     # Accessor Methods
     def get_isc(self):
-        return self.__isc
+        return int(self.__isc)
 
     # Mutator Methods
     def set_isc(self, isc):

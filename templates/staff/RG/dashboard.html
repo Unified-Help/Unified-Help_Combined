@@ -263,17 +263,16 @@ function overall() {
   anychart.onDocumentReady(function () {
 
     // create a data set
-    var data = anychart.data.set([
-      ["Winter", 20000, 40000, 20000],
-      ["Spring", 20000, 40000, 40000],
-      ["Summer", 40000, 30000, 30000],
-      ["Autumn", 20000, 20000, 40000]
-    ]);
+    var data = anychart.data.set({{ IDA_this_year|safe }});
 
     // map the data
     var seriesData_1 = data.mapAs({x: 0, value: 1});
     var seriesData_2 = data.mapAs({x: 0, value: 2});
     var seriesData_3 = data.mapAs({x: 0, value: 3});
+    var seriesData_4 = data.mapAs({x: 0, value: 4});
+    var seriesData_5 = data.mapAs({x: 0, value: 5});
+    var seriesData_6 = data.mapAs({x: 0, value: 6});
+    var seriesData_7 = data.mapAs({x: 0, value: 7});
 
     // create a chart
     var chart = anychart.area();
@@ -283,20 +282,32 @@ function overall() {
 
     // create area series, set the data
     var series1 = chart.area(seriesData_1);
+      series1.name("Donated to cause")
     var series2 = chart.area(seriesData_2);
+      series2.name("Campaign Costs")
     var series3 = chart.area(seriesData_3);
+      series3.name("Inventory Storage Costs")
+    var series4 = chart.area(seriesData_4);
+      series4.name("Charitable expenses costs")
+    var series5 = chart.area(seriesData_5);
+      series5.name("Fund Raising Costs")
+    var series6 = chart.area(seriesData_6);
+      series6.name("Administration Costs")
+    var series7 = chart.area(seriesData_7);
+      series7.name("Utilities Costs")
 
     {% raw %}
     // configure tooltips
-    chart.tooltip().format("{%value} ({%yPercentOfCategory}{decimalsCount:2}%)");
+    //chart.tooltip().format("{%}{%value} ({%yPercentOfCategory}{decimalsCount:2}%)");
 
     // configure labels on the y-axis
     chart.yAxis().labels().format("{%value}");
     {% endraw %}
 
-    // set the chart title
-    chart.title("Stacked Area Chart");
-
+    // Configure titles/ axis/ others
+    chart.title("Donations to cause vs costs");
+    chart.animation(true);
+    chart.legend(true);
     // set the container id
     chart.container("IDA_container");
 
@@ -387,50 +398,36 @@ anychart.onDocumentReady(function () {
     chart.draw();
 });
 //--------------- Expenses Incurred bar chart ---------------//
-anychart.onDocumentReady(function () {
 
-    // create data
-    var data = [
-      {x: "John", value: 10000},
-      {x: "Jake", value: 12000},
-      {x: "Peter", value: 13000,
-       normal:   {
-           fill: "#5cd65c",
-           stroke: null,
-           label: {enabled: true}
-         },
-       hovered:  {
-           fill: "#5cd65c",
-           label: {enabled: true}
-         },
-       selected: {
-           fill: "#5cd65c",
-           label: {enabled: true}
-         }
-      },
-      {x: "James", value: 10000},
-      {x: "Mary", value: 9000}
-    ];
+  anychart.onDocumentReady(function () {
 
-    // create a chart
-    var chart = anychart.column();
+      // create data
+      var data = [
+        ["John", 10000],
+        ["Jake", 12000],
+        ["Peter", 13000],
+        ["James", 10000],
+        ["Mary", 9000]
+      ];
 
-    // create a column series and set the data
-    var series = chart.column(data);
+      // create a chart
+      var chart = anychart.column();
 
-    // set the chart title
-    chart.title("Column Chart: Appearance (Individual Points)");
+      // create a column series and set the data
+      var series = chart.column(data);
 
-    // set the titles of the axes
-    chart.xAxis().title("Manager");
-    chart.yAxis().title("Sales, $");
+      // set the chart title
+      chart.title("Column Chart: Basic Sample");
 
-    // set the container id
-    chart.container("EI_container");
+      // set the titles of the axes
+      chart.xAxis().title("Manager");
+      chart.yAxis().title("Sales, $");
 
-    // initiate drawing the chart
-    chart.draw();
-});
+      // set the container id
+      chart.container("EI_container");
 
+      // initiate drawing the chart
+      chart.draw();
+  });
 </script>
 {% endblock %}
