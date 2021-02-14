@@ -1289,6 +1289,9 @@ def profile():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
+    session.pop('email', None)
+    session.pop('contact', None)
+    session.pop('password', None)
     return render_template('customer/index.html')
 
 
@@ -1458,6 +1461,8 @@ def staff_profile():
 @app.route('/logout')
 def staff_logout():
     session.pop('username', None)
+    session.pop('email', None)
+    session.pop('contact', None)
     return render_template('staff/home.html')
 
 
