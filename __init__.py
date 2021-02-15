@@ -1269,7 +1269,7 @@ def login():
             if b.get_account_type() == "Customer":
                 return redirect(url_for('profile'))
             else:
-                return redirect(url_for('staff_home'))
+                return redirect(url_for('incoming_item'))
     return render_template('customer/AM/login.html')
 
 
