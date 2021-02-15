@@ -169,8 +169,8 @@
                   {% endfor %}
                   {% if session['username'] %}
                   {% if post.get_category() == 'Pinned Posts' %}
-                  <button class="fas fa-arrow-up fa-lg" style="width:50 px;height:30px;" onclick="upvote({{post.get_upvote()}}, {{post.get_post_id()}}, 1)">&nbsp;</button>&nbsp;
-                  <button class="fas fa-arrow-down fa-lg" style="width:50 px;height:30px;" onclick="down_vote({{post.get_upvote()}}, {{post.get_post_id()}}, 1)">&nbsp;</button>&nbsp;{{post.get_upvote()}}
+                  <button id='upBtn' class="fas fa-arrow-up fa-sm" style="width:30px;height:30px;margin-left:900px;" onclick="upvote({{post.get_upvote()}}, {{post.get_post_id()}}, 1)">&nbsp;</button>&nbsp;
+                  <button class="fas fa-arrow-down fa-sm" style="width:30px;height:30px;margin-left:900px;" onclick="down_vote({{post.get_upvote()}}, {{post.get_post_id()}}, 1)">&nbsp;</button>&nbsp;{{post.get_upvote()}}
                   {% elif post.get_category() == 'Unified Help Community' %}
                   <button class="fas fa-arrow-up float-right fa-lg"   style="width:50px;height:30px;" onclick="upvote({{post.get_upvote()}}, {{post.get_post_id()}}, 2)">&nbsp;<span style="font-weight: bold">{{post.get_upvote()}}</span></button>
                   {% endif %}
