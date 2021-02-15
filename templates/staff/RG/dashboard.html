@@ -133,7 +133,7 @@
             <h3>Inventory Space</h3>
           </div>
           <div class="p-2">
-              <label class="btn btn-sm btn-dark btn-simple" id="1">
+              <label class="btn btn-sm btn-dark btn-simple" id="streamButton"  onclick="startStream()">
                 <input type="radio" class="d-none d-sm-none" name="options">
                 <span class="d-none d-sm-block d-md-block d-lg-block d-xl-block">Live</span>
                 <span class="d-block d-sm-none">
@@ -391,30 +391,66 @@ function overall() {
   anychart.onDocumentReady(function () {
 
     // create data
-    var data = [
-      {x: "A", value: 637166},
-      {x: "B", value: 721630},
-      {x: "C", value: 148662},
-      {x: "D", value: 78662},
-      {x: "E", value: 90000}
-    ];
+    live_data = anychart.data.set([
+      {x: "Used", value: 70},
+      {x: "Free", value: 30},
+    ]);
 
     // create a pie chart and set the data
-    var chart = anychart.pie(data);
+    var chart = anychart.pie(live_data);
 
     /* set the inner radius
     (to turn the pie chart into a doughnut chart)*/
     chart.innerRadius("30%");
 
     // set the chart title
-    chart.title("Doughnut Chart: Basic Sample");
-
+    chart.animation(true)
+    chart.legend(true)
     // set the container id
     chart.container("IS_container");
 
     // initiate drawing the chart
     chart.draw();
 });
+
+function startStream() {
+
+  // adjust button content
+  var streamButton = document.getElementById("streamButton");
+  streamButton.innerHTML = "Stop" + "\nstream";
+
+  // set interval of data stream
+  var myVar = setInterval(
+
+    // data streaming itself
+    function() {
+
+      // append data
+      live_data.append({
+
+        // x value
+        x: "Used",
+
+        // random value from 1 to 500
+        value : Math.floor((Math.random() * 60)+ 1)
+      });
+
+      // removes first point
+      live_data.remove(0);
+      indexSetter++;
+    }, 500            // interval
+  );
+
+  streamButton.onclick = function() {
+
+    // clears interval which stops streaming
+    clearInterval(myVar);
+    streamButton.onclick = function () {
+      startStream();
+    };
+    streamButton.innerHTML = "Start" + "\nstream";
+  };
+};
 
 //--------------- Online vs Offline Donations Line graph (comparison) ---------------//
 anychart.onDocumentReady(function () {

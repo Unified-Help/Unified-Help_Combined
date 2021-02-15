@@ -1754,7 +1754,6 @@ def dashboard():
     EI_this_year_overview = 0
     EI_overall_overview = 0
     for key, value in totals_overall.items():
-        print(now.year, key)
         if now.year == int(key):
             EI_this_year_overview += sum(value)
 
@@ -2120,6 +2119,7 @@ def cost_analysis():
     fre_chart_data_3 = []
     ac_chart_data_3 = []
     uc_chart_data_3 = []
+    reduced_costs = {}
     for key, value in totals_overall.items():
         CC_data = [key, value[0]]
         cc_chart_data_3.append(CC_data)
@@ -2138,6 +2138,11 @@ def cost_analysis():
 
         UC_data = [key, value[5]]
         uc_chart_data_3.append(UC_data)
+
+        # Top 5 reduced costs
+        #if now.year == key:
+
+
     costs_db.close()
 
     return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
@@ -2152,11 +2157,6 @@ def cost_analysis():
 @app.route("/upload_insert_data")
 def upload_insert_data():
     return render_template('staff/RG/upload_insert_data.html')
-
-
-@app.route("/detailed_analysis")
-def detailed_analysis():
-    return render_template('staff/RG/detailed_analysis.html')
 
 
 @app.route("/upload_dataForm")
