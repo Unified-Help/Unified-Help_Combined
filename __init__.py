@@ -1655,14 +1655,20 @@ def dashboard():
 
     # ----------------------------Charts-------------------------
     donations = {}
-    costs_db = shelve.open('costs.db', 'w')
-    with open("Staff_RG_costs.csv", 'r') as costs_data_file:
-        reader = csv.DictReader(costs_data_file)
-        for row in reader:
-            donation = Donations(row['Month'], row['Year'], total_month_donations,
-                                 row['Offline Donations'])
-            donations[donation.get_data_id()] = donation
-            costs_db["donations"] = donations
+    try:
+        costs_db = shelve.open('costs.db', 'w')
+    except:
+        return redirect(url_for("file_upload"))
+    try:
+        with open("Staff_RG_costs.csv", 'r') as costs_data_file:
+            reader = csv.DictReader(costs_data_file)
+            for row in reader:
+                donation = Donations(row['Month'], row['Year'], total_month_donations,
+                                     row['Offline Donations'])
+                donations[donation.get_data_id()] = donation
+                costs_db["donations"] = donations
+    except FileNotFoundError:
+        return redirect(url_for("file_upload"))
     costs_db.close()
 
     costs_db = shelve.open('costs.db', 'r')
@@ -1795,47 +1801,50 @@ def cost_analysis():
 
     except:
         print("error in retrieving data from costs.db")
+        try:
+            with open("Staff_RG_costs.csv", 'r') as costs_data_file:
+                reader = csv.DictReader(costs_data_file)
+                for row in reader:
+                    # ------ Creating and Storing Campaign Costs Objects ----- #
+                    ccON = CampaignCosts(row['Month'], row['Year'], row['Campaign Costs: Online'],
+                                         row['Campaign Costs: Offline'])
+                    cc_dict[ccON.get_data_id()] = ccON
+                    costs_db['Campaign Costs'] = cc_dict
 
-        with open("Staff_RG_costs.csv", 'r') as costs_data_file:
-            reader = csv.DictReader(costs_data_file)
-            for row in reader:
-                # ------ Creating and Storing Campaign Costs Objects ----- #
-                ccON = CampaignCosts(row['Month'], row['Year'], row['Campaign Costs: Online'],
-                                     row['Campaign Costs: Offline'])
-                cc_dict[ccON.get_data_id()] = ccON
-                costs_db['Campaign Costs'] = cc_dict
+                    # ------ Creating and Storing ISC Objects ----- #
+                    isc = ISC(row['Month'], row['Year'], row['Inventory Storage Costs'])
+                    isc_dict[isc.get_data_id()] = isc
+                    costs_db['ISC Costs'] = isc_dict
 
-                # ------ Creating and Storing ISC Objects ----- #
-                isc = ISC(row['Month'], row['Year'], row['Inventory Storage Costs'])
-                isc_dict[isc.get_data_id()] = isc
-                costs_db['ISC Costs'] = isc_dict
+                    # ------ Creating and Storing CAP Objects ----- #
+                    CAP_supplies = CapCosts(row['Month'], row['Year'], row['Charitable Programs: Supplies'],
+                                            row['Charitable Programs: Manpower'], row['Charitable Programs: Venue Rental'])
+                    cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
+                    costs_db['CAP Costs'] = cap_dict
 
-                # ------ Creating and Storing CAP Objects ----- #
-                CAP_supplies = CapCosts(row['Month'], row['Year'], row['Charitable Programs: Supplies'],
-                                        row['Charitable Programs: Manpower'], row['Charitable Programs: Venue Rental'])
-                cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
-                costs_db['CAP Costs'] = cap_dict
+                    # ------ Creating and Storing FRE Objects ----- #
+                    FRE_catering = FreCosts(row['Month'], row['Year'], row['Fund-raising Expenses: Catering'],
+                                            row['Fund-raising Expenses: Venue Rental'],
+                                            row['Fund Raising Expenses: Marketing'])
+                    fre_dict[FRE_catering.get_data_id()] = FRE_catering
+                    costs_db['FRE Costs'] = fre_dict
 
-                # ------ Creating and Storing FRE Objects ----- #
-                FRE_catering = FreCosts(row['Month'], row['Year'], row['Fund-raising Expenses: Catering'],
-                                        row['Fund-raising Expenses: Venue Rental'],
-                                        row['Fund Raising Expenses: Marketing'])
-                fre_dict[FRE_catering.get_data_id()] = FRE_catering
-                costs_db['FRE Costs'] = fre_dict
+                    # ------ Creating and Storing AC Objects ----- #
+                    AC_ES = AdminCosts(row['Month'], row['Year'], row['Administration Costs: Employee Salaries'],
+                                       row['Administration Costs: Employee training'],
+                                       row['Administration Costs: Office Supplies'],
+                                       row['Administration Costs: Legal Fees'])
+                    ac_dict[AC_ES.get_data_id()] = AC_ES
+                    costs_db['AC Costs'] = ac_dict
 
-                # ------ Creating and Storing AC Objects ----- #
-                AC_ES = AdminCosts(row['Month'], row['Year'], row['Administration Costs: Employee Salaries'],
-                                   row['Administration Costs: Employee training'],
-                                   row['Administration Costs: Office Supplies'],
-                                   row['Administration Costs: Legal Fees'])
-                ac_dict[AC_ES.get_data_id()] = AC_ES
-                costs_db['AC Costs'] = ac_dict
+                    # ------ Creating and Storing UC Objects ----- #
+                    UC_water = UtilitiesCosts(row['Month'], row['Year'], row['Utilities Costs: Water'],
+                                              row['Utilities Costs: Electricity'])
+                    uc_dict[UC_water.get_data_id()] = UC_water
+                    costs_db['UC Costs'] = uc_dict
 
-                # ------ Creating and Storing UC Objects ----- #
-                UC_water = UtilitiesCosts(row['Month'], row['Year'], row['Utilities Costs: Water'],
-                                          row['Utilities Costs: Electricity'])
-                uc_dict[UC_water.get_data_id()] = UC_water
-                costs_db['UC Costs'] = uc_dict
+        except FileNotFoundError:
+            return redirect(url_for("file_upload"))
     costs_db.close()
 
     # Retrieve Costs from shelve and store in dictionary
@@ -2175,7 +2184,10 @@ def manual_insertForm():
         now_time = now.strftime("%X")
         now_date = now.strftime("%x")
         cost_dict = {}
-        db = shelve.open('costs.db', 'w')
+        try:
+            db = shelve.open('costs.db', 'w')
+        except:
+            return redirect(url_for("file_upload"))
 
         # Update Campaign Costs
         if manual_upload_form.data_field.data == "Campaign Costs: Online" or manual_upload_form.data_field.data == "Campaign Costs: Offline":
@@ -2306,6 +2318,7 @@ def manual_insertForm():
     else:
         print("hi")
 
+
     return render_template('staff/RG/manual_insertForm.html', form=manual_upload_form)
 
 
@@ -2314,8 +2327,8 @@ def update_history():
     changes_dict = {}
     try:
         db2 = shelve.open("Staff_RG_update_history.db", "r")
-    except FileNotFoundError:
-        print("Database not found")
+    except:
+        return redirect(url_for("file_upload"))
 
     try:
         changes_dict = db2['history']
