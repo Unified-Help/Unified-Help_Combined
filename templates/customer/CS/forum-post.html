@@ -251,19 +251,6 @@
                         </div>
                       </div>
                     </div>
-                {% if session['username'] %}
-                {% if reply.get_reply_category() == 'Pinned Posts' %}
-                <button class="fas fa-arrow-up float-right" style="width:50px;height:30px;" onclick="reply_upvote({{reply.get_upvote()}}, {{post.get_post_id()}}, 1, {{reply.get_post_reply_id()}})">&nbsp;<span style="font-weight: bold">{{reply.get_upvote()}}</span></button>
-                {% elif reply.get_reply_category() == 'Unified Help Community' %}
-                <button class="fas fa-arrow-up float-right" style="width:50px;height:30px;" onclick="reply_upvote({{reply.get_upvote()}}, {{post.get_post_id()}}, 2, {{reply.get_post_reply_id()}})">&nbsp;<span style="font-weight: bold">{{reply.get_upvote()}}</span></button>
-                {% endif %}
-                {% elif not session['username'] %}
-                {% if post.get_category() == 'Pinned Posts' %}
-                  <a href="/forum/login/redirect_to_pinned_post/{{post.get_post_id() }}"><button class="float-right">Login to upvote and downvote</button></a>
-                {% elif post.get_category() == 'Unified Help Community' %}
-                  <a href="/forum/login/redirect_to_uhc_post/{{post.get_post_id() }}"><button class="float-right">Login to upvote and downvote</button></a>
-                {%endif%}
-                {%endif%}
               </td>
             </tr>
             </tbody>
