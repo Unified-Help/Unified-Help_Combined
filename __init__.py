@@ -1818,7 +1818,8 @@ def cost_analysis():
 
                     # ------ Creating and Storing CAP Objects ----- #
                     CAP_supplies = CapCosts(row['Month'], row['Year'], row['Charitable Programs: Supplies'],
-                                            row['Charitable Programs: Manpower'], row['Charitable Programs: Venue Rental'])
+                                            row['Charitable Programs: Manpower'],
+                                            row['Charitable Programs: Venue Rental'])
                     cap_dict[CAP_supplies.get_data_id()] = CAP_supplies
                     costs_db['CAP Costs'] = cap_dict
 
@@ -2148,9 +2149,21 @@ def cost_analysis():
         UC_data = [key, value[5]]
         uc_chart_data_3.append(UC_data)
 
-        # Top 5 reduced costs
-        #if now.year == key:
-
+        # # Top 5 reduced costs
+        # if now.year == key:
+        #     cc_current_year = value[0]
+        #     isc_current_year = value[1]
+        #     cap_current_year = value[2]
+        #     fre_current_year = value[3]
+        #     ac_current_year = value[4]
+        #     uc_current_year = value[5]
+        # if now.year - 1 == key:
+        #     reduced_costs["Campaign Costs"] = cc_current_year - value[0]
+        #     reduced_costs["Inventory Storage Costs"] = isc_current_year - value[1]
+        #     reduced_costs["Charitable Program Costs"] = cap_current_year - value[2]
+        #     reduced_costs["Fund Raising Expenses"] = fre_current_year - value[3]
+        #     reduced_costs["Administration Costs"] = ac_current_year - value[4]
+        #     reduced_costs["Utilities Costs"] = uc_current_year - value[5]
 
     costs_db.close()
 
@@ -2317,7 +2330,6 @@ def manual_insertForm():
 
     else:
         print("hi")
-
 
     return render_template('staff/RG/manual_insertForm.html', form=manual_upload_form)
 
