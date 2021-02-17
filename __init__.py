@@ -2123,6 +2123,8 @@ def cost_analysis():
     except:
         print("Unable to retrieve IDA_overall from costs.db")
 
+    costs_db.close()
+
     cc_chart_data_3 = []
     isc_chart_data_3 = []
     cap_chart_data_3 = []
@@ -2150,22 +2152,20 @@ def cost_analysis():
         uc_chart_data_3.append(UC_data)
 
         # # Top 5 reduced costs
-        # if now.year == key:
-        #     cc_current_year = value[0]
-        #     isc_current_year = value[1]
-        #     cap_current_year = value[2]
-        #     fre_current_year = value[3]
-        #     ac_current_year = value[4]
-        #     uc_current_year = value[5]
-        # if now.year - 1 == key:
-        #     reduced_costs["Campaign Costs"] = cc_current_year - value[0]
-        #     reduced_costs["Inventory Storage Costs"] = isc_current_year - value[1]
-        #     reduced_costs["Charitable Program Costs"] = cap_current_year - value[2]
-        #     reduced_costs["Fund Raising Expenses"] = fre_current_year - value[3]
-        #     reduced_costs["Administration Costs"] = ac_current_year - value[4]
-        #     reduced_costs["Utilities Costs"] = uc_current_year - value[5]
-
-    costs_db.close()
+        if now.year == key:
+            cc_current_year = value[0]
+            isc_current_year = value[1]
+            cap_current_year = value[2]
+            fre_current_year = value[3]
+            ac_current_year = value[4]
+            uc_current_year = value[5]
+        if now.year - 1 == key:
+            reduced_costs["Campaign Costs"] = cc_current_year - value[0]
+            reduced_costs["Inventory Storage Costs"] = isc_current_year - value[1]
+            reduced_costs["Charitable Program Costs"] = cap_current_year - value[2]
+            reduced_costs["Fund Raising Expenses"] = fre_current_year - value[3]
+            reduced_costs["Administration Costs"] = ac_current_year - value[4]
+            reduced_costs["Utilities Costs"] = uc_current_year - value[5]
 
     return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
                            cc_data2=cc_chart_data_3,
