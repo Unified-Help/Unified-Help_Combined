@@ -50,9 +50,6 @@ class ForumPost:
         self.__datetime = datetime
         self.__datetime = self.__datetime.strftime("%d %b %Y, %X")
 
-    def set_reply_count(self,reply_count):
-        self.__reply_count = reply_count
-
     # Accessor
     def get_username(self):
         return self.__username
@@ -83,9 +80,6 @@ class ForumPost:
 
     def get_date_time(self):
         return self.__datetime
-
-    def get_reply_count(self):
-        return self.__replycount
 
 class ForumPinnedPostsCounter(ForumPost):
     def __init__(self):
