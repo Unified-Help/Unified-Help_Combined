@@ -1,6 +1,3 @@
-import shelve
-
-
 # Monetary Donations
 class DonateMoney:
 

@@ -1,6 +1,4 @@
-from wtforms import Form, StringField, FloatField, IntegerField, RadioField, SelectField, TextAreaField, validators
-from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms.fields.html5 import DateField, TimeField, DecimalField
+from wtforms import Form, StringField, IntegerField, SelectField, validators
 
 
 class donateMoney(Form):
@@ -24,7 +22,6 @@ class donateMoney(Form):
                                                ('05', 'May'), ('06', 'June'), ('07', 'July'), ('08', 'August'),
                                                ('09', 'September'), ('10', 'October'), ('11', 'November'),
                                                ('12', 'December')])
-    # use datetime?
     cardInfo_YearExpiry = SelectField("Year of Expiry*", [validators.DataRequired()],
                                       choices=[('21', '2021'), ('22', '2022'), ('23', '2023'), ('24', '2024'),
                                                ('25', '2025'), ('26', '2026'), ('27', '2027')])

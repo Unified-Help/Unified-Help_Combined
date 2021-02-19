@@ -120,7 +120,7 @@ def donateHistory():
         try:
             db = shelve.open("donorChoices", "r")
 
-            # If only Money donations are created and Items are empty
+            # Display if only Money donations are created and Items are empty
             if "Money" in db and "Items" not in db:
                 # Money History
                 donorsMID_dict = db["Money"]
@@ -132,12 +132,11 @@ def donateHistory():
                     for i in range(len(donorsList)):
                         donorMID = donorsList[i]
                         donorsMID_list.append(donorMID)
-                        # print(donorsMID_list)
 
                 return render_template('customer/TP/donationHistory.html', donorsIID_list='',
                                        donorsMID_list=donorsMID_list)
 
-            # If only Item donations are created and Money is empty
+            # Display if only Item donations are created and Money is empty
             if "Money" not in db and "Items" in db:
                 # Item History
                 donorsIID_dict = db["Items"]
@@ -154,7 +153,7 @@ def donateHistory():
                 return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list,
                                        donorsMID_list='')
 
-            # Once both item and money donations has been made
+            # Display once both item and money donations has been made
             if "Money" in db and "Items" in db:
                 # Money History
                 donorsMID_dict = db["Money"]
@@ -166,7 +165,6 @@ def donateHistory():
                     for i in range(len(donorsList)):
                         donorMID = donorsList[i]
                         donorsMID_list.append(donorMID)
-                        # print(donorsMID_list)
 
                 # Item History
                 donorsIID_dict = db["Items"]
@@ -178,10 +176,7 @@ def donateHistory():
                     for i in range(len(donorsList)):
                         donorIID = donorsList[i]
                         donorsIID_list.append(donorIID)
-                        # print(donorsIID_list)
 
-                # print(donorI_dID)
-                # print("hi")
                 return render_template('customer/TP/donationHistory.html', donorsIID_list=donorsIID_list,
                                        donorsMID_list=donorsMID_list)
 
@@ -235,11 +230,10 @@ def donate_Money():
             now = datetime.datetime.now()
 
             donor = DonateMoney(donate_money.donateToWho.data, donate_money.moneyAmount.data,
-                                donate_money.cardInfo_Name.data,
-                                donate_money.cardInfo_Number.data, donate_money.cardInfo_CVV.data,
-                                donate_money.cardInfo_DateExpiry.data, donate_money.cardInfo_YearExpiry.data, now)
-            # donor.set_moneyID()
-            # set the money ID counter
+                                donate_money.cardInfo_Name.data, donate_money.cardInfo_Number.data,
+                                donate_money.cardInfo_CVV.data, donate_money.cardInfo_DateExpiry.data,
+                                donate_money.cardInfo_YearExpiry.data, now)
+            # Setting the money ID counter
             donoCounter = []
             if "MoneyCounter" not in dbMC:
                 dbMC["MoneyCounter"] = donoCounter
@@ -258,16 +252,15 @@ def donate_Money():
 
             donor.set_moneyID(moneyID)
 
-            # setting the donation status "pending" or "confirmed"
+            # Setting the donation status "pending" or "confirmed"
             if request.form.get('Cancel') == 'Cancel':
                 donor.set_status("Pending")
             if request.form.get('Confirm') == 'Confirm':
                 donor.set_status("Confirmed")
                 donate_amount = donor.get_money_amount()
                 dbMC['TotalMAmount'] = donate_amount
-            # print(donor.get_status())
 
-            # {donor ID: [donation info1, donation info2]}
+            # Storing shelve as {donor ID: [donation info1, donation info2]}
             donationinfoMNest.append(donor)
             donor_moneychoices[SID] = donationinfoMNest
 
@@ -282,18 +275,6 @@ def donate_Money():
 
 app.config["Item_Donations"] = "static/customer/img/Idonation"
 app.config["Allowed_Images_Type"] = ["PNG", "JPG", "JPEG"]
-
-
-def allowed_images(filename):
-    if not "." in filename:
-        return False
-
-    file = filename.rsplit(".", 1)[1]
-
-    if file.upper() in app.config["Allowed_Images_Type"]:
-        return True
-    else:
-        return False
 
 
 @app.route("/donate/details/item", methods=['GET', 'POST'])
@@ -324,14 +305,10 @@ def donate_Item():
                 # If user has made a donation before
                 if SID in userids:
                     donationinfoI.append(donor_itemchoices[SID])
-                    # list(donanationinfoI)
-                    # donor_itemchoices.pop(donor_itemchoices[SID])
 
-                # print(donationinfoI)
                 for x in donationinfoI:
                     for y in x:
                         donationinfoINest.append(y)
-                # print(donationinfoINest)
 
             except:
                 print("Error in retrieving Donors IM from donorChoices")
@@ -341,10 +318,10 @@ def donate_Item():
             donor = DonateItem(donate_item.donateToWho.data, donate_item.itemType.data, donate_item.itemName.data,
                                donate_item.itemWeight.data, donate_item.itemHeight.data, donate_item.itemLength.data,
                                donate_item.itemWidth.data, donate_item.collectionType.data,
-                               donate_item.collectionDate.data,
-                               donate_item.collectionMonth.data, donate_item.collectionTime.data,
-                               donate_item.pickupAddress1.data, donate_item.pickupAddress2.data,
-                               donate_item.pickupAddress3.data, donate_item.pickupPostalCode.data, now)
+                               donate_item.collectionDate.data, donate_item.collectionMonth.data,
+                               donate_item.collectionTime.data, donate_item.pickupAddress1.data,
+                               donate_item.pickupAddress2.data, donate_item.pickupAddress3.data,
+                               donate_item.pickupPostalCode.data, now)
 
             # Setting Item Donation ID
             donoCounter = []
@@ -369,17 +346,8 @@ def donate_Item():
             if request.files:
                 image = request.files['image']
 
-                # if image.filename == " ":
-                #     print("Image must have filename")
-                #     return redirect(request.url)
-                #
-                # if not allowed_images(image.filename):
-                #     print("That image type is not allowed")
-                #     return redirect(request.url)
-
                 donor.set_item_image(image.filename)
                 image.save(os.path.join(app.config["Item_Donations"], image.filename))
-                # return redirect(request.url)
 
             # Set Username to object
             donor.set_username(SID)
@@ -400,10 +368,8 @@ def donate_Item():
                 donor.set_status("Pending")
             if request.form.get('Confirm') == 'Confirm':
                 donor.set_status("Confirmed")
-            # print(donor.get_status())
 
-            # {donor ID: [donation info1, donation info2]}
-            # change donorIDnInfo to donor_itemchoices
+            # Storing shelve as {donor ID: [donation info1, donation info2]}
             donationinfoINest.append(donor)
             donor_itemchoices[SID] = donationinfoINest
 
@@ -490,7 +456,6 @@ def donate_ItemUpdate(id):
             if donoinfoList[i].get_itemID() == id:
                 updatedonoinfo = donoinfoList[i]
 
-        # donor = donors_dict.get(id)
         donor = updatedonoinfo
 
         # Item Specifications
@@ -528,7 +493,6 @@ def donate_ItemUpdate(id):
             if donoinfoList[i].get_itemID() == id:
                 updatedonoinfo = donoinfoList[i]
 
-        # donor = donors_dict.get(id)
         donor = updatedonoinfo
 
         # Item Specifications
@@ -565,14 +529,15 @@ def donateGallery():
         if "Items" in db:
             # Item History
             donorsIID_dict = db["Items"]
-            # useridsI = [*donorsIID_dict]
             donorsIID_list = []
             unnested_donorsIID_list = []
 
+            # Getting list of all donor objects (donations created) and putting into 1 list
             for key in donorsIID_dict:
                 donorinfo_list = donorsIID_dict[key]
                 donorsIID_list.append(donorinfo_list)
 
+            # Unnesting the list of donor objects (donations)
             for x in donorsIID_list:
                 for y in x:
                     unnested_donorsIID_list.append(y)
@@ -609,6 +574,7 @@ def forum_login():
 
     return render_template('customer/AM/login.html')
 
+
 # This app route is added so that when the user wants to upvote/downvote or make a reply to a post, the user needs to be logged in before they can do any of the activity mentioned
 @app.route('/forum/login/redirect_to_pinned_post/<int:post_id>', methods=['GET', 'POST'])
 def forum_login_redirect_to_pinned_post(post_id):
@@ -631,6 +597,7 @@ def forum_login_redirect_to_pinned_post(post_id):
 
     return render_template('customer/AM/login.html')
 
+
 # This app route is added so that when the user wants to upvote/downvote or make a reply to a post, the user needs to be logged in before they can do any of the activity mentioned
 @app.route('/forum/login/redirect_to_uhc_post/<int:post_id>', methods=['GET', 'POST'])
 def forum_login_redirect_to_uhc_post(post_id):
@@ -652,6 +619,7 @@ def forum_login_redirect_to_uhc_post(post_id):
             return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
     return render_template('customer/AM/login.html')
+
 
 @app.route("/forum")
 def forum():
@@ -681,6 +649,7 @@ def forum():
     usersDB.close()
     return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, uhc_list=uhc_list,
                            usersList=usersList)
+
 
 @app.route("/forum/createforumpost", methods=['GET', 'POST'])
 def create_forum_post():
@@ -785,7 +754,6 @@ def forum_pinned_posts_post(post_id):
     pp_upvote_list = []
     pp_downvote_list = []
 
-
     post = pinned_posts_dict.get(post_id)
     session['post_id'] = post_id
     pinned_posts_list.append(post)
@@ -877,7 +845,8 @@ def forum_pinned_posts_post(post_id):
     datetime_now = datetime.datetime.now().strftime("%d %b %Y, %X")
     return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list,
                            user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list,
-                           post_id=post_id, pp_upvote_list=pp_upvote_list, pp_downvote_list=pp_downvote_list, datetime_now=datetime_now)
+                           post_id=post_id, pp_upvote_list=pp_upvote_list, pp_downvote_list=pp_downvote_list,
+                           datetime_now=datetime_now)
 
 
 @app.route("/forum/pinned_posts/update/<int:post_id>", methods=['GET', 'POST'])
@@ -925,6 +894,7 @@ def forum_pinned_posts_post_delete(post_id):
         db['PinnedPostsPostReply'] = reply_dict
     db.close()
     return redirect(url_for('forum_pinned_posts'))
+
 
 @app.route("/forum/pinned_posts/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
 def pinned_post_delete_reply(post_id, reply_id):
@@ -1071,7 +1041,9 @@ def forum_uhc_posts_post(post_id):
 
     return render_template('customer/CS/forum-post.html', post_list=uhc_list,
                            user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list,
-                           post_id=post_id, uhc_upvote_list=uhc_upvote_list, uhc_downvote_list=uhc_downvote_list, datetime_now=datetime_now)
+                           post_id=post_id, uhc_upvote_list=uhc_upvote_list, uhc_downvote_list=uhc_downvote_list,
+                           datetime_now=datetime_now)
+
 
 @app.route("/forum/uhc/update/<int:post_id>", methods=['GET', 'POST'])
 def forum_uhc_post_update(post_id):
@@ -1100,6 +1072,7 @@ def forum_uhc_post_update(post_id):
         return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update,
                                list=uhc_list)
 
+
 @app.route('/forum/uhc/delete/<int:post_id>', methods=['GET', 'POST'])
 def forum_uhc_post_delete(post_id):
     uhc_dict = {}
@@ -1117,6 +1090,7 @@ def forum_uhc_post_delete(post_id):
         db['UHCPostsPostReply'] = reply_dict
     db.close()
     return redirect(url_for('forum_uhc_posts'))
+
 
 @app.route("/forum/uhc/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
 def uhc_delete_reply(post_id, reply_id):
@@ -1265,7 +1239,6 @@ def upvote():
                 pinned_post_dict[post].set_upvote(upvote)
         db['PinnedPosts'] = pinned_post_dict
 
-
         for post in uhc_dict:
             if post == post_id:
                 uhc_dict[post].set_upvote(upvote)
@@ -1273,6 +1246,7 @@ def upvote():
         db.close()
 
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
+
 
 # Account Management
 
@@ -1550,19 +1524,19 @@ def retrieve_staff():
 
 @app.route("/incoming_items")
 def incoming_item():
-    # SID = session["username"]
     donorsI_dict = {}
     try:
         db = shelve.open("donorChoices", "r")
         donorsIID_dict = db["Items"]
-        # useridsI = [*donorsIID_dict]
         donorsIID_list = []
         unnested_donorsIID_list = []
 
+        # Getting list of all donor objects (donations created) and putting into 1 list
         for key in donorsIID_dict:
             donorinfo_list = donorsIID_dict[key]
             donorsIID_list.append(donorinfo_list)
 
+        # Unnesting the list of donor objects (donations)
         for x in donorsIID_list:
             for y in x:
                 unnested_donorsIID_list.append(y)
@@ -1576,20 +1550,20 @@ def incoming_item():
 
 @app.route("/incoming_items/confirmation/<string:id>", methods=['GET', 'POST'])
 def incoming_item_confirmation(id):
-    # SID = session["username"]
     if request.method == 'POST':
         donorsI_dict = {}
         db = shelve.open('donorChoices', 'w')
 
         donorsI_dict = db['Items']
-        # donoinfoList = donorsI_dict[SID]
         donorsIID_list = []
         unnested_donorsIID_list = []
 
+        # Getting list of all donor objects (donations created) and putting into 1 list
         for key in donorsI_dict:
             donorinfo_list = donorsI_dict[key]
             donorsIID_list.append(donorinfo_list)
 
+        # Unnesting the list of donor objects (donations)
         for x in donorsIID_list:
             for y in x:
                 unnested_donorsIID_list.append(y)
@@ -1602,6 +1576,7 @@ def incoming_item_confirmation(id):
 
         donor = updatedonoinfo
 
+        # Setting the donation collection status to Confirmed
         if request.form.get('Confirm') == 'Confirm':
             donor.set_collection_status("Confirmed")
 
@@ -1620,14 +1595,15 @@ def incoming_item_archive(id):
         db = shelve.open('donorChoices', 'w')
 
         donorsI_dict = db['Items']
-        # donoinfoList = donorsI_dict[SID]
         donorsIID_list = []
         unnested_donorsIID_list = []
 
+        # Getting list of all donor objects (donations created) and putting into 1 list
         for key in donorsI_dict:
             donorinfo_list = donorsI_dict[key]
             donorsIID_list.append(donorinfo_list)
 
+        # Unnesting the list of donor objects (donations)
         for x in donorsIID_list:
             for y in x:
                 unnested_donorsIID_list.append(y)
@@ -1640,10 +1616,9 @@ def incoming_item_archive(id):
 
         donor = updatedonoinfo
 
+        # Setting the donation collection status to Archived
         if request.form.get('Archive') == 'Archive':
             donor.set_collection_status("Archive")
-
-        # print(donor.get_collection_status())
 
         db['Items'] = donorsI_dict
 

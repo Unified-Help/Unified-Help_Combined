@@ -1,8 +1,5 @@
-from wtforms import Form, StringField, FloatField, IntegerField, RadioField, SelectField, \
-    TextAreaField, validators
+from wtforms import Form, StringField, FloatField, RadioField, SelectField, TextAreaField, validators
 from wtforms.validators import DataRequired
-from flask_wtf.file import FileField, FileRequired, FileAllowed
-from wtforms.fields.html5 import DateField, TimeField, DecimalField
 
 
 class donateItem(Form):
@@ -26,7 +23,6 @@ class donateItem(Form):
     itemLength = FloatField("Length of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
     itemWidth = FloatField("Width of Item*", [validators.NumberRange(min=0, max=150), validators.DataRequired()])
     itemImage = TextAreaField("Select Image")
-    # itemImage = FileField('Picture of Item', validators=[FileAllowed(['jpg', 'png'], 'Images only!')])
 
     # Collection Types and Information
     collectionDate = SelectField("Pick Collection Date*", [validators.DataRequired()],
