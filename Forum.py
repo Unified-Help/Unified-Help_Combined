@@ -17,7 +17,6 @@ class ForumPost:
         self.__downvote = 0
         self.__edited = False
         self.__datetime = datetime.now()
-        self.__reply_count = 0
 
     # Mutator
     def set_username(self, username):

@@ -587,6 +587,7 @@ def donateGallery():
 
 
 # Customer Support
+# This app route is added so that when the user wants to post a forum post, the user needs to be logged in before they can post
 @app.route('/forum/login', methods=['GET', 'POST'])
 def forum_login():
     create_login_form = CreateUserForm(request.form)
@@ -604,12 +605,11 @@ def forum_login():
             session["gender"] = b.get_gender()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
-            print(b.get_date_time())
             return redirect(url_for('create_forum_post'))
 
     return render_template('customer/AM/login.html')
 
-
+# This app route is added so that when the user wants to upvote/downvote or make a reply to a post, the user needs to be logged in before they can do any of the activity mentioned
 @app.route('/forum/login/redirect_to_pinned_post/<int:post_id>', methods=['GET', 'POST'])
 def forum_login_redirect_to_pinned_post(post_id):
     create_login_form = CreateUserForm(request.form)
@@ -627,12 +627,11 @@ def forum_login_redirect_to_pinned_post(post_id):
             session["gender"] = b.get_gender()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
-            print(b.get_date_time())
             return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
 
     return render_template('customer/AM/login.html')
 
-
+# This app route is added so that when the user wants to upvote/downvote or make a reply to a post, the user needs to be logged in before they can do any of the activity mentioned
 @app.route('/forum/login/redirect_to_uhc_post/<int:post_id>', methods=['GET', 'POST'])
 def forum_login_redirect_to_uhc_post(post_id):
     create_login_form = CreateUserForm(request.form)
@@ -650,11 +649,9 @@ def forum_login_redirect_to_uhc_post(post_id):
             session["gender"] = b.get_gender()
             session.permanent = True
             app.permanent_session_lifetime = timedelta(hours=1)
-            print(b.get_date_time())
             return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
     return render_template('customer/AM/login.html')
-
 
 @app.route("/forum")
 def forum():
@@ -684,7 +681,6 @@ def forum():
     usersDB.close()
     return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, uhc_list=uhc_list,
                            usersList=usersList)
-
 
 @app.route("/forum/createforumpost", methods=['GET', 'POST'])
 def create_forum_post():
@@ -747,7 +743,6 @@ def create_forum_post():
 
 @app.route("/forum/pinned_posts")
 def forum_pinned_posts():
-    # page = request.args.get('page', 1, type=int)
     usersDB = {}
     pinned_posts_dict = {}
     db = shelve.open('forumdb', 'c')
@@ -773,15 +768,23 @@ def forum_pinned_posts():
 # Specific Forum Post ID - UHC
 @app.route("/forum/pinned_posts/<int:post_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post(post_id):
+    global pp_upvote_list, pp_downvote_list
     post_reply_retrieve_dict = {}
     user_dict = {}
     pinned_posts_dict = {}
+    pp_upvote_dict = {}
+    pp_downvote_dict = {}
     db = shelve.open('forumdb', 'c')
     pinned_posts_dict = db['PinnedPosts']
+    pp_upvote_dict = db['PinnedPostUpvoteCount']
+    pp_downvote_dict = db['PinnedPostDownvoteCount']
     userdb = shelve.open('account', 'r')
     user_dict = userdb['Users']
     pinned_posts_list = []
     user_list = []
+    pp_upvote_list = []
+    pp_downvote_list = []
+
 
     post = pinned_posts_dict.get(post_id)
     session['post_id'] = post_id
@@ -790,6 +793,11 @@ def forum_pinned_posts_post(post_id):
         user = user_dict.get(key)
         user_list.append(user)
     userdb.close()
+
+    if post_id in pp_upvote_dict.keys():
+        pp_upvote_list = pp_upvote_dict[post_id]
+    if post_id in pp_downvote_dict.keys():
+        pp_downvote_list = pp_downvote_dict[post_id]
 
     # Retrieving Post Replies
     post_reply_retrieve_dict = db['PinnedPostsPostReply']
@@ -817,7 +825,6 @@ def forum_pinned_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -831,7 +838,6 @@ def forum_pinned_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -844,7 +850,6 @@ def forum_pinned_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -858,7 +863,6 @@ def forum_pinned_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
@@ -870,9 +874,10 @@ def forum_pinned_posts_post(post_id):
         return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
 
     post_id = post_id
+    datetime_now = datetime.datetime.now().strftime("%d %b %Y, %X")
     return render_template('customer/CS/forum-post.html', post_list=pinned_posts_list,
                            user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list,
-                           post_id=post_id)
+                           post_id=post_id, pp_upvote_list=pp_upvote_list, pp_downvote_list=pp_downvote_list, datetime_now=datetime_now)
 
 
 @app.route("/forum/pinned_posts/update/<int:post_id>", methods=['GET', 'POST'])
@@ -919,11 +924,8 @@ def forum_pinned_posts_post_delete(post_id):
         reply_dict.pop(post_id)
         db['PinnedPostsPostReply'] = reply_dict
     db.close()
-
     return redirect(url_for('forum_pinned_posts'))
 
-
-# Pinned Post Reply Deletion
 @app.route("/forum/pinned_posts/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
 def pinned_post_delete_reply(post_id, reply_id):
     reply_dict = {}
@@ -939,9 +941,7 @@ def pinned_post_delete_reply(post_id, reply_id):
 
     reply_dict[post_id] = id_dict
     db['PinnedPostsPostReply'] = reply_dict
-
     db.close()
-
     return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
 
 
@@ -962,18 +962,23 @@ def forum_uhc_posts():
                            lenOfUHCPost=lenOfUHCPost)
 
 
-# Specific Forum Post ID - UHC
 @app.route("/forum/uhc/<int:post_id>", methods=['GET', 'POST'])
 def forum_uhc_posts_post(post_id):
     post_reply_retrieve_dict = {}
     user_dict = {}
     uhc_dict = {}
+    uhc_upvote_dict = {}
+    uhc_downvote_dict = {}
     db = shelve.open('forumdb', 'c')
     uhc_dict = db['UHC']
+    uhc_upvote_dict = db['UHCPostUpvoteCount']
+    uhc_downvote_dict = db['UHCPostDownvoteCount']
     userdb = shelve.open('account', 'r')
     user_dict = userdb['Users']
     uhc_list = []
     user_list = []
+    uhc_upvote_list = []
+    uhc_downvote_list = []
 
     post = uhc_dict.get(post_id)
     uhc_list.append(post)
@@ -981,6 +986,11 @@ def forum_uhc_posts_post(post_id):
         user = user_dict.get(key)
         user_list.append(user)
     userdb.close()
+
+    if post_id in uhc_upvote_dict.keys():
+        uhc_upvote_list = uhc_upvote_dict[post_id]
+    if post_id in uhc_downvote_dict.keys():
+        uhc_downvote_list = uhc_downvote_dict[post_id]
 
     # Retrieving Post Replies
     post_reply_retrieve_dict = db['UHCPostsPostReply']
@@ -1008,7 +1018,6 @@ def forum_uhc_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -1022,7 +1031,6 @@ def forum_uhc_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -1035,7 +1043,6 @@ def forum_uhc_posts_post(post_id):
                 reply_id = 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -1049,7 +1056,6 @@ def forum_uhc_posts_post(post_id):
                 reply_id = last_id + 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
-                post_reply_details.set_upvote(0)
                 post_reply_details.set_date_time(datetime.datetime.now())
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
@@ -1061,10 +1067,11 @@ def forum_uhc_posts_post(post_id):
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
     post_id = post_id
+    datetime_now = datetime.datetime.now().strftime("%d %b %Y, %X")
+
     return render_template('customer/CS/forum-post.html', post_list=uhc_list,
                            user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list,
-                           post_id=post_id)
-
+                           post_id=post_id, uhc_upvote_list=uhc_upvote_list, uhc_downvote_list=uhc_downvote_list, datetime_now=datetime_now)
 
 @app.route("/forum/uhc/update/<int:post_id>", methods=['GET', 'POST'])
 def forum_uhc_post_update(post_id):
@@ -1093,7 +1100,6 @@ def forum_uhc_post_update(post_id):
         return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update,
                                list=uhc_list)
 
-
 @app.route('/forum/uhc/delete/<int:post_id>', methods=['GET', 'POST'])
 def forum_uhc_post_delete(post_id):
     uhc_dict = {}
@@ -1112,8 +1118,6 @@ def forum_uhc_post_delete(post_id):
     db.close()
     return redirect(url_for('forum_uhc_posts'))
 
-
-# Pinned Post Reply Deletion
 @app.route("/forum/uhc/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
 def uhc_delete_reply(post_id, reply_id):
     reply_dict = {}
@@ -1139,80 +1143,136 @@ def upvote():
     upvote = request.form["upvote"]
     upvote = int(upvote)
     category = request.form["category"]
+    vote = request.form["vote"]
+    vote = int(vote)
+    post_id = request.form["post_id"]
+    post_id = int(post_id)
+    db = shelve.open('forumdb', 'c')
+    pinned_post_dict = {}
+    uhc_dict = {}
+    pinned_post_dict = db['PinnedPosts']
+    uhc_dict = db['UHC']
+    pp_upvote_dict = db['PinnedPostUpvoteCount']
+    pp_downvote_dict = db['PinnedPostDownvoteCount']
+    uhc_upvote_dict = db['UHCPostUpvoteCount']
+    uhc_downvote_dict = db['UHCPostDownvoteCount']
+    list = []
     if category == "1":
-        pinned_post_dict = {}
-        db = shelve.open('forumdb', 'c')
-        pinned_post_dict = db['PinnedPosts']
+        if vote == 1:
+            if post_id in pp_upvote_dict.keys():
+                list = pp_upvote_dict[post_id]
+                if session['username'] in list:
+                    pass
+                else:
+                    list.append(session['username'])
+                    pp_upvote_dict[post_id] = list
+                    db['PinnedPostUpvoteCount'] = pp_upvote_dict
+            else:
+                list.append(session['username'])
+                pp_upvote_dict[post_id] = list
+                db['PinnedPostUpvoteCount'] = pp_upvote_dict
 
-        post_id = request.form["post_id"]
-        post_id = int(post_id)
+            if post_id in pp_downvote_dict.keys():
+                list = pp_downvote_dict[post_id]
+                if session['username'] in list:
+                    list.remove(session['username'])
+                    pp_downvote_dict[post_id] = list
+                    db['PinnedPostDownvoteCount'] = pp_downvote_dict
+            else:
+                pass
+
+        else:
+            if post_id in pp_downvote_dict.keys():
+                list = pp_downvote_dict[post_id]
+                if session['username'] in list:
+                    pass
+                else:
+                    list.append(session['username'])
+                    pp_downvote_dict[post_id] = list
+                    db['PinnedPostDownvoteCount'] = pp_downvote_dict
+            else:
+                list.append(session['username'])
+                pp_downvote_dict[post_id] = list
+                db['PinnedPostDownvoteCount'] = pp_downvote_dict
+
+            if post_id in pp_upvote_dict.keys():
+                list = pp_upvote_dict[post_id]
+                if session['username'] in list:
+                    list.remove(session['username'])
+                    pp_upvote_dict[post_id] = list
+                    db['PinnedPostUpvoteCount'] = pp_upvote_dict
+            else:
+                pass
+
         for post in pinned_post_dict:
             if post == post_id:
                 pinned_post_dict[post].set_upvote(upvote)
         db['PinnedPosts'] = pinned_post_dict
-        db.close()
-        return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
-    elif category == "2":
-        uhc_dict = {}
-        db = shelve.open('forumdb', 'c')
-        uhc_dict = db['UHC']
 
-        post_id = request.form["post_id"]
-        post_id = int(post_id)
+        db.close()
+
+        return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
+
+    elif category == "2":
+        if vote == 1:
+            if post_id in uhc_upvote_dict.keys():
+                list = uhc_upvote_dict[post_id]
+                if session['username'] in list:
+                    pass
+                else:
+                    list.append(session['username'])
+                    uhc_upvote_dict[post_id] = list
+                    db['UHCPostUpvoteCount'] = uhc_upvote_dict
+            else:
+                list.append(session['username'])
+                uhc_upvote_dict[post_id] = list
+                db['UHCPostUpvoteCount'] = uhc_upvote_dict
+
+            if post_id in uhc_downvote_dict.keys():
+                list = uhc_downvote_dict[post_id]
+                if session['username'] in list:
+                    list.remove(session['username'])
+                    uhc_downvote_dict[post_id] = list
+                    db['UHCPostDownvoteCount'] = uhc_downvote_dict
+            else:
+                pass
+
+        else:
+            if post_id in uhc_downvote_dict.keys():
+                list = uhc_downvote_dict[post_id]
+                if session['username'] in list:
+                    pass
+                else:
+                    list.append(session['username'])
+                    uhc_downvote_dict[post_id] = list
+                    db['UHCPostDownvoteCount'] = uhc_downvote_dict
+            else:
+                list.append(session['username'])
+                uhc_downvote_dict[post_id] = list
+                db['UHCPostDownvoteCount'] = uhc_downvote_dict
+
+            if post_id in uhc_upvote_dict.keys():
+                list = uhc_upvote_dict[post_id]
+                if session['username'] in list:
+                    list.remove(session['username'])
+                    uhc_upvote_dict[post_id] = list
+                    db['UHCPostUpvoteCount'] = uhc_upvote_dict
+            else:
+                pass
+
+        for post in pinned_post_dict:
+            if post == post_id:
+                pinned_post_dict[post].set_upvote(upvote)
+        db['PinnedPosts'] = pinned_post_dict
+
+
         for post in uhc_dict:
             if post == post_id:
                 uhc_dict[post].set_upvote(upvote)
         db['UHC'] = uhc_dict
         db.close()
+
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
-
-
-@app.route("/reply_upvote", methods=['POST'])
-def reply_upvote():
-    upvote = request.form["reply_upvote"]
-    upvote = int(upvote)
-    category = request.form["category"]
-    if category == "1":
-        pinned_post_reply_dict = {}
-        db = shelve.open('forumdb', 'c')
-        pinned_post_reply_dict = db['PinnedPostsPostReply']
-
-        post_id = request.form["post_id"]
-        post_id = int(post_id)
-        reply_id = request.form["reply_id"]
-        reply_id = int(reply_id)
-        for post in pinned_post_reply_dict:
-            if post == post_id:
-                reply_dict = pinned_post_reply_dict[post]
-                for reply in reply_dict:
-                    if reply == reply_id:
-                        print('random')
-                        reply_dict[reply].set_upvote(upvote)
-                        print(reply_dict[reply].get_upvote())
-        db['PinnedPostsPostReply'] = pinned_post_reply_dict
-        db.close()
-        return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
-    elif category == "2":
-        uhc_post_reply_dict = {}
-        db = shelve.open('forumdb', 'c')
-        uhc_post_reply_dict = db['UHCPostsPostReply']
-
-        post_id = request.form["post_id"]
-        post_id = int(post_id)
-        reply_id = request.form["reply_id"]
-        reply_id = int(reply_id)
-        for post in uhc_post_reply_dict:
-            if post == post_id:
-                reply_dict = uhc_post_reply_dict[post]
-                for reply in reply_dict:
-                    if reply == reply_id:
-                        print('random')
-                        reply_dict[reply].set_upvote(upvote)
-                        print(reply_dict[reply].get_upvote())
-        db['UHCPostsPostReply'] = uhc_post_reply_dict
-        db.close()
-        return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
-
 
 # Account Management
 

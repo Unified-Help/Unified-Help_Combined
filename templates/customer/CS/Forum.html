@@ -6,22 +6,21 @@
 
 {% set active_page = "cs" %}
 <body>
-
   {% block content %}
-  <br/><br/><br/><br/>
+  <br><br><br><br>
   <main>
-
     <div class="container my-3">
       <nav class="breadcrumb">
-          <span class="breadcrumb-item active">Unified Help Forum</span>
+        <span class="breadcrumb-item active">Unified Help Forum</span>
       </nav>
     </div>
-      <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger" style="position:absolute; right:290px">Create Post</button></a>
+    <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger" style="position:absolute; right:400px">Create Post</button></a>
     <br><br>
     <div class="container my-3">
-      <!-- Pinned Posts Forum -->
       <div class="row">
         <div class="col-12 col-xl-12">
+
+          <!-- Pinned Posts Forum -->
           <h2 class="h4 text-white mb-0 p-4 rounded-top forum-cat-color"><a href="{{url_for('forum_pinned_posts')}}" style="text-decoration: none; color:#ffffff">Pinned Posts</a></h2>
           <table class="table table-bordered table-responsive">
             <thead class="thead-light">
@@ -38,37 +37,37 @@
                 <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_pinned_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
               </td>
               <td>
-                <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
+                <p>by <br> {{ post.get_username() }} <br> {{post.get_date_time() }}</p>
               </td>
             </tr>
             {% endfor %}
             </tbody>
           </table>
 
-        <!-- Unified Help Community Forum -->
-        <h2 class="h4 text-white mb-0 p-4 rounded-top forum-cat-color"><a href="{{url_for('forum_uhc_posts')}}" style="text-decoration: none; color:#ffffff">Unified Help Community</a></h2>
-        <table class="table table-bordered table-responsive">
-          <thead class="thead-light">
+          <!-- Unified Help Community Forum -->
+          <h2 class="h4 text-white mb-0 p-4 rounded-top forum-cat-color"><a href="{{url_for('forum_uhc_posts')}}" style="text-decoration: none; color:#ffffff">Unified Help Community</a></h2>
+          <table class="table table-bordered table-responsive">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col" style="width: 1000px;text-align: center; margin:auto;">Topics</th>
+                <th scope="col" style="width: 250px;text-align: center; margin:auto;">Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for post in uhc_list|reverse %}
+              {%- if loop.index > 3 %}{% break %}{% endif %}
             <tr>
-              <th scope="col" style="width: 1000px;text-align: center; margin:auto;">Topics</th>
-              <th scope="col" style="width: 250px;text-align: center; margin:auto;">Created</th>
+              <td>
+                <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
+              </td>
+              <td>
+                <p>by <br> {{ post.get_username() }} <br> {{post.get_date_time() }}</p>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {% for post in uhc_list|reverse %}
-            {%- if loop.index > 3 %}{% break %}{% endif %}
-          <tr>
-            <td>
-              <h3 class="h5" style="margin:auto;padding:10px 0px 10px 5px;"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
-            </td>
-            <td>
-              <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
-            </td>
-          </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </div>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -76,9 +75,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </main>
-  <!-- End #main -->
   {% endblock %}
-
-  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
-
 </body>

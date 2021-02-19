@@ -1,12 +1,12 @@
 {% extends "customer/base.html" %}
 {% block title %}UnifiedHelpForum - {{ category }} Forum Overview{% endblock %}
-  {% block head %}
-    <link href="{{url_for('static', filename = 'customer/css/style-forum.css')}}" rel="stylesheet">
-  {% endblock %}
-
+{% block head %}
+  <link href="{{url_for('static', filename = 'customer/css/style-forum.css')}}" rel="stylesheet">
+{% endblock %}
+{% set active_page = "cs" %}
 <body>
   {% block content %}
-  <br/><br/><br/><br/>
+  <br><br><br><br>
   <main>
     <div class="container my-3">
       <nav class="breadcrumb">
@@ -14,41 +14,41 @@
           <span class="breadcrumb-item active">{{ category }} Overview</span>
       </nav>
       {% if category == "Pinned Posts" %}
-      {% for user in usersList %}
-      {% if user.get_username() == session['username'] %}
-      {% if user.get_account_type() == 'Staff' %}
-      <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
-      {% endif %}
-      {% endif %}
-      {% endfor %}
+        {% for user in usersList %}
+          {% if user.get_username() == session['username'] %}
+            {% if user.get_account_type() == 'Staff' %}
+              <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
       {% elif category == "Unified Help Community" %}
-      <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
+        <a href="{{url_for('create_forum_post')}}"><button type="button" class="btn btn-outline-danger">Create Post</button></a>
       {% endif %}
-      <br/><br/>
+      <br><br>
       <div class="row">
         <div class="col-12 col-xl-12">
           <h2 class="h4 text-white mb-0 p-4 rounded-top forum-cat-color">{{ category }} Overview</h2>
           <table class="table table-bordered table-responsive-lg">
             <thead class="thead-light">
-            <tr>
-              <th scope="col" style="width: 350px;text-align: center; margin:auto;">Topics</th>
-              <th scope="col" style="width: 100px;text-align: center; margin:auto;">Created</th>
-            </tr>
+              <tr>
+                <th scope="col" style="width: 350px;text-align: center; margin:auto;">Topics</th>
+                <th scope="col" style="width: 100px;text-align: center; margin:auto;">Created</th>
+              </tr>
             </thead>
             <tbody>
             {% for post in list|reverse %}
-            <tr>
-              <td>
-                {% if category == 'Pinned Posts' %}
-                <h3 class="h5"><a href="{{ url_for('forum_pinned_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
-                {% elif category == 'Unified Help Community' %}
-                <h3 class="h5"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
-                {% endif %}
-              </td>
-              <td>
-                <p>by <br/> {{ post.get_username() }} <br/> {{post.get_date_time() }}</p>
-              </td>
-            </tr>
+              <tr>
+                <td>
+                  {% if category == 'Pinned Posts' %}
+                    <h3 class="h5"><a href="{{ url_for('forum_pinned_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
+                  {% elif category == 'Unified Help Community' %}
+                    <h3 class="h5"><a href="{{ url_for('forum_uhc_posts_post', post_id = post.get_post_id() ) }}">{{ post.get_post_subject() }}</a></h3>
+                  {% endif %}
+                </td>
+                <td>
+                  <p>by <br> {{ post.get_username() }} <br> {{post.get_date_time() }}</p>
+                </td>
+              </tr>
             {% endfor %}
             </tbody>
           </table>
@@ -60,9 +60,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </main>
-  <!-- End #main -->
   {% endblock %}
-
-  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
-
 </body>
