@@ -1278,7 +1278,7 @@ def create_user():
         return redirect(url_for('profile'))
     return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
-
+# Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     create_login_form = CreateUserForm(request.form)
@@ -1306,7 +1306,7 @@ def login():
                 return redirect(url_for('incoming_item'))
     return render_template('customer/AM/login.html')
 
-
+# Customer Profile
 @app.route('/profile')
 def profile():
     if "username" in session:
@@ -1319,7 +1319,7 @@ def profile():
     else:
         return redirect(url_for('login'))
 
-
+# Customer Logout
 @app.route('/logout')
 def logout():
     session.pop('username', None)
@@ -1328,7 +1328,7 @@ def logout():
     session.pop('password', None)
     return render_template('customer/index.html')
 
-
+# Retrieve Customer Database
 @app.route('/retrieveusers')
 def retrieve_users():
     users_dict = {}
@@ -1343,7 +1343,7 @@ def retrieve_users():
 
     return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
 
-
+# Update Customer Profile
 @app.route('/updateProfile', methods=['GET', 'POST'])
 def update_profile():
     update_profile_form = CreateUserForm(request.form)
@@ -1384,7 +1384,7 @@ def update_profile():
         update_profile_form.confirm_password.data = user.get_confirm_password()
     return render_template('customer/AM/EditAccount.html', form=update_profile_form)
 
-
+# Update Customer Database
 @app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
     update_user_form = CreateUserForm(request.form)
@@ -1425,7 +1425,7 @@ def update_user(id):
 
         return render_template('customer/AM/updateAccount.html', form=update_user_form)
 
-
+# Delete Customer Database
 @app.route('/deleteUser/<int:id>', methods=['POST'])
 def delete_user(id):
     users_dict = {}
@@ -1452,6 +1452,7 @@ def staff_home():
 
 # ------------ Account Management ------------ #
 
+# Create Staff Account
 @app.route('/createStaff', methods=['GET', 'POST'])
 def create_staff():
     create_user_form = CreateUserForm(request.form)
@@ -1480,7 +1481,7 @@ def create_staff():
         return redirect(url_for('profile'))
     return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
-
+# Create Staff Profile
 @app.route("/staffprofile")
 def staff_profile():
     if "username" in session:
@@ -1491,7 +1492,7 @@ def staff_profile():
     else:
         return redirect(url_for('login'))
 
-
+# Staff Logout
 @app.route('/logout')
 def staff_logout():
     session.pop('username', None)
@@ -1499,12 +1500,12 @@ def staff_logout():
     session.pop('contact', None)
     return render_template('staff/home.html')
 
-
+# Customer Database
 @app.route("/account_management")
 def account_management():
     return render_template('staff/AM/unlock_delete_acc.html')
 
-
+# Retrieve Staff Database
 @app.route("/retrievestaff")
 def retrieve_staff():
     users_dict = {}
