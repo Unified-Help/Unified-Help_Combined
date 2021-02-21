@@ -1278,6 +1278,7 @@ def create_user():
         return redirect(url_for('profile'))
     return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
+
 # Login
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -1306,6 +1307,7 @@ def login():
                 return redirect(url_for('incoming_item'))
     return render_template('customer/AM/login.html')
 
+
 # Customer Profile
 @app.route('/profile')
 def profile():
@@ -1319,6 +1321,7 @@ def profile():
     else:
         return redirect(url_for('login'))
 
+
 # Customer Logout
 @app.route('/logout')
 def logout():
@@ -1327,6 +1330,7 @@ def logout():
     session.pop('contact', None)
     session.pop('password', None)
     return render_template('customer/index.html')
+
 
 # Retrieve Customer Database
 @app.route('/retrieveusers')
@@ -1342,6 +1346,7 @@ def retrieve_users():
         users_list.append(user)
 
     return render_template('staff/AM/unlock_delete_acc.html', count=len(users_list), users_list=users_list)
+
 
 # Update Customer Profile
 @app.route('/updateProfile', methods=['GET', 'POST'])
@@ -1384,6 +1389,7 @@ def update_profile():
         update_profile_form.confirm_password.data = user.get_confirm_password()
     return render_template('customer/AM/EditAccount.html', form=update_profile_form)
 
+
 # Update Customer Database
 @app.route('/updateUser/<int:id>/', methods=['GET', 'POST'])
 def update_user(id):
@@ -1425,6 +1431,7 @@ def update_user(id):
 
         return render_template('customer/AM/updateAccount.html', form=update_user_form)
 
+
 # Delete Customer Database
 @app.route('/deleteUser/<int:id>', methods=['POST'])
 def delete_user(id):
@@ -1444,7 +1451,7 @@ def delete_user(id):
 
 # ================================================== Staff Side ================================================== #
 
-
+# Not Used
 @app.route('/staff_home', methods=['GET', 'POST'])
 def staff_home():
     return render_template('staff/home.html')
@@ -1481,6 +1488,7 @@ def create_staff():
         return redirect(url_for('profile'))
     return render_template('customer/AM/CreateAccount.html', form=create_user_form)
 
+
 # Create Staff Profile
 @app.route("/staffprofile")
 def staff_profile():
@@ -1492,6 +1500,7 @@ def staff_profile():
     else:
         return redirect(url_for('login'))
 
+
 # Staff Logout
 @app.route('/logout')
 def staff_logout():
@@ -1500,10 +1509,12 @@ def staff_logout():
     session.pop('contact', None)
     return render_template('staff/home.html')
 
+
 # Customer Database
 @app.route("/account_management")
 def account_management():
     return render_template('staff/AM/unlock_delete_acc.html')
+
 
 # Retrieve Staff Database
 @app.route("/retrievestaff")
@@ -1632,9 +1643,11 @@ def incoming_item_archive(id):
 
 @app.route("/dashboard")
 def dashboard():
-    # ----------------Analytics Overview-------------------
+    # ----------------Analytics Overview Cards-------------------#
     now = datetime.datetime.now()
     dbMC = shelve.open("donorChoices", "r")
+
+    # Retrieving amount of money donated from transaction processing
     try:
         donor_moneychoices = dbMC["Money"]
     except:
@@ -1643,6 +1656,7 @@ def dashboard():
     donorsIID_list = []
     unnested_donorsIID_list = []
 
+    # Puts all donation objects into a list (unnested_donorsIID_list). This is courtesy of lennon
     for key in donor_moneychoices:
         donorinfo_list = donor_moneychoices[key]
         donorsIID_list.append(donorinfo_list)
@@ -1656,11 +1670,14 @@ def dashboard():
     total_month_donations = 0
     for i in unnested_donorsIID_list:
         overall_donations += i.get_money_amount()
+        # Gets total donation for the year
         if now.strftime("%Y") == i.get_year():
             total_year_donations += i.get_money_amount()
+            # Gets total donation for the month
             if now.strftime("%b").upper() == i.get_month():
                 total_month_donations += i.get_money_amount()
 
+    # Retrieving number of items donated from transaction processing
     try:
         donor_itemchoices = dbMC["Items"]
     except:
@@ -1669,6 +1686,7 @@ def dashboard():
     donor_item_list = []
     unnested_item_list = []
 
+    # Puts all donation objects into a list (unnested_donorsIID_list). This is courtesy of lennon
     for key in donor_itemchoices:
         donorinfo_list = donor_itemchoices[key]
         donor_item_list.append(donorinfo_list)
@@ -1689,12 +1707,13 @@ def dashboard():
 
     dbMC.close()
 
-    # ----------------------------Charts-------------------------
+    # ----------------------------Charts------------------------- #
     donations = {}
     try:
         costs_db = shelve.open('costs.db', 'w')
     except:
         return redirect(url_for("file_upload"))
+    # Creating money donation object for online vs offline donation chart
     try:
         with open("Staff_RG_costs.csv", 'r') as costs_data_file:
             reader = csv.DictReader(costs_data_file)
@@ -2155,7 +2174,7 @@ def cost_analysis():
 
     costs_db = shelve.open('costs.db', 'r')
     try:
-        costs_db["IDA_overall"] = totals_overall
+        totals_overall = costs_db["IDA_overall"]
     except:
         print("Unable to retrieve IDA_overall from costs.db")
 
@@ -2187,21 +2206,26 @@ def cost_analysis():
         UC_data = [key, value[5]]
         uc_chart_data_3.append(UC_data)
 
-        # # Top 5 reduced costs
-        if now.year == key:
-            cc_current_year = value[0]
-            isc_current_year = value[1]
-            cap_current_year = value[2]
-            fre_current_year = value[3]
-            ac_current_year = value[4]
-            uc_current_year = value[5]
-        if now.year - 1 == key:
-            reduced_costs["Campaign Costs"] = cc_current_year - value[0]
-            reduced_costs["Inventory Storage Costs"] = isc_current_year - value[1]
-            reduced_costs["Charitable Program Costs"] = cap_current_year - value[2]
-            reduced_costs["Fund Raising Expenses"] = fre_current_year - value[3]
-            reduced_costs["Administration Costs"] = ac_current_year - value[4]
-            reduced_costs["Utilities Costs"] = uc_current_year - value[5]
+        # # # Top 5 reduced costs
+        # if now.year == key:
+        #     cc_current_year = value[0]
+        #     isc_current_year = value[1]
+        #     cap_current_year = value[2]
+        #     fre_current_year = value[3]
+        #     ac_current_year = value[4]
+        #     uc_current_year = value[5]
+        #
+        # if now.year - 1 == key:
+        #     reduced_costs["Campaign Costs"] = cc_current_year - value[0]
+        #     reduced_costs["Inventory Storage Costs"] = isc_current_year - value[1]
+        #     reduced_costs["Charitable Program Costs"] = cap_current_year - value[2]
+        #     reduced_costs["Fund Raising Expenses"] = fre_current_year - value[3]
+        #     reduced_costs["Administration Costs"] = ac_current_year - value[4]
+        #     reduced_costs["Utilities Costs"] = uc_current_year - value[5]
+        #
+        #     sorted_tuples = sorted(reduced_costs.items(), key=lambda item: item[1])
+        #     sorted_reduced_costs = {k: v for k, v in sorted_tuples}
+        #     print(sorted_reduced_costs)
 
     return render_template('staff/RG/cost_analysis.html', cc_data=cc_chart_data_1, cc_data1=cc_chart_data_2,
                            cc_data2=cc_chart_data_3,
@@ -2209,7 +2233,7 @@ def cost_analysis():
                            cap_data=cap_chart_data_1, cap_data1=cap_chart_data_2, cap_data2=cap_chart_data_3,
                            fre_data=fre_chart_data_1, fre_data1=fre_chart_data_2, fre_data2=fre_chart_data_3,
                            ac_data=ac_chart_data_1, ac_data1=ac_chart_data_2, ac_data2=ac_chart_data_3,
-                           uc_data=uc_chart_data_1, uc_data1=uc_chart_data_2, uc_data2=uc_chart_data_3, )
+                           uc_data=uc_chart_data_1, uc_data1=uc_chart_data_2, uc_data2=uc_chart_data_3)
 
 
 @app.route("/upload_insert_data")
@@ -2391,6 +2415,7 @@ def update_history():
     return render_template("staff/RG/update_history.html", update_history=changes_list)
 
 
+# Allowed file type for file upload
 ALLOWED_EXTENSIONS = {"csv"}
 
 
@@ -2412,10 +2437,6 @@ def file_upload():
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
-        # if file.filename != '':
-        #     file_ext = os.path.splitext(file.filename)[1]
-        #     if file_ext not in app.config['ALLOWED_EXTENSIONS']:
-        #         abort(400)
         if file and allowed_file(file.filename):
             file.save(os.path.join("Staff_RG_costs.csv"))
             return redirect(url_for('cost_analysis'))
