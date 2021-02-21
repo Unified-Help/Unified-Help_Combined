@@ -620,7 +620,7 @@ def forum_login_redirect_to_uhc_post(post_id):
 
     return render_template('customer/AM/login.html')
 
-
+# Forum Page (Only allows 3 post per category)
 @app.route("/forum")
 def forum():
     pinned_posts_dict = {}
@@ -650,7 +650,7 @@ def forum():
     return render_template('customer/CS/Forum.html', pinned_posts_list=pinned_posts_list, uhc_list=uhc_list,
                            usersList=usersList)
 
-
+# Creating of forum post
 @app.route("/forum/createforumpost", methods=['GET', 'POST'])
 def create_forum_post():
     usersDB = {}
@@ -679,6 +679,7 @@ def create_forum_post():
             except:
                 print("Error in retrieving data from forumdb.")
 
+            # If the Category is 'Unified Help Community'
             if create_forum_post_form.category.data == "Unified Help Community" or create_forum_post_form.category_staff.data == "Unified Help Community":
                 post = ForumUHCPostCounter()
                 post.set_post_id()
@@ -692,6 +693,7 @@ def create_forum_post():
                 db['UHC'] = uhc_dict
                 db.close()
                 return redirect(url_for('forum_uhc_posts'))
+            # If the Category is 'Pinned Posts'
             elif create_forum_post_form.category_staff.data == "Pinned Posts":
                 post = ForumPinnedPostsCounter()
                 post.set_post_id()
@@ -709,7 +711,7 @@ def create_forum_post():
     return render_template('customer/CS/createForumPost.html', form=create_forum_post_form,
                            session_username=session_username, usersList=usersList)
 
-
+# Pinned Posts Forum Overview Page
 @app.route("/forum/pinned_posts")
 def forum_pinned_posts():
     usersDB = {}
@@ -734,7 +736,7 @@ def forum_pinned_posts():
                            category=category, lenOfPinnedPost=lenOfPinnedPost)
 
 
-# Specific Forum Post ID - UHC
+# The post from the category "Pinned Posts" itself
 @app.route("/forum/pinned_posts/<int:post_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post(post_id):
     global pp_upvote_list, pp_downvote_list
@@ -767,14 +769,13 @@ def forum_pinned_posts_post(post_id):
     if post_id in pp_downvote_dict.keys():
         pp_downvote_list = pp_downvote_dict[post_id]
 
-    # Retrieving Post Replies
     post_reply_retrieve_dict = db['PinnedPostsPostReply']
     post_reply_retrieve_list = []
 
     if post_id in post_reply_retrieve_dict:
         reply_dict = post_reply_retrieve_dict[post_id]
-        for tag in reply_dict:
-            reply = reply_dict.get(tag)
+        for key in reply_dict:
+            reply = reply_dict.get(key)
             post_reply_retrieve_list.append(reply)
 
     reply_post_form = ForumPostReply(request.form)
@@ -785,11 +786,13 @@ def forum_pinned_posts_post(post_id):
             post_reply_dict = db['PinnedPostsPostReply']
         except:
             print("Error in retrieving data from forumdb.")
-        id_dict = {}
+        replies_dict = {}
 
+        # If the post_reply_dict has the post_id as the key
         if post_id in post_reply_dict:
-            id_dict = post_reply_dict[post_id]
-            if len(id_dict.keys()) == 0:
+            # If post_id is in post_reply_dict, it will append new replies to the post_reply_dict
+            replies_dict = post_reply_dict[post_id]
+            if len(replies_dict.keys()) == 0:
                 reply_id = 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
@@ -797,11 +800,11 @@ def forum_pinned_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['PinnedPostsPostReply'] = post_reply_dict
             else:
-                for reply_id in id_dict.keys():
+                for reply_id in replies_dict.keys():
                     last_id = reply_id
                 reply_id = last_id + 1
                 post_reply_details = ForumPinnedPostsCounter()
@@ -810,11 +813,12 @@ def forum_pinned_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['PinnedPostsPostReply'] = post_reply_dict
+        # If the post_reply_dict does not have the post_id as the key, it will make a new key with the post_id
         else:
-            if len(id_dict.keys()) == 0:
+            if len(replies_dict.keys()) == 0:
                 reply_id = 1
                 post_reply_details = ForumPinnedPostsCounter()
                 post_reply_details.set_post_reply_id(reply_id)
@@ -822,11 +826,11 @@ def forum_pinned_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['PinnedPostsPostReply'] = post_reply_dict
             else:
-                for reply_id in id_dict.keys():
+                for reply_id in replies_dict.keys():
                     last_id = reply_id
                 reply_id = last_id + 1
                 post_reply_details = ForumPinnedPostsCounter()
@@ -835,8 +839,8 @@ def forum_pinned_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Pinned Posts")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['PinnedPostsPostReply'] = post_reply_dict
         db.close()
         return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
@@ -848,7 +852,7 @@ def forum_pinned_posts_post(post_id):
                            post_id=post_id, pp_upvote_list=pp_upvote_list, pp_downvote_list=pp_downvote_list,
                            datetime_now=datetime_now)
 
-
+# Update of Pinned Posts Post
 @app.route("/forum/pinned_posts/update/<int:post_id>", methods=['GET', 'POST'])
 def forum_pinned_posts_post_update(post_id):
     forum_pinned_posts_form_update = createForumPost(request.form)
@@ -876,7 +880,7 @@ def forum_pinned_posts_post_update(post_id):
         return render_template('customer/CS/forum-post_update.html', form=forum_pinned_posts_form_update,
                                list=pinned_posts_list)
 
-
+# Deletion of Pinned Posts Post
 @app.route('/forum/pinned_posts/delete/<int:post_id>', methods=['GET', 'POST'])
 def forum_pinned_posts_post_delete(post_id):
     pinned_posts_dict = {}
@@ -895,26 +899,26 @@ def forum_pinned_posts_post_delete(post_id):
     db.close()
     return redirect(url_for('forum_pinned_posts'))
 
-
+# Deletion of reply from the Pinned Posts Post
 @app.route("/forum/pinned_posts/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
 def pinned_post_delete_reply(post_id, reply_id):
-    reply_dict = {}
+    pp_reply_dict = {}
     db = shelve.open('forumdb', 'c')
-    reply_dict = db['PinnedPostsPostReply']
+    pp_reply_dict = db['PinnedPostsPostReply']
 
-    id_dict = {}
+    replies_dict = {}
 
-    if post_id in reply_dict:
-        id_dict = reply_dict[post_id]
-        if reply_id in id_dict:
-            id_dict.pop(reply_id)
+    if post_id in pp_reply_dict:
+        replies_dict = pp_reply_dict[post_id]
+        if reply_id in replies_dict:
+            replies_dict.pop(reply_id)
 
-    reply_dict[post_id] = id_dict
-    db['PinnedPostsPostReply'] = reply_dict
+    pp_reply_dict[post_id] = replies_dict
+    db['PinnedPostsPostReply'] = pp_reply_dict
     db.close()
     return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
 
-
+# UHC Forum Overview Page
 @app.route("/forum/uhc")
 def forum_uhc_posts():
     uhc_dict = {}
@@ -931,7 +935,7 @@ def forum_uhc_posts():
     return render_template('customer/CS/overview-forum-category.html', list=uhc_list, category=category,
                            lenOfUHCPost=lenOfUHCPost)
 
-
+# The post from the category "Unified Help Community" itself
 @app.route("/forum/uhc/<int:post_id>", methods=['GET', 'POST'])
 def forum_uhc_posts_post(post_id):
     post_reply_retrieve_dict = {}
@@ -962,14 +966,13 @@ def forum_uhc_posts_post(post_id):
     if post_id in uhc_downvote_dict.keys():
         uhc_downvote_list = uhc_downvote_dict[post_id]
 
-    # Retrieving Post Replies
     post_reply_retrieve_dict = db['UHCPostsPostReply']
     post_reply_retrieve_list = []
 
     if post_id in post_reply_retrieve_dict:
         reply_dict = post_reply_retrieve_dict[post_id]
-        for tag in reply_dict:
-            reply = reply_dict.get(tag)
+        for key in reply_dict:
+            reply = reply_dict.get(key)
             post_reply_retrieve_list.append(reply)
 
     reply_post_form = ForumPostReply(request.form)
@@ -980,11 +983,13 @@ def forum_uhc_posts_post(post_id):
             post_reply_dict = db['UHCPostsPostReply']
         except:
             print("Error in retrieving data from forumdb.")
-        id_dict = {}
+        replies_dict = {}
 
+        # If the post_reply_dict has the post_id as the key
         if post_id in post_reply_dict:
-            id_dict = post_reply_dict[post_id]
-            if len(id_dict.keys()) == 0:
+            # If post_id is in post_reply_dict, it will append new replies to the post_reply_dict
+            replies_dict = post_reply_dict[post_id]
+            if len(replies_dict.keys()) == 0:
                 reply_id = 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
@@ -992,11 +997,11 @@ def forum_uhc_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['UHCPostsPostReply'] = post_reply_dict
             else:
-                for reply_id in id_dict.keys():
+                for reply_id in replies_dict.keys():
                     last_id = reply_id
                 reply_id = last_id + 1
                 post_reply_details = ForumUHCPostCounter()
@@ -1005,11 +1010,12 @@ def forum_uhc_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['UHCPostsPostReply'] = post_reply_dict
+        # If the post_reply_dict does not have the post_id as the key, it will make a new key with the post_id
         else:
-            if len(id_dict.keys()) == 0:
+            if len(replies_dict.keys()) == 0:
                 reply_id = 1
                 post_reply_details = ForumUHCPostCounter()
                 post_reply_details.set_post_reply_id(reply_id)
@@ -1017,11 +1023,11 @@ def forum_uhc_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['UHCPostsPostReply'] = post_reply_dict
             else:
-                for reply_id in id_dict.keys():
+                for reply_id in replies_dict.keys():
                     last_id = reply_id
                 reply_id = last_id + 1
                 post_reply_details = ForumUHCPostCounter()
@@ -1030,21 +1036,20 @@ def forum_uhc_posts_post(post_id):
                 post_reply_details.set_username(session['username'])
                 post_reply_details.set_reply_category("Unified Help Community")
                 post_reply_details.set_reply_message(reply_post_form.reply_message.data)
-                id_dict[post_reply_details.get_post_reply_id()] = post_reply_details
-                post_reply_dict[post_id] = id_dict
+                replies_dict[post_reply_details.get_post_reply_id()] = post_reply_details
+                post_reply_dict[post_id] = replies_dict
                 db['UHCPostsPostReply'] = post_reply_dict
         db.close()
         return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
     post_id = post_id
     datetime_now = datetime.datetime.now().strftime("%d %b %Y, %X")
-
     return render_template('customer/CS/forum-post.html', post_list=uhc_list,
                            user_list=user_list, form=reply_post_form, reply_list=post_reply_retrieve_list,
                            post_id=post_id, uhc_upvote_list=uhc_upvote_list, uhc_downvote_list=uhc_downvote_list,
                            datetime_now=datetime_now)
 
-
+# Update of UHC Post
 @app.route("/forum/uhc/update/<int:post_id>", methods=['GET', 'POST'])
 def forum_uhc_post_update(post_id):
     forum_uhc_form_update = updateForumPost(request.form)
@@ -1072,7 +1077,7 @@ def forum_uhc_post_update(post_id):
         return render_template('customer/CS/forum-post_update.html', form=forum_uhc_form_update,
                                list=uhc_list)
 
-
+# Deletion of UHC Post
 @app.route('/forum/uhc/delete/<int:post_id>', methods=['GET', 'POST'])
 def forum_uhc_post_delete(post_id):
     uhc_dict = {}
@@ -1091,27 +1096,27 @@ def forum_uhc_post_delete(post_id):
     db.close()
     return redirect(url_for('forum_uhc_posts'))
 
-
+# Deletion of reply from the UHC Post
 @app.route("/forum/uhc/delete/<int:post_id>/delete_reply/<int:reply_id>", methods=['GET', 'POST'])
 def uhc_delete_reply(post_id, reply_id):
-    reply_dict = {}
+    uhc_reply_dict = {}
     db = shelve.open('forumdb', 'c')
-    reply_dict = db['UHCPostsPostReply']
+    uhc_reply_dict = db['UHCPostsPostReply']
 
-    id_dict = {}
+    replies_dict = {}
 
-    if post_id in reply_dict:
-        id_dict = reply_dict[post_id]
-        if reply_id in id_dict:
-            id_dict.pop(reply_id)
+    if post_id in uhc_reply_dict:
+        replies_dict = uhc_reply_dict[post_id]
+        if reply_id in replies_dict:
+            replies_dict.pop(reply_id)
 
-    reply_dict[post_id] = id_dict
-    db['UHCPostsPostReply'] = reply_dict
+    uhc_reply_dict[post_id] = replies_dict
+    db['UHCPostsPostReply'] = uhc_reply_dict
     db.close()
 
     return redirect(url_for('forum_uhc_posts_post', post_id=post_id))
 
-
+# Upvote and Downvote of Forum Post
 @app.route("/upvote", methods=['POST'])
 def upvote():
     upvote = request.form["upvote"]
@@ -1131,13 +1136,14 @@ def upvote():
     uhc_upvote_dict = db['UHCPostUpvoteCount']
     uhc_downvote_dict = db['UHCPostDownvoteCount']
     list = []
+    # If category == "Pinned Posts"
     if category == "1":
+        # If the upvote button is pressed
         if vote == 1:
+            # Appending session['username'] to the upvote list
             if post_id in pp_upvote_dict.keys():
                 list = pp_upvote_dict[post_id]
-                if session['username'] in list:
-                    pass
-                else:
+                if session['username'] not in list:
                     list.append(session['username'])
                     pp_upvote_dict[post_id] = list
                     db['PinnedPostUpvoteCount'] = pp_upvote_dict
@@ -1146,21 +1152,20 @@ def upvote():
                 pp_upvote_dict[post_id] = list
                 db['PinnedPostUpvoteCount'] = pp_upvote_dict
 
+            # Removing session['username'] from the downvote list
             if post_id in pp_downvote_dict.keys():
                 list = pp_downvote_dict[post_id]
                 if session['username'] in list:
                     list.remove(session['username'])
                     pp_downvote_dict[post_id] = list
                     db['PinnedPostDownvoteCount'] = pp_downvote_dict
-            else:
-                pass
 
+        # If the downvote button is pressed
         else:
+            # Appending session['username'] to the downvote list
             if post_id in pp_downvote_dict.keys():
                 list = pp_downvote_dict[post_id]
-                if session['username'] in list:
-                    pass
-                else:
+                if session['username'] not in list:
                     list.append(session['username'])
                     pp_downvote_dict[post_id] = list
                     db['PinnedPostDownvoteCount'] = pp_downvote_dict
@@ -1169,14 +1174,13 @@ def upvote():
                 pp_downvote_dict[post_id] = list
                 db['PinnedPostDownvoteCount'] = pp_downvote_dict
 
+            # Removing session['username'] from the upvote list
             if post_id in pp_upvote_dict.keys():
                 list = pp_upvote_dict[post_id]
                 if session['username'] in list:
                     list.remove(session['username'])
                     pp_upvote_dict[post_id] = list
                     db['PinnedPostUpvoteCount'] = pp_upvote_dict
-            else:
-                pass
 
         for post in pinned_post_dict:
             if post == post_id:
@@ -1187,13 +1191,14 @@ def upvote():
 
         return redirect(url_for('forum_pinned_posts_post', post_id=post_id))
 
+    # If category == "Unified Help Community"
     elif category == "2":
+        # If the upvote button is pressed
         if vote == 1:
+            # Appending session['username'] to the upvote list
             if post_id in uhc_upvote_dict.keys():
                 list = uhc_upvote_dict[post_id]
-                if session['username'] in list:
-                    pass
-                else:
+                if session['username'] not in list:
                     list.append(session['username'])
                     uhc_upvote_dict[post_id] = list
                     db['UHCPostUpvoteCount'] = uhc_upvote_dict
@@ -1202,21 +1207,20 @@ def upvote():
                 uhc_upvote_dict[post_id] = list
                 db['UHCPostUpvoteCount'] = uhc_upvote_dict
 
+            # Removing session['username'] from the downvote list
             if post_id in uhc_downvote_dict.keys():
                 list = uhc_downvote_dict[post_id]
                 if session['username'] in list:
                     list.remove(session['username'])
                     uhc_downvote_dict[post_id] = list
                     db['UHCPostDownvoteCount'] = uhc_downvote_dict
-            else:
-                pass
 
+        # If the downvote button is pressed
         else:
+            # Appending session['username'] to the downvote list
             if post_id in uhc_downvote_dict.keys():
                 list = uhc_downvote_dict[post_id]
-                if session['username'] in list:
-                    pass
-                else:
+                if session['username'] not in list:
                     list.append(session['username'])
                     uhc_downvote_dict[post_id] = list
                     db['UHCPostDownvoteCount'] = uhc_downvote_dict
@@ -1225,19 +1229,13 @@ def upvote():
                 uhc_downvote_dict[post_id] = list
                 db['UHCPostDownvoteCount'] = uhc_downvote_dict
 
+            # Removing session['username'] from the upvote list
             if post_id in uhc_upvote_dict.keys():
                 list = uhc_upvote_dict[post_id]
                 if session['username'] in list:
                     list.remove(session['username'])
                     uhc_upvote_dict[post_id] = list
                     db['UHCPostUpvoteCount'] = uhc_upvote_dict
-            else:
-                pass
-
-        for post in pinned_post_dict:
-            if post == post_id:
-                pinned_post_dict[post].set_upvote(upvote)
-        db['PinnedPosts'] = pinned_post_dict
 
         for post in uhc_dict:
             if post == post_id:
@@ -1249,7 +1247,6 @@ def upvote():
 
 
 # Account Management
-
 @app.route('/createUser', methods=['GET', 'POST'])
 def create_user():
     create_user_form = CreateUserForm(request.form)
